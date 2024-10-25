@@ -416,9 +416,4 @@ pip-selfcheck.json
 .ionide
 
 
-# virtual env
-.venv
-env
-.env
-
 # End of https://www.toptal.com/developers/gitignore/api/venv,django,python,pycharm,visualstudiocode,dotenv,virtualenv
