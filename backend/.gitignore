@@ -304,6 +304,8 @@ fabric.properties
 # Translations
 
 # Django stuff:
+**/__pycache__/
+
 
 # Flask stuff:
 
