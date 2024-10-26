@@ -28,6 +28,7 @@ class Event(models.Model):
     end_date = models.DateTimeField()
     organizers = models.ManyToManyField('Organizer', related_name='events')
     speakers = models.ManyToManyField('Speaker', related_name='events')
+    talks = models.ManyToManyField('Talks', related_name='events')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     location = models.CharField(max_length=100)
