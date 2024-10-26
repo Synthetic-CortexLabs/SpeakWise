@@ -3,7 +3,6 @@ from django.urls import reverse
 
 # Create your models here.
 
-
 class Organizer(models.Model):
     """
     Model representing an Organizer.
@@ -41,3 +40,4 @@ class Organizer(models.Model):
 
     def get_absolute_url(self):
         return reverse("Organizer_detail", kwargs={"pk": self.pk})
+
