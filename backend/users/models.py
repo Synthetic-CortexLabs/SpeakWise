@@ -6,10 +6,10 @@ from django.contrib.auth import get_user_model
 
 class UserProfile(models.Model):
 
-    user_id=models.OneToOneField(get_user_model(),on_delete=models.CASCADE)
-    bio = models.TextField()
-    profile_picture = models.ImageField()
-    social_links = models.CharField()
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    bio = models.TextField(blank=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+    social_links = models.CharField(max_length=255, blank=True)
 
     class Meta:
         db_table = 'profiles'
@@ -17,7 +17,7 @@ class UserProfile(models.Model):
         verbose_name_plural = 'Profiles'
 
     def __str__(self):
-        return f"{self.user_id.username}"
+        return f"{self.user.username}'s Profile"
     
 
     def get_absolute_url(self):

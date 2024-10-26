@@ -21,12 +21,12 @@ class Talks(models.Model):
             str: The title of the talk.
     """
 
-    event_id = models.ForeignKey("Event", on_delete=models.CASCADE)
+    event = models.ForeignKey("events.Event", on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    speaker_id = models.ManyToManyField("Speaker")
+    speakers = models.ManyToManyField("speakers.Speaker")
 
     def __str__(self):
         return self.title
