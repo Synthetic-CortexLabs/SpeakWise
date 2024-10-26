@@ -26,7 +26,7 @@ class Talks(models.Model):
     description = models.TextField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    speaker_id = models.ManyToManyField("Speaker", on_delete=models.CASCADE)
+    speaker_id = models.ManyToManyField("Speaker")
 
     def __str__(self):
         return self.title
