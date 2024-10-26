@@ -9,7 +9,7 @@ def validate_date_time_values(start_time, end_time):
     """
     this function validates date time values
     from serializer data ensuring correct
-    data time values are entered.
+    Datetime values are entered.
     """
 
     if start_time > end_time:
