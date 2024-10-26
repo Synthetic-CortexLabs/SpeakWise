@@ -1,4 +1,6 @@
 from django.db import models
+from organizers.models import Organizer
+from speakers.models import Speaker
 
 # Create your models here.
 
@@ -20,23 +22,23 @@ class Event(models.Model):
 
     Methods:
         __str__(): Returns the event's title.
-    
+
     """
+
     title = models.CharField(max_length=100)
     description = models.TextField()
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
-    organizers = models.ManyToManyField('Organizer', related_name='events')
-    speakers = models.ManyToManyField('Speaker', related_name='events')
-    talks = models.ManyToManyField('Talks', related_name='events')
+    organizers = models.ManyToManyField(Organizer, related_name="events")
+    speakers = models.ManyToManyField(Speaker, related_name="events")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     location = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name = 'Event'
-        verbose_name_plural = 'Events'
-        ordering = ['start_date']
+        verbose_name = "Event"
+        verbose_name_plural = "Events"
+        ordering = ["start_date"]
 
     def __str__(self):
         return self.title

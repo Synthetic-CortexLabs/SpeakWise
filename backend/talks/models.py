@@ -1,4 +1,6 @@
 from django.db import models
+from speakers.models import Speaker
+from events.models import Event
 
 # Create your models here.
 
@@ -15,18 +17,19 @@ class Talks(models.Model):
         location (str): The location where the talk will be held.
         description (str): A detailed description of the talk.
     """
+
     """
         Returns the string representation of the Talks instance, which is the title of the talk.
         Returns:
             str: The title of the talk.
     """
 
-    event_id = models.ForeignKey("Event", on_delete=models.CASCADE)
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    speaker_id = models.ManyToManyField("Speaker", on_delete=models.CASCADE)
+    speaker_id = models.ManyToManyField(Speaker)
 
     def __str__(self):
         return self.title
