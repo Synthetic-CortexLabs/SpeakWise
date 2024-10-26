@@ -26,15 +26,19 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    
+
     - name: Set up Database
       run: |
-        python backend/manage.py migrate
+        cd backend
+        python manage.py migrate
       env:
-        DJANGO_SETTINGS_MODULE: SpeakWise.settings
+        DJANGO_SETTINGS_MODULE: speakwise.settings
+        PYTHONPATH: ${{ github.workspace }}/backend
 
     - name: Run Tests
       run: |
-        python backend/manage.py test
+        cd backend
+        python manage.py test
       env:
-        DJANGO_SETTINGS_MODULE: SpeakWise.settings
+        DJANGO_SETTINGS_MODULE: speakwise.settings
+        PYTHONPATH: ${{ github.workspace }}/backend
