@@ -26,15 +26,20 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install black flake8 coverage  # Add coverage tool for test coverage check
+        pip install black flake8 coverage
       env:
         DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-    - name: Run Black Formatter
+    - name: Run Black Formatter and Fix Code
       run: |
         cd backend
-        black --check .  # Check formatting using black
+        black .  # Automatically reformat code
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "Auto-format code with Black" || echo "No changes to commit"  # Only commits if there are changes
+        git push origin ${{ github.ref }}  # Push changes back to the branch
 
     - name: Run Flake8 Linter
       run: |
@@ -60,7 +65,7 @@ jobs:
         PYTHONPATH: ${{ github.workspace }}/backend
 
     - name: Upload Coverage Report
-      uses: actions/upload-artifact@v4  # Updated to v4 as per latest requirements
+      uses: actions/upload-artifact@v4  # Updated to v4
       with:
         name: coverage-report
         path: backend/htmlcov/  # Upload coverage report for review if needed
