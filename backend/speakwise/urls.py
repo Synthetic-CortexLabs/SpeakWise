@@ -24,19 +24,14 @@ from drf_spectacular.views import (
 )
 
 urlpatterns = [
+    # Admin path
     path("admin/", admin.site.urls),
-    # Installed apps urls
-    path("api/events/", include("events.urls", namespace="events")),
-    path("api/docs/", SpectacularSwaggerView.as_view()),
-    # Swagger UI api auto documentation urls :
-    path(
-        "api/docs/",
-        SpectacularSwaggerView.as_view(url_name="schema"),
-        name="swagger-ui",
-    ),
-    path(
-        "api/redoc/",
-        SpectacularRedocView.as_view(url_name="schema"),
-        name="redoc",
-    ),
+    
+    # Installed apps URLs
+    path("talk/", include("talks.urls")),  # Talks API
+    path("api/events/", include("events.urls", namespace="events")),  # Events API with namespace
+    
+    # Swagger UI auto documentation URLs
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]
