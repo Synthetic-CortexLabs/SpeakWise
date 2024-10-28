@@ -11,7 +11,7 @@ class SpeakerListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
 
-class RetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+class RetrieveUpdateDestroySpeakerView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Speaker.objects.all()
     serializer_class = SpeakerSerializer
     permission_classes = [IsAuthenticated]
