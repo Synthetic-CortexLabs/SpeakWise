@@ -7,8 +7,8 @@ from django.utils import timezone
 class TimestampedModel(models.Model):
     """Timestamped model."""
 
-    create_at = models.DateTimeField(default=timezone.now)
-    update_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         """Meta class."""
