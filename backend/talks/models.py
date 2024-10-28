@@ -7,23 +7,16 @@ from events.models import Event
 
 class Talks(models.Model):
     """
-    A Django model representing a talk or presentation.
-    Attributes:
-        title (str): The title of the talk.
-        speaker (str): The name of the speaker.
-        duration (int): The duration of the talk in minutes.
-        date (date): The date of the talk.
-        time (time): The time of the talk.
-        location (str): The location where the talk will be held.
-        description (str): A detailed description of the talk.
-    """
+    event_id (ForeignKey): Reference to the associated event.
+    start_time (DateTimeField): The start time of the talk.
+    end_time (DateTimeField): The end time of the talk.
+    speaker_id (ManyToManyField): Reference to the associated speakers.
+Methods:
+    __str__: Returns the title of the talk.
 
+    Returns:
+        _type_: _description_
     """
-        Returns the string representation of the Talks instance, which is the title of the talk.
-        Returns:
-            str: The title of the talk.
-    """
-
     event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField()
