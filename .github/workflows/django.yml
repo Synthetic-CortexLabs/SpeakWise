@@ -31,20 +31,34 @@ jobs:
         DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-    - name: Run Black Formatter and Fix Code
+    - name: Run Black Formatter and Check for Changes
+      id: black
       run: |
         cd backend
         black .  # Automatically reformat code
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add .
-        git commit -m "Auto-format code with Black" || echo "No changes to commit"  # Only commits if there are changes
-        git push origin ${{ github.ref }}  # Push changes back to the branch
+        git diff --quiet || echo "changes_detected" > ../black_changes.log  # Log if Black made changes
+      continue-on-error: true  # Continue even if Black makes changes
 
-    - name: Run Flake8 Linter
+    - name: Run Flake8 Linter and Check for Issues
+      id: flake8
       run: |
         cd backend
-        flake8 .  # Run linting using flake8
+        flake8 . || echo "issues_detected" > ../flake8_issues.log  # Log if Flake8 finds issues
+
+    - name: Create Pull Request for Formatting and Linting Issues
+      if: |
+        steps.black.outputs.changes_detected == 'true' || steps.flake8.outputs.issues_detected == 'true'
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: auto-format/dev  # Branch where changes are pushed
+        base: dev  # Target branch for the PR
+        title: "Auto-format and lint fixes with Black and Flake8"
+        body: |
+          This PR contains auto-formatted code using Black and resolves Flake8 linting issues.
+          Please review the changes before merging into dev.
+        commit-message: "Auto-format code with Black and fix Flake8 issues"
+        labels: "auto-format, black, flake8, CI"
 
     - name: Run Database Migrations
       run: |
