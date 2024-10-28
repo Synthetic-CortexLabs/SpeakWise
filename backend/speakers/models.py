@@ -32,7 +32,7 @@ class Speaker(TimestampedModel):
     twitter = models.CharField(max_length=50)
     organization = models.CharField(max_length=100)
     bio = models.TextField()
-    avatar = models.ImageField(upload_to="speakers/avatars/")
+    avatar = models.ImageField(upload_to="speakers/avatars/", null=True, blank=True)
 
     class Meta:
         db_table = "speakers"
