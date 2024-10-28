@@ -103,6 +103,22 @@ class Feedback(models.Model):
 
 
 class FeedbackTrend(TimestampedModel):
+    """
+    FeedbackTrend model represents the trend of feedback for a specific talk over time.
+    Attributes:
+        talk_id (ForeignKey): Reference to the related talk.
+        date (DateField): The date for which the feedback trend is recorded.
+        average_daily_rating (FloatField): The average rating received on the given date.
+        daily_feedback_count (PositiveIntegerField): The total number of feedback entries received on the given date.
+        positive_feedback_count (PositiveIntegerField): The number of positive feedback entries received on the given date.
+    Meta:
+        indexes (list): Database indexes for optimizing queries on 'talk_id' and 'date'.
+        unique_together (tuple): Ensures that each combination of 'talk_id' and 'date' is unique.
+        ordering (list): Default ordering of records by 'date' in descending order.
+    Methods:
+        __str__(): Returns a string representation of the feedback trend, including the date, average rating, and feedback count.
+    """
+
     talk_id = models.ForeignKey(Talks, on_delete=models.CASCADE,
                                  related_name="trends")
     date = models.DateField()
