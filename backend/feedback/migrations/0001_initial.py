@@ -10,28 +10,77 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('events', '0001_initial'),
-        ('talks', '0001_initial'),
+        ("events", "0001_initial"),
+        ("talks", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Feedback',
+            name="Feedback",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('speaker_expertise', models.IntegerField(choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default=1)),
-                ('depth_of_topic', models.IntegerField(choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default=1)),
-                ('relevancy', models.IntegerField(choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default=1)),
-                ('value_or_impact', models.IntegerField(choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default=1)),
-                ('comments', models.TextField(blank=True)),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to='events.event')),
-                ('reviewer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to=settings.AUTH_USER_MODEL)),
-                ('talk', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to='talks.talks')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "speaker_expertise",
+                    models.IntegerField(
+                        choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default=1
+                    ),
+                ),
+                (
+                    "depth_of_topic",
+                    models.IntegerField(
+                        choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default=1
+                    ),
+                ),
+                (
+                    "relevancy",
+                    models.IntegerField(
+                        choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default=1
+                    ),
+                ),
+                (
+                    "value_or_impact",
+                    models.IntegerField(
+                        choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default=1
+                    ),
+                ),
+                ("comments", models.TextField(blank=True)),
+                (
+                    "event",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="reviews",
+                        to="events.event",
+                    ),
+                ),
+                (
+                    "reviewer",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="reviews",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "talk",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="reviews",
+                        to="talks.talks",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'feedback',
-                'verbose_name_plural': 'feedback',
+                "verbose_name": "feedback",
+                "verbose_name_plural": "feedback",
             },
         ),
     ]
