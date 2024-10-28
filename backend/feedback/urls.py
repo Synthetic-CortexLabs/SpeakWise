@@ -1,7 +1,9 @@
 from django.urls import path
-from feedback import views
+from feedback.views import ListCreateFeedbackView, RetrieveUpdateDestroyFeedbackView
 
+
+app_name = "feedback"
 urlpatterns = [
-    path('feedback/', views.list_feedback, name='list_feedback'),
-    path('feedback/<str:pk>/', views.feedback_detail, name='feedback_detail'),
+    path('feedback/', ListCreateFeedbackView, name='list_feedback'),
+    path('feedback/<str:pk>/', RetrieveUpdateDestroyFeedbackView, name='feedback_detail'),
 ]
