@@ -4,6 +4,6 @@ from feedback.views import ListCreateFeedbackView, RetrieveUpdateDestroyFeedback
 
 app_name = "feedback"
 urlpatterns = [
-    path('feedback/', ListCreateFeedbackView, name='list_feedback'),
-    path('feedback/<str:pk>/', RetrieveUpdateDestroyFeedbackView, name='feedback_detail'),
+    path('feedback/', ListCreateFeedbackView.as_view(), name='list_feedback'),
+    path('feedback/<str:pk>/', RetrieveUpdateDestroyFeedbackView.as_view(), name='feedback_detail'),
 ]
