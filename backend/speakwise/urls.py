@@ -28,6 +28,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     
     # Installed apps URLs
+    path("feedback/", include("feedback.urls")),  # Feedback API
     path("speakers/", include("speakers.urls")),  # Speakers API
     path("talk/", include("talks.urls")),  # Talks API
     path("api/events/", include("events.urls", namespace="events")),  # Events API with namespace
