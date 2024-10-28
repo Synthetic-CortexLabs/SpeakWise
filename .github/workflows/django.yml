@@ -60,7 +60,7 @@ jobs:
         PYTHONPATH: ${{ github.workspace }}/backend
 
     - name: Upload Coverage Report
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4  # Updated to v4 as per latest requirements
       with:
         name: coverage-report
         path: backend/htmlcov/  # Upload coverage report for review if needed
