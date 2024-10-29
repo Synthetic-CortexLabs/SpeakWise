@@ -1,6 +1,115 @@
-# **Analysis of SpeakWise Project**
+# **SpeakWise**
 
-Based on the detailed project description you've provided for **SpeakWise**, I'll break down the core features and sub-features categorized under each user flow. Then, I'll derive the necessary models and outline the API endpoints using Django Rest Framework (DRF). Finally, I'll update the backend structure if necessary, including full descriptions.
+## **Project Overview**
+
+SpeakWise is a conference feedback platform designed to facilitate meaningful feedback for speakers, provide analytics for organizers, and enhance the conference experience for attendees. This platform allows organizers to create and manage events across different regions, while attendees can navigate through regions, countries, and sessions to give detailed feedback on speakers. 
+
+### **Purpose**
+
+- **For Attendees**: To easily navigate events by region and provide session-specific feedback that helps improve future conferences.
+- **For Organizers**: To manage events and sessions, analyze attendee feedback, and gather insights on speaker performance.
+- **For Speakers**: To gain actionable insights from attendee feedback, helping them refine and improve future presentations.
+
+---
+
+## **User Flows**
+
+### **1. Attendee Flow**
+
+**Purpose**: This flow allows attendees to register, select their event region, navigate to specific sessions, submit feedback, and manage their profile.
+
+**Detailed Workflow**:
+
+1. **Registration & Login**
+   - Attendees register with their email, username, and password.
+   - After registration, attendees receive a **unique attendance code** to verify actual attendance (only sent to attendees who check in at the event).
+
+2. **Event & Location Selection**
+   - Attendees begin by selecting the region of the conference. The seven regions are:
+     - North America
+     - South America
+     - Europe
+     - Africa
+     - Middle East
+     - Asia
+     - South Pacific
+
+   - **Example Path**:
+     - **Step 1**: Select **Africa** as the region.
+     - **Step 2**: Choose the country where the conference took place, e.g., **Ghana**.
+     - **Step 3**: View and select the specific conference, e.g., **PyHo 2024**.
+     - **Step 4**: Select the day of the conference, e.g., **Day 2**.
+     - **Step 5**: Choose the session, e.g., **Reinforcement Learning - by Jason Quist**.
+
+3. **Session Feedback Submission**
+   - Once inside a session, attendees can provide feedback using:
+     - **Overall Rating**: Give a star rating out of 5 to rate the session overall.
+     - **Qualitative Ratings** (on a scale of 1 to 10) for specific aspects:
+       - **Engagement**
+       - **Clarity**
+       - **Depth of Content**
+       - **Speaker’s Knowledge**
+       - **Practical Relevance**
+     - **Text Comments**: Attendees can leave additional feedback in a comment box (non-editable after 24 hours).
+     - **Anonymous Option**: Option to submit feedback anonymously.
+
+4. **Verification of Attendance**
+   - **Unique Attendance Code**: After checking into the conference, attendees receive a unique code via email, allowing only verified attendees to submit feedback. 
+
+5. **Feedback History**
+   - Attendees can view past feedback they’ve submitted in their profile. This feedback is read-only after the 24-hour editable period.
+
+6. **Profile Management**
+   - Update profile details (name, organization), password, and notification preferences.
+
+---
+
+### **2. Organizer Flow**
+
+**Purpose**: This flow is for conference organizers to create and manage events and sessions, oversee attendee engagement, and analyze feedback.
+
+**Detailed Workflow**:
+
+1. **Event & Session Management**
+   - Organizers create events by defining:
+     - **Region**: One of the seven regions (e.g., Africa).
+     - **Country**: The country within the region (e.g., Ghana).
+     - **Event Details**: Event name, description, and specific dates (e.g., PyHo 2024).
+     - **Session Details**: Define session name, speaker(s), time, and location for each session within the event.
+
+2. **Attendee Management**
+   - Manage attendee registrations and send **unique attendance codes** to those who check in at the conference.
+   - Monitor which attendees have verified their attendance, enabling only those who attended to provide feedback.
+
+3. **Analytics Dashboard**
+   - Access real-time feedback and engagement metrics, with features like:
+     - **Heatmaps**: Visual representation of session popularity and attendee engagement levels.
+     - **Speaker Comparison Tool**: Compare speakers based on aggregated ratings (Engagement, Clarity, etc.).
+
+4. **Reporting & Exports**
+   - Generate and export reports (PDF, CSV) with feedback summaries, session ratings, and other insights for post-event analysis.
+
+---
+
+### **3. Speaker Flow**
+
+**Purpose**: This flow provides speakers with access to detailed feedback on their sessions and a platform to manage their profile.
+
+**Detailed Workflow**:
+
+1. **Profile Setup**
+   - Upon receiving a link from the organizer, speakers create a profile with details like:
+     - **Bio**: Background information and expertise.
+     - **Social Links**: Optional links to LinkedIn, Twitter, etc.
+
+2. **Session Feedback Analytics**
+   - Access detailed feedback for each session they conducted, including:
+     - **Quantitative Feedback**: Aggregated ratings for Engagement, Clarity, Content Depth, Speaker Knowledge, and Practical Relevance.
+     - **Qualitative Comments**: See attendee comments on the session.
+     - **Reviewer Visibility**: Only see reviewer names if the feedback is non-anonymous.
+
+3. **Export Feedback**
+   - Option to download reports on session feedback, allowing speakers to keep a record and reflect on their performance.
 
 ---
 
