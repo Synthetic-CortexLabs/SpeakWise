@@ -60,11 +60,17 @@ jobs:
         commit-message: "Auto-format code with Black and fix Flake8 issues"
         labels: "auto-format, black, flake8, CI"
 
-    - name: Run Database Migrations
+    - name: Database Migration Workflow
       run: |
         cd backend
-        python manage.py migrate  # Apply migrations
-        python manage.py migrate zero  # Rollback migrations to test reversibility
+        # Apply migrations
+        python manage.py migrate
+        # Validate rollbacks
+        python manage.py migrate zero  # Rollback all migrations
+        python manage.py migrate  # Reapply all migrations
+        # Rollback specific app as an example
+        python manage.py migrate speakwise zero  # Replace <app_name> with the actual app name to test specific app rollback
+        python manage.py migrate speakwise  # Migrate specific app forward again
       env:
         DJANGO_SETTINGS_MODULE: speakwise.settings
         PYTHONPATH: ${{ github.workspace }}/backend
