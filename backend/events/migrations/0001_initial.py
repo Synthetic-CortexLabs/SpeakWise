@@ -4,33 +4,50 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('organizers', '0001_initial'),
-        ('speakers', '0001_initial'),
+        ("organizers", "0001_initial"),
+        ("speakers", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Event',
+            name="Event",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('description', models.TextField()),
-                ('start_date', models.DateTimeField()),
-                ('end_date', models.DateTimeField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('location', models.CharField(max_length=100)),
-                ('organizers', models.ManyToManyField(related_name='events', to='organizers.organizer')),
-                ('speakers', models.ManyToManyField(related_name='events', to='speakers.speaker')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                ("description", models.TextField()),
+                ("start_date", models.DateTimeField()),
+                ("end_date", models.DateTimeField()),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                ("location", models.CharField(max_length=100)),
+                (
+                    "organizers",
+                    models.ManyToManyField(
+                        related_name="events", to="organizers.organizer"
+                    ),
+                ),
+                (
+                    "speakers",
+                    models.ManyToManyField(
+                        related_name="events", to="speakers.speaker"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Event',
-                'verbose_name_plural': 'Events',
-                'ordering': ['start_date'],
+                "verbose_name": "Event",
+                "verbose_name_plural": "Events",
+                "ordering": ["start_date"],
             },
         ),
     ]

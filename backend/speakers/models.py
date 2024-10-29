@@ -1,3 +1,5 @@
+"""Speakers models."""
+
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -11,13 +13,13 @@ class Speaker(TimestampedModel):
     This model represents a speaker in the SpeakWise application. It extends the TimestampedModel to include
     timestamp fields for creation and modification times.
     Attributes:
-        user_id (OneToOneField): A one-to-one relationship with the User model. This field is required and 
+        user_id (OneToOneField): A one-to-one relationship with the User model. This field is required and
                                  ensures that each speaker is associated with a unique user.
         twitter (CharField): A character field to store the speaker's Twitter handle. The maximum length is 50 characters.
         organization (CharField): A character field to store the name of the organization the speaker is associated with.
                                   The maximum length is 100 characters.
         bio (TextField): A text field to store the biography of the speaker.
-        avatar (ImageField): An image field to store the avatar of the speaker. The images are uploaded to the 
+        avatar (ImageField): An image field to store the avatar of the speaker. The images are uploaded to the
                              "speakers/avatars/" directory.
     Meta:
         db_table (str): The name of the database table to use for this model ("speakers").
@@ -35,12 +37,16 @@ class Speaker(TimestampedModel):
     avatar = models.ImageField(upload_to="speakers/avatars/", null=True, blank=True)
 
     class Meta:
+        """Meta options for the Speaker model."""
+
         db_table = "speakers"
         verbose_name = "Speaker"
         verbose_name_plural = "Speakers"
 
     def __str__(self):
+        """String representation of the Speaker."""
         return self.user_id.username
 
     def get_absolute_url(self):
+        """Returns the absolute URL for the Speaker detail view."""
         return reverse("speaker_detail", kwargs={"pk": self.pk})

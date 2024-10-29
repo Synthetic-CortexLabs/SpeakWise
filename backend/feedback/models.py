@@ -1,3 +1,5 @@
+"""Feedback models for the feedback app."""
+
 import logging
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -58,23 +60,18 @@ class Feedback(models.Model):
         (4, 4),
         (5, 5),
     ]
-    talk = models.ForeignKey(Talks, on_delete=models.CASCADE,
-                              related_name="reviews")
-    event = models.ForeignKey(Event, on_delete=models.CASCADE,
-                               related_name="reviews")
-    reviewer = models.ForeignKey(User, on_delete=models.CASCADE,
-                                  related_name="reviews")
-    speaker_expertise = models.IntegerField(choices=NUM_STARS, 
-                                            default=NUM_STARS[0][0])
-    depth_of_topic = models.IntegerField(choices=NUM_STARS, 
-                                         default=NUM_STARS[0][0])
-    relevancy = models.IntegerField(choices=NUM_STARS,
-                                     default=NUM_STARS[0][0])
-    value_or_impact = models.IntegerField(choices=NUM_STARS,
-                                           default=NUM_STARS[0][0])
+    talk = models.ForeignKey(Talks, on_delete=models.CASCADE, related_name="reviews")
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="reviews")
+    reviewer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="reviews")
+    speaker_expertise = models.IntegerField(choices=NUM_STARS, default=NUM_STARS[0][0])
+    depth_of_topic = models.IntegerField(choices=NUM_STARS, default=NUM_STARS[0][0])
+    relevancy = models.IntegerField(choices=NUM_STARS, default=NUM_STARS[0][0])
+    value_or_impact = models.IntegerField(choices=NUM_STARS, default=NUM_STARS[0][0])
     comments = models.TextField(blank=True)
 
     class Meta:
+        """Meta options."""
+
         verbose_name = "feedback"
         verbose_name_plural = "feedback"
 
@@ -82,6 +79,7 @@ class Feedback(models.Model):
         return f"Feedback by {self.reviewer.user.username} for {self.talk.title} at  {self.event.title} event"
 
     def average_score(self):
+        """Calculate the average score of the ratings."""
         try:
             total = (
                 self.speaker_expertise
@@ -119,8 +117,7 @@ class FeedbackTrend(TimestampedModel):
         __str__(): Returns a string representation of the feedback trend, including the date, average rating, and feedback count.
     """
 
-    talk_id = models.ForeignKey(Talks, on_delete=models.CASCADE,
-                                 related_name="trends")
+    talk_id = models.ForeignKey(Talks, on_delete=models.CASCADE, related_name="trends")
     date = models.DateField()
     average_daily_rating = models.FloatField()
     daily_feedback_count = models.PositiveIntegerField()
@@ -133,4 +130,5 @@ class FeedbackTrend(TimestampedModel):
     ordering = ["-date"]
 
     def __str__(self):
+        """Return a string representation of the feedback trend."""
         return f"{self.date} - Avg Rating: {self.average_daily_rating} - Feedback Count: {self.daily_feedback_count}"
