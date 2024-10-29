@@ -50,7 +50,7 @@ jobs:
         steps.black.outputs.changes_detected == 'true' || steps.flake8.outputs.issues_detected == 'true'
       uses: peter-evans/create-pull-request@v5
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.SPEAKWISE }}
         branch: auto-format/dev  # Branch where changes are pushed
         base: dev  # Target branch for the PR
         title: "Auto-format and lint fixes with Black and Flake8"
