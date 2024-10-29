@@ -1,6 +1,9 @@
+"""Organizers app models module."""
+
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+
 # Create your models here.
 
 
@@ -32,12 +35,16 @@ class Organizer(models.Model):
     avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
 
     class Meta:
+        """Meta options for the Organizer model."""
+
         db_table = "organizers"
-        verbose_name = ("Organizer")
-        verbose_name_plural = ("Organizers")
+        verbose_name = "Organizer"
+        verbose_name_plural = "Organizers"
 
     def __str__(self):
+        """String representation of the Organizer."""
         return self.name
 
     def get_absolute_url(self):
+        """Returns the absolute URL for the Organizer detail view."""
         return reverse("Organizer_detail", kwargs={"pk": self.pk})

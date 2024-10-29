@@ -5,33 +5,34 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('speakers', '0001_initial'),
+        ("speakers", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='speaker',
-            name='created_at',
+            model_name="speaker",
+            name="created_at",
         ),
         migrations.RemoveField(
-            model_name='speaker',
-            name='updated_at',
+            model_name="speaker",
+            name="updated_at",
         ),
         migrations.AddField(
-            model_name='speaker',
-            name='create_at',
+            model_name="speaker",
+            name="create_at",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
         migrations.AddField(
-            model_name='speaker',
-            name='update_at',
+            model_name="speaker",
+            name="update_at",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
         migrations.AlterField(
-            model_name='speaker',
-            name='avatar',
-            field=models.ImageField(blank=True, null=True, upload_to='speakers/avatars/'),
+            model_name="speaker",
+            name="avatar",
+            field=models.ImageField(
+                blank=True, null=True, upload_to="speakers/avatars/"
+            ),
         ),
     ]

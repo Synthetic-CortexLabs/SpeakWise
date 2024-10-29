@@ -1,3 +1,5 @@
+"""Feedback URL Configuration."""
+
 from django.urls import path
 from feedback.views import (
     ListCreateFeedbackView,

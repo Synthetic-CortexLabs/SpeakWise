@@ -1,5 +1,5 @@
-from rest_framework import status
-from rest_framework.response import Response
+"""This module contains the views for the events app."""
+
 from rest_framework.permissions import AllowAny
 from .models import Event
 from .serializers import EventsSerializer

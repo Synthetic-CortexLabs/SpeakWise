@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,21 +14,35 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Speaker',
+            name="Speaker",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('twitter', models.CharField(max_length=50)),
-                ('organization', models.CharField(max_length=100)),
-                ('bio', models.TextField()),
-                ('avatar', models.ImageField(upload_to='speakers/avatars/')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("twitter", models.CharField(max_length=50)),
+                ("organization", models.CharField(max_length=100)),
+                ("bio", models.TextField()),
+                ("avatar", models.ImageField(upload_to="speakers/avatars/")),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "user_id",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Speaker',
-                'verbose_name_plural': 'Speakers',
-                'db_table': 'speakers',
+                "verbose_name": "Speaker",
+                "verbose_name_plural": "Speakers",
+                "db_table": "speakers",
             },
         ),
     ]

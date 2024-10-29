@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,18 +14,32 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='UserProfile',
+            name="UserProfile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('bio', models.TextField()),
-                ('profile_picture', models.ImageField(upload_to='')),
-                ('social_links', models.CharField(max_length=255, null=True)),
-                ('user_id', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("bio", models.TextField()),
+                ("profile_picture", models.ImageField(upload_to="")),
+                ("social_links", models.CharField(max_length=255, null=True)),
+                (
+                    "user_id",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Profile',
-                'verbose_name_plural': 'Profiles',
-                'db_table': 'profiles',
+                "verbose_name": "Profile",
+                "verbose_name_plural": "Profiles",
+                "db_table": "profiles",
             },
         ),
     ]

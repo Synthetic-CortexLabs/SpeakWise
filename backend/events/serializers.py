@@ -1,3 +1,5 @@
+"""Event serializers."""
+
 from rest_framework import serializers
 from .models import Event
 
@@ -9,4 +11,4 @@ class EventsSerializer(serializers.ModelSerializer):
         """Meta class."""
 
         model = Event
-        fields = "__all__"
+        exclude = ["created_at", "updated_at"]

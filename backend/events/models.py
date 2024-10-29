@@ -1,15 +1,20 @@
+"""Event models."""
+
 from django.db import models
 from organizers.models import Organizer
 from speakers.models import Speaker
+from base.models import TimestampedModel
+from django.utils import timezone
 
 # Create your models here.
 
 
-class Event(models.Model):
+class Event(TimestampedModel):
     """
     Represents an event.
 
-    Attributes:
+    Attributes:path("encounters/", views.EncounterListView.as_view()),
+    # path("encounters/<int:pk>/", views.EncounterDetailView.as_view()),
         title (str): The event's title.
         description (str): A detailed description of the event.
         start_date (datetime): When the event starts.
@@ -26,19 +31,20 @@ class Event(models.Model):
     """
 
     title = models.CharField(max_length=100)
-    description = models.TextField()
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    description = models.TextField(null=True)
+    start_date = models.DateTimeField(default=timezone.now)
+    end_date = models.DateTimeField(default=timezone.now)
     organizers = models.ManyToManyField(Organizer, related_name="events")
     speakers = models.ManyToManyField(Speaker, related_name="events")
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    location = models.CharField(max_length=100)
+    location = models.CharField(max_length=100, null=True)
 
     class Meta:
+        """Meta options."""
+
         verbose_name = "Event"
         verbose_name_plural = "Events"
         ordering = ["start_date"]
 
     def __str__(self):
+        """Return the event's title."""
         return self.title
