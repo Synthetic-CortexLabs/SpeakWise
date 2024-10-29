@@ -11,7 +11,7 @@ class FeedbackSerializer(ModelSerializer):
         """Meta class."""
 
         model = Feedback
-        fields = ["__all__"]
+        fields = "__all__"
 
 
 class FeedbackTrendSerializer(ModelSerializer):

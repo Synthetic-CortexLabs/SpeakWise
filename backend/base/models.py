@@ -1,4 +1,5 @@
-"""base models for created recurring models that can be inherited by other model to avoid duplications"""
+"""base models for created recurring models that can be inherited by other 
+model to avoid duplications"""
 
 from django.db import models
 from django.utils import timezone

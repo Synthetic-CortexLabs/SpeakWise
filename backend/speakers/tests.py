@@ -66,8 +66,8 @@ class SpeakerSerializerTest(TestCase):
                 "avatar",
                 "bio",
                 "id",
-                "create_at",
-                "update_at",
+                "created_at",
+                "updated_at",
             ],
         )
 
@@ -100,7 +100,8 @@ class SpeakerAPITest(APITestCase):
             avatar="path/to/avatar.jpg",
         )
         self.list_create_url = reverse("list_create_speakers")
-        self.detail_url = reverse("speaker_detail", kwargs={"pk": self.speaker.pk})
+        self.detail_url = reverse("speaker_detail", kwargs={
+                                  "pk": self.speaker.pk})
 
     def test_create_speaker(self):
         """Test creating a new speaker."""

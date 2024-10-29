@@ -20,8 +20,7 @@ class TalksModelTest(TestCase):
         self.user = User.objects.create_user(username="testuser", password="testpass")
         self.event = Event.objects.create(
             title="Test Event",
-            start_date=datetime.now(),  # Provide a value for start_date
-            # Provide a value for end_date if required
+            start_date=datetime.now(), 
             end_date=datetime.now() + timedelta(days=1),
         )
         self.speaker = Speaker.objects.create(
