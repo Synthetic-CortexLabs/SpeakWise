@@ -1,0 +1,30 @@
+[
+    {
+        "model": "events.Event",
+        "pk": 1,
+        "fields": {
+            "title": "Event 1",
+            "description": "Event 1 description",
+            "start_date_time": "2020-01-01",
+            "end_date_time": "2020-01-02",
+            "location": "Event 1 location",
+            "is_active": true,
+            "created_at": "2020-01-01T00:00:00Z",
+            "updated_at": "2020-01-01T00:00:00Z"
+        }
+    },
+    {
+        "model": "events.Event",
+        "pk": 2,
+        "fields": {
+            "title": "Event 2",
+            "description": "Event 2 description",
+            "start_date_time": "2020-02-01",
+            "end_date_time": "2020-02-02",
+            "location": "Event 2 location",
+            "is_active": true,
+            "created_at": "2020-01-01T00:00:00Z",
+            "updated_at": "2020-01-01T00:00:00Z"
+        }
+    }
+]

@@ -86,8 +86,13 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "speakwise.users",
     # Your stuff: custom apps go here
+    "speakwise.users",
+    "speakwise.organizers",
+    "speakwise.events",
+    "speakwise.feedbacks",
+    "speakwise.speakers",
+    "speakwise.base",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -177,7 +182,7 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#dirs
-        "DIRS": [str(APPS_DIR / "templates")],
+        "DIRS": [],
         # https://docs.djangoproject.com/en/dev/ref/settings/#app-dirs
         "APP_DIRS": True,
         "OPTIONS": {
