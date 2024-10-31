@@ -1,7 +1,7 @@
 import pytest
 
+from speakwise.users.ignore_tests.factories import UserFactory
 from speakwise.users.models import User
-from speakwise.users.tests.factories import UserFactory
 
 
 @pytest.fixture(autouse=True)
