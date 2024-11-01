@@ -89,6 +89,7 @@ LOCAL_APPS = [
     # Your stuff: custom apps go here
     "speakwise.users",
     "speakwise.organizers",
+    "speakwise.talks",
     "speakwise.events",
     "speakwise.feedbacks",
     "speakwise.speakers",
@@ -136,6 +137,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+
+# USER AUTH MODEL
 # MIDDLEWARE
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware

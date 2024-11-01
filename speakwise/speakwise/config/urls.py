@@ -22,7 +22,8 @@ urlpatterns = [
     # User management
     path("users/", include("speakwise.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    path("api/", include("speakwise.events.urls", namespace="events")),
+    path("api/events/", include("speakwise.events.urls", namespace="events")),
+    path("api/talks/", include("speakwise.talks.urls", namespace="talks")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
