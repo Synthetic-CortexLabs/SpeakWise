@@ -24,6 +24,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("api/events/", include("speakwise.events.urls", namespace="events")),
     path("api/talks/", include("speakwise.talks.urls", namespace="talks")),
+    path("api/speakers/", include("speakwise.speakers.urls", namespace="speakers")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

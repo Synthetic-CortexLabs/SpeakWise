@@ -1,10 +1,11 @@
 """Speakers app tests."""
 
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 from django.test import TestCase
-from rest_framework.test import APITestCase
+from django.urls import reverse
 from rest_framework import status
+from rest_framework.test import APITestCase
+
 from .models import Speaker
 from .serializers import SpeakerSerializer
 
@@ -17,7 +18,8 @@ class SpeakerModelTest(TestCase):
     def setUp(self):
         """Set up test data."""
         self.user = User.objects.create_user(
-            username="testuser", password="password123"
+            username="testuser",
+            password="password123",
         )
         self.speaker = Speaker.objects.create(
             user_id=self.user,
@@ -43,7 +45,9 @@ class SpeakerSerializerTest(TestCase):
     def setUp(self):
         """Set up test data."""
         self.user = User.objects.create_user(
-            username="testuser", password="password123"
+            username="testuser",
+            password="password123",
+            email="user@mail.com",
         )
         self.speaker_data = {
             "user_id": self.user,
@@ -86,10 +90,12 @@ class SpeakerAPITest(APITestCase):
     def setUp(self):
         """Set up test data."""
         self.user = User.objects.create_user(
-            username="testuser", password="password123"
+            username="testuser",
+            password="password123",
         )
         self.user2 = User.objects.create_user(
-            username="testsuser", password="password123"
+            username="testsuser",
+            password="password123",
         )
         self.client.login(username="testuser", password="password123")
         self.speaker = Speaker.objects.create(

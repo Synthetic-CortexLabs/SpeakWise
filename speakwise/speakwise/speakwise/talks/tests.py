@@ -19,8 +19,7 @@ class TalksModelTest(TestCase):
 
     def setUp(self):
         """Set up the test."""
-        self.user = User.objects.create_user(
-            username="testuser", password="testpass")
+        self.user = User.objects.create_user(username="testuser", password="testpass")
         self.event = Event.objects.create(
             title="Test Event",
             start_date=datetime.now(),
@@ -53,8 +52,7 @@ class TalksAPITest(TestCase):
     def setUp(self):
         """Set up the test."""
         self.client = APIClient()
-        self.user = User.objects.create_user(
-            username="testuser", password="testpass")
+        self.user = User.objects.create_user(username="testuser", password="testpass")
         self.event = Event.objects.create(
             title="Test Event",
             start_date=datetime.now(),  # Provide a value for start_date
@@ -76,8 +74,7 @@ class TalksAPITest(TestCase):
             end_time=datetime.now() + timedelta(hours=1),
         )
         self.talk.speaker_id.add(self.speaker)
-        self.talk_url = reverse(
-            "talk-retrieve-update-destroy", args=[self.talk.id])
+        self.talk_url = reverse("talk-retrieve-update-destroy", args=[self.talk.id])
         self.talk_list_url = reverse("talk-list-create")
 
     def test_list_talks(self):
@@ -101,8 +98,7 @@ class TalksAPITest(TestCase):
         response = self.client.post(self.talk_list_url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Talks.objects.count(), 2)
-        self.assertEqual(Talks.objects.get(
-            id=response.data["id"]).title, "New Talk")
+        self.assertEqual(Talks.objects.get(id=response.data["id"]).title, "New Talk")
 
     def test_retrieve_talk(self):
         """Test the retrieval of a talk."""
