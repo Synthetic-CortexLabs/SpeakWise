@@ -2,6 +2,16 @@
 
 - 📖 [Remix docs](https://remix.run/docs)
 
+## Navigating to project
+
+Cd in frontend
+then cd in speakwise
+so I mean:
+
+```shellscript
+cd frontend/speakwise
+```
+
 ## Development
 
 Run the dev server:
