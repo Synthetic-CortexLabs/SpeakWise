@@ -6,6 +6,33 @@ from speakers.models import Speaker
 from .models import User
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    """
+    UserRegistrationSerializer is a ModelSerializer for handling user registration with different roles.
+    Attributes:
+        speaker_profile (SpeakerSerializer): Optional serializer for speaker profile data.
+        organizer_profile (OrganizerSerializer): Optional serializer for organizer profile data.
+        role (serializers.CharField): Role of the user, write-only field.
+    Meta:
+        model (User): The User model associated with this serializer.
+        fields (tuple): Fields to be included in the serialized output.
+        extra_kwargs (dict): Additional keyword arguments for fields.
+    Methods:
+        create(validated_data):
+            Creates a new User instance along with associated Speaker or Organizer profile based on the role.
+            Args:
+                validated_data (dict): Validated data for creating the user and profiles.
+            Returns:
+                User: The created User instance.
+        validate(data):
+            Validates the input data to ensure that the appropriate profile data is provided based on the role.
+            Args:
+                data (dict): Input data to be validated.
+            Returns:
+                dict: Validated data.
+            Raises:
+                serializers.ValidationError: If the required profile data is not provided for the specified role.
+    """
+    
     speaker_profile = SpeakerSerializer(required=False)
     organizer_profile = OrganizerSerializer(required=False)
     role = serializers.CharField(write_only=True)
