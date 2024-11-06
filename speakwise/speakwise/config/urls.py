@@ -30,6 +30,7 @@ urlpatterns = [
     path("api/auth/", include("speakwise.users.auth_urls", namespace="auth")),
     path("api/talks/", include("speakwise.talks.urls", namespace="talks")),
     path("api/speakers/", include("speakwise.speakers.urls", namespace="speakers")),
+    path("api/feedbacks/", include("speakwise.feedbacks.urls", namespace="feedbacks")
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # Media files
