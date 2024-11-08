@@ -24,4 +24,3 @@ repos:
       - id: flake8
         additional_dependencies: [flake8-django]
         exclude: 'migrations/|tests.py|.*tests.py'
-
