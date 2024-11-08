@@ -1,6 +1,9 @@
 from django.urls import path
-from .auth_views import RegisterView
+
+from speakwise.users.auth_views import RegisterView
+
+app_name = "auth"
 
 urlpatterns = [
-   path("signup/",RegisterView.as_view(),name="sign-up"),
+    path("signup/", RegisterView.as_view(), name="sign-up"),
 ]
