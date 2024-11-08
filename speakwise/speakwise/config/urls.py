@@ -8,6 +8,10 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
@@ -22,7 +26,12 @@ urlpatterns = [
     # User management
     path("users/", include("speakwise.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    path("api/", include("speakwise.events.urls", namespace="events")),
+    path("api/events/", include("speakwise.events.urls", namespace="events")),
+    path("api/auth/", include("speakwise.users.auth_urls", namespace="auth")),
+    path("api/talks/", include("speakwise.talks.urls", namespace="talks")),
+    path("api/speakers/", include("speakwise.speakers.urls", namespace="speakers")),
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
