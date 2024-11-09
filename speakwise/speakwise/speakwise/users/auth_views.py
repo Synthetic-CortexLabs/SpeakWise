@@ -1,36 +1,52 @@
-# views.py
-from rest_framework import status, permissions
-from rest_framework.views import APIView
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics
+from rest_framework import status
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from drf_spectacular.utils import extend_schema
-from django.contrib.auth import authenticate
-from .serializers import UserSerializer
 
-@extend_schema(request=UserSerializer, responses={200: UserSerializer})
-class RegisterView(APIView):
-    """
-    RegisterView handles user registration.
+from speakwise.users.api.serializers import UserSerializer
+
+
+@extend_schema(
+    tags=["Authentication"],
+    description="Register a new user",
+    request=UserSerializer,
+    responses={201: UserSerializer, 400: None},
+)
+class RegisterView(generics.CreateAPIView):
+    """Handle user registration with JWT token generation.
+
     This view allows any user to register by providing the necessary data.
-    It validates the provided data using UserSerializer and, if valid, creates a new user.
-    Upon successful registration, it generates and returns JWT tokens (refresh and access) along with the user data.
+    It validates the provided data using UserSerializer and creates a new user
+    if valid.
+
+    Upon successful registration, it returns:
+        - User data
+        - JWT refresh token
+        - JWT access token
+
     Methods:
-        post(request): Handles the POST request to register a new user.
-            - request: The HTTP request containing user registration data.
-            - Returns: A Response object with user data and JWT tokens if registration is successful,
-                       or error details if registration fails.
+        post(request): Handle user registration POST request.
+            Args:
+                request: HTTP request with registration data.
+            Returns:
+                Response with user data and tokens, or error details.
     """
 
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (AllowAny,)
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             refresh = RefreshToken.for_user(user)
-            return Response({
-                'user': UserSerializer(user).data,
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-            }, status=status.HTTP_201_CREATED)
+            return Response(
+                {
+                    "user": UserSerializer(user).data,
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                },
+                status=status.HTTP_201_CREATED,
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
