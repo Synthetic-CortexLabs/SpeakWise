@@ -2,7 +2,7 @@
 """Base settings to build other settings files upon."""
 
 from pathlib import Path
-
+import os
 import environ
 from decouple import config
 
@@ -105,6 +105,7 @@ LOCAL_APPS = [
     "speakwise.feedbacks",
     "speakwise.speakers",
     "speakwise.base",
+    "speakwise.attendees",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
