@@ -55,7 +55,8 @@ DATABASES = {
         "PASSWORD": config("POSTGRES_PASSWORD"),
         "HOST": config("POSTGRES_HOST"),
         "PORT": config("POSTGRES_PORT"),
-    },
+        # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
+    }
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
@@ -352,6 +353,10 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_RENDERER_CLASSES": (
+        "speakwise.core.renderers.CustomJSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ),
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
