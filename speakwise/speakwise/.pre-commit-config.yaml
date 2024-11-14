@@ -26,6 +26,7 @@ repos:
       - id: prettier
         args: ['--tab-width', '2', '--single-quote']
         exclude: 'speakwise/templates/'
+    exclude: 'speakwise/templates/'
 
   - repo: https://github.com/adamchainz/django-upgrade
     rev: '1.22.1'
@@ -42,12 +43,15 @@ repos:
         args: [--fix, --exit-non-zero-on-fix]
       # Formatter
       - id: ruff-format
+    exclude: 'static/'
 
   - repo: https://github.com/Riverside-Healthcare/djLint
     rev: v1.35.2
     hooks:
       - id: djlint-reformat-django
       - id: djlint-django
+
+    exclude: 'static/'
 
 # sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
 ci:
