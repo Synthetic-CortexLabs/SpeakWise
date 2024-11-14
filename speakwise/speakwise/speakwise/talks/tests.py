@@ -43,7 +43,7 @@ class TalksModelTest(TestCase):
 
     def test_talk_creation(self):
         """Test the talk creation."""
-        self.assertEqual(self.talk.title, "Test Talk")
+        assert self.talk.title == "Test Talk"
 
 
 class TalksAPITest(TestCase):
@@ -82,8 +82,8 @@ class TalksAPITest(TestCase):
         response = self.client.get(self.talk_list_url)
         talks = Talks.objects.all()
         serializer = TalkSerializer(talks, many=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, serializer.data)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == serializer.data
 
     def test_create_talk(self):
         """Test the creation of a talk."""
@@ -96,17 +96,17 @@ class TalksAPITest(TestCase):
             "speaker_id": [self.speaker.id],
         }
         response = self.client.post(self.talk_list_url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Talks.objects.count(), 2)
-        self.assertEqual(Talks.objects.get(id=response.data["id"]).title, "New Talk")
+        assert response.status_code == status.HTTP_201_CREATED
+        assert Talks.objects.count() == 2
+        assert Talks.objects.get(id=response.data["id"]).title == "New Talk"
 
     def test_retrieve_talk(self):
         """Test the retrieval of a talk."""
         response = self.client.get(self.talk_url)
         talk = Talks.objects.get(id=self.talk.id)
         serializer = TalkSerializer(talk)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, serializer.data)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data == serializer.data
 
     def test_update_talk(self):
         """Test the update of a talk."""
@@ -119,13 +119,13 @@ class TalksAPITest(TestCase):
             "speaker_id": [self.speaker.id],
         }
         response = self.client.put(self.talk_url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        assert response.status_code == status.HTTP_200_OK
         self.talk.refresh_from_db()
-        self.assertEqual(self.talk.title, "Updated Talk")
-        self.assertEqual(self.talk.description, "Updated Description")
+        assert self.talk.title == "Updated Talk"
+        assert self.talk.description == "Updated Description"
 
     def test_delete_talk(self):
         """Test the deletion of a talk."""
         response = self.client.delete(self.talk_url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Talks.objects.count(), 0)
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert Talks.objects.count() == 0
