@@ -7,8 +7,6 @@ from rest_framework.permissions import AllowAny
 from speakwise.talks.models import Talks
 from speakwise.talks.serializers import TalkSerializer
 
-"""Events views."""
-
 
 @extend_schema(request=TalkSerializer, responses={200: TalkSerializer})
 class TalkListCreateView(generics.ListCreateAPIView):

@@ -1,1 +1,1 @@
-# Register your models here.
+"""feedback admin."""
