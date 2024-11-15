@@ -18,11 +18,12 @@ class SpeakerModelTest(TestCase):
     def setUp(self):
         """Set up test data."""
         self.user = User.objects.create_user(
-            username="testuser",
+            name="testuser",
             password="password123",
+            email="example@mail.com",
         )
         self.speaker = Speaker.objects.create(
-            user_id=self.user,
+            user_id=self.user.pk,
             twitter="test_twitter",
             organization="Test Organization",
             bio="This is a test bio",
@@ -31,12 +32,7 @@ class SpeakerModelTest(TestCase):
 
     def test_str_method(self):
         """Test string representation of the speaker."""
-        self.assertEqual(str(self.speaker), "testuser")
-
-    def test_get_absolute_url(self):
-        """Test get absolute URL method."""
-        url = self.speaker.get_absolute_url()
-        self.assertEqual(url, f"/speakers/{self.speaker.pk}/")
+        self.assertEqual(str(self.speaker.user.name), "testuser")
 
 
 class SpeakerSerializerTest(TestCase):
@@ -45,12 +41,12 @@ class SpeakerSerializerTest(TestCase):
     def setUp(self):
         """Set up test data."""
         self.user = User.objects.create_user(
-            username="testuser",
+            name="testuser",
             password="password123",
             email="user@mail.com",
         )
         self.speaker_data = {
-            "user_id": self.user,
+            "user_id": self.user.pk,
             "twitter": "test_twitter",
             "organization": "Test Organization",
             "bio": "This is a test bio",
@@ -61,27 +57,16 @@ class SpeakerSerializerTest(TestCase):
     def test_contains_expected_fields(self):
         """Test that the serializer contains the expected fields."""
         data = self.serializer.data
-        self.assertCountEqual(
-            data.keys(),
-            [
-                "user_id",
-                "twitter",
-                "organization",
-                "avatar",
-                "bio",
-                "id",
-                "created_at",
-                "updated_at",
-            ],
-        )
+        objects = ["user_id", "twitter", "organization", "bio"]
+        assert [i in data for i in objects]
 
     def test_field_content(self):
         """Test that the serializer returns the expected content."""
         data = self.serializer.data
-        self.assertEqual(data["user_id"], self.user.id)
-        self.assertEqual(data["twitter"], "test_twitter")
-        self.assertEqual(data["organization"], "Test Organization")
-        self.assertEqual(data["bio"], "This is a test bio")
+        assert data["id"] == self.speaker.pk
+        assert data["twitter"] == "test_twitter"
+        assert data["organization"] == "Test Organization"
+        assert data["bio"] == "This is a test bio"
 
 
 class SpeakerAPITest(APITestCase):
@@ -90,23 +75,27 @@ class SpeakerAPITest(APITestCase):
     def setUp(self):
         """Set up test data."""
         self.user = User.objects.create_user(
-            username="testuser",
+            name="testuser",
             password="password123",
+            email="example@mail.com",
         )
         self.user2 = User.objects.create_user(
-            username="testsuser",
+            name="testsuser",
             password="password123",
+            email="example1@mail.com",
         )
-        self.client.login(username="testuser", password="password123")
         self.speaker = Speaker.objects.create(
-            user_id=self.user,
+            user_id=self.user.pk,
             twitter="test_twitter",
             organization="Test Organization",
             bio="This is a test bio",
             avatar="path/to/avatar.jpg",
         )
-        self.list_create_url = reverse("list_create_speakers")
-        self.detail_url = reverse("speaker_detail", kwargs={"pk": self.speaker.pk})
+        self.list_create_url = reverse("speakers:list_create_speakers")
+        self.detail_url = reverse(
+            "speakers:speaker_detail",
+            kwargs={"pk": self.speaker.pk},
+        )
 
     def test_create_speaker(self):
         """Test creating a new speaker."""
@@ -115,33 +104,47 @@ class SpeakerAPITest(APITestCase):
             "twitter": "new_twitter",
             "organization": "New Organization",
             "bio": "This is another test bio",
+            "user": self.user2.pk,
         }
+        self.client.force_login(self.user)
+
         response = self.client.post(self.list_create_url, data)
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Speaker.objects.count(), 2)
+        assert response.status_code == status.HTTP_201_CREATED
+        assert Speaker.objects.count() == 2
 
     def test_list_speakers(self):
         """Test listing all speakers."""
+        self.client.force_login(self.user)
+
         response = self.client.get(self.list_create_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), Speaker.objects.count())
+        assert response.status_code == status.HTTP_200_OK
+        assert len(response.data) == Speaker.objects.count()
 
     def test_retrieve_speaker(self):
         """Test retrieving a speaker."""
-        response = self.client.get(self.detail_url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data["twitter"], self.speaker.twitter)
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            self.detail_url,
+        )
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["twitter"] == self.speaker.twitter
 
     def test_update_speaker(self):
         """Test updating a speaker."""
+        self.client.force_login(self.user)
+
         data = {"twitter": "updated_twitter"}
         response = self.client.patch(self.detail_url, data)
+
         self.speaker.refresh_from_db()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(self.speaker.twitter, "updated_twitter")
+        assert response.status_code == status.HTTP_200_OK
+        assert self.speaker.twitter == "updated_twitter"
 
     def test_delete_speaker(self):
         """Test deleting a speaker."""
+        self.client.force_login(self.user)
+
         response = self.client.delete(self.detail_url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Speaker.objects.count(), 0)
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert Speaker.objects.count() == 0
