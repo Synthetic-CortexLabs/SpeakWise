@@ -2,7 +2,7 @@
 """Base settings to build other settings files upon."""
 
 from pathlib import Path
-import os
+
 import environ
 from decouple import config
 
@@ -56,7 +56,7 @@ DATABASES = {
         "HOST": config("POSTGRES_HOST"),
         "PORT": config("POSTGRES_PORT"),
         # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
-    }
+    },
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD

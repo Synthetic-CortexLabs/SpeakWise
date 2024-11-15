@@ -39,9 +39,10 @@ repos:
     hooks:
       # Linter
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+        args: [--fix]
       # Formatter
       - id: ruff-format
+        args: [--respect-gitignore, --check]
 
   - repo: https://github.com/Riverside-Healthcare/djLint
     rev: v1.35.2

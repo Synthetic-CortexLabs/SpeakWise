@@ -1,6 +1,7 @@
+from typing import Any
+
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
-from typing import Any, Dict, List, Union
 
 
 def parse_error(errors):
@@ -31,7 +32,7 @@ def get_error_data(errors: Any, status_text: str) -> str:
     """Extract error message or return status text."""
     try:
         error_data = parse_error(errors)
-    except (AttributeError, IndexError, KeyError) as e:  # Specific exceptions
+    except (AttributeError, IndexError, KeyError):  # Specific exceptions
         error_data = ""
     return error_data if error_data else status_text
 
@@ -45,7 +46,9 @@ class CustomJSONRenderer(JSONRenderer):
         response_message = (
             data.pop("response_message", "")
             if isinstance(data, dict)
-            else data if isinstance(data, str) else ""
+            else data
+            if isinstance(data, str)
+            else ""
         )
 
         if status.is_client_error(status_code) or status.is_server_error(status_code):
@@ -54,7 +57,8 @@ class CustomJSONRenderer(JSONRenderer):
             response_data = []
             if not response_message:
                 response_message = get_error_data(
-                    errors, renderer_context["response"].status_text
+                    errors,
+                    renderer_context["response"].status_text,
                 )
 
         custom_data = {
@@ -66,6 +70,8 @@ class CustomJSONRenderer(JSONRenderer):
         }
 
         response = super(CustomJSONRenderer, self).render(  # noqa: UP008
-            custom_data, accepted_media_type, renderer_context
+            custom_data,
+            accepted_media_type,
+            renderer_context,
         )
         return response  # noqa: RET504
