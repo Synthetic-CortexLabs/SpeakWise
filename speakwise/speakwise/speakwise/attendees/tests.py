@@ -1,16 +1,10 @@
 """Tests for events app."""
 
 from django.test import TestCase
-from django.urls import reverse
-from rest_framework import status
-from rest_framework.test import APIRequestFactory
-from rest_framework.test import APITestCase
 
+from speakwise.attendees.models import AttendanceCode
+from speakwise.attendees.models import Attendee
 from speakwise.events.models import Event
-
-from speakwise.attendees.models import Attendee, AttendanceCode
-
-from speakwise.attendees.views import AttendeeListCreateView, AttendeeDetailView
 
 
 class TestModels(TestCase):
@@ -35,7 +29,9 @@ class TestModels(TestCase):
         )
         attendee = Attendee.objects.create(email="admin@mail.com")
         att_code = AttendanceCode.objects.create(
-            attendee=attendee, event=event, code="2024SW"
+            attendee=attendee,
+            event=event,
+            code="2024SW",
         )
         assert att_code.code == "2024SW"
         assert att_code.event == event

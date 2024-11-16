@@ -1,7 +1,13 @@
 """Base models for the SpeakWise application."""
 
+from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
+
+PHONE_REGEX = RegexValidator(
+    regex=r"^\+?1?\d{9,15}$",
+    message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
+)
 
 
 class TimestampedModel(models.Model):

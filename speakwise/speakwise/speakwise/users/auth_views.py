@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from speakwise.users.api.serializers import UserSerializer
+from speakwise.users.serializers import UserSerializer
 
 
 @extend_schema(
@@ -37,13 +37,13 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        serializer = UserSerializer(data=request.data, context={"request": request})
         if serializer.is_valid():
-            user = serializer.save()
-            refresh = RefreshToken.for_user(user)
+            serializer.save()
+            refresh = RefreshToken.for_user(serializer)
             return Response(
                 {
-                    "user": UserSerializer(user).data,
+                    "user": serializer.data,
                     "refresh": str(refresh),
                     "access": str(refresh.access_token),
                 },

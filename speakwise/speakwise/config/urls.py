@@ -24,7 +24,7 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
-    path("users/", include("speakwise.users.urls", namespace="users")),
+    path("api/users/", include("speakwise.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     path("api/events/", include("speakwise.events.urls", namespace="events")),
     path("api/auth/", include("speakwise.users.auth_urls", namespace="auth")),
