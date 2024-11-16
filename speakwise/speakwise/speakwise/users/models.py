@@ -6,6 +6,10 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from speakwise.base.models import PHONE_REGEX
+from speakwise.base.models import TimestampedModel
+
+from .choices import UserRole
 from .managers import UserManager
 from .choices import UserRoles as ROLE_CHOICES
 from speakwise.base.models import TimestampedModel

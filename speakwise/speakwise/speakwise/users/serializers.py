@@ -12,17 +12,14 @@ class UserRoleSerializer(serializers.ModelSerializer):
         """Meta class."""
 
         model = UserRole
-        fields = ["id", "display"]
+        fields = ["id", "role"]
 
 
 class UserSerializer(WritableNestedModelSerializer):
-    """user serializer."""
-
-    role = UserRoleSerializer(required=False)
+    """User serializer."""
 
     class Meta:
-        """Meta class."""
-
         model = User
-        fields = ["id", "first_name", "last_name", "email", "role", "nationality"]
-        read_only_fields = ["id", "role"]
+        fields = ["id", "username", "email", "password"]
+
+        extra_kwargs = {"password": {"write_only": True}}

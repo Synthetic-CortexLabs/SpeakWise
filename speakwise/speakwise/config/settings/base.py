@@ -5,9 +5,7 @@
 import os
 from datetime import timedelta
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
-import dj_database_url
 import environ
 
 # from decouple import config
@@ -66,13 +64,17 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 #     },
 # }
 DATABASES = {
-    "default": dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default=os.environ.get("DATABASE_URL"),
-        conn_max_age=600,
-    ),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("POSTGRES_DB"),
+        "USER": config("POSTGRES_USER"),
+        "PASSWORD": config("POSTGRES_PASSWORD"),
+        "HOST": config("POSTGRES_HOST"),
+        "PORT": config("POSTGRES_PORT"),
+        # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
+    },
 }
-# DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

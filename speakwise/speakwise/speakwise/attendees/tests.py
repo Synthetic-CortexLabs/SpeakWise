@@ -1,9 +1,7 @@
 """Tests for events app."""
 
 from django.test import TestCase
-from django.urls import reverse
-from rest_framework.test import APIClient
-from rest_framework import status
+
 from speakwise.attendees.models import AttendanceCode
 from speakwise.attendees.models import Attendee
 from speakwise.events.models import Event
@@ -34,6 +32,9 @@ class TestModels(TestCase):
             attendee=attendee,
             event=event,
             code="2024SW",
+            attendee=attendee,
+            event=event,
+            code="2024SW",
         )
         assert att_code.code == "2024SW"
         assert att_code.event == event
@@ -46,7 +47,7 @@ class ValidateAttendeeViewTests(TestCase):
         self.client = APIClient()
         self.valid_email = "valid@example.com"
         self.invalid_email = "invalid@example.com"
-        self.url = reverse('verify-attendee')
+        self.url = reverse("verify-attendee")
 
         # Create a sample attendee in the database
         self.attendee = Attendee.objects.create(email=self.valid_email)
