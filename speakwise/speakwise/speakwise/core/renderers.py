@@ -1,3 +1,5 @@
+"""Custom JSON renderer for API responses."""
+
 from typing import Any
 
 from rest_framework import status
@@ -5,6 +7,7 @@ from rest_framework.renderers import JSONRenderer
 
 
 def parse_error(errors):
+    """Parse error messages."""
     response = None
 
     if isinstance(errors, str):
@@ -38,6 +41,8 @@ def get_error_data(errors: Any, status_text: str) -> str:
 
 
 class CustomJSONRenderer(JSONRenderer):
+    """Custom JSON renderer for API responses."""
+
     def render(self, data, accepted_media_type=None, renderer_context=None):
         status_code = renderer_context["response"].status_code
         response_status = "success"
@@ -46,9 +51,7 @@ class CustomJSONRenderer(JSONRenderer):
         response_message = (
             data.pop("response_message", "")
             if isinstance(data, dict)
-            else data
-            if isinstance(data, str)
-            else ""
+            else data if isinstance(data, str) else ""
         )
 
         if status.is_client_error(status_code) or status.is_server_error(status_code):

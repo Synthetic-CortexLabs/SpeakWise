@@ -1,3 +1,5 @@
+"""Attendees models."""
+
 from django.db import models
 
 from speakwise.base.models import TimestampedModel
