@@ -34,6 +34,7 @@ urlpatterns = [
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/attendees/", include("attendees.urls", namespace="attendees")),
     path("api/feedbacks/", include("feedbacks.urls", namespace="feedbacks")),
+    path("api/", include("speakwise.organizers.urls", namespace="organizers")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
