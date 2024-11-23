@@ -2,7 +2,7 @@
 # organizers/views.py
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics
-from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import Organizers
 from .serializers import OrganizerSerializer
@@ -18,7 +18,7 @@ class OrganizerListCreateView(generics.ListCreateAPIView):
 
     queryset = Organizers.objects.all()
     serializer_class = OrganizerSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
 
 
 @extend_schema(
@@ -31,4 +31,4 @@ class OrganizerDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Organizers.objects.all()
     serializer_class = OrganizerSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
