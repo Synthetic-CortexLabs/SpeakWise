@@ -50,10 +50,6 @@ The frontend of **SpeakWise** aims to provide an intuitive and seamless experien
    - Login functionality with authentication tokens.
    - Password reset and email verification (if implemented).
 
-2. **Unique Attendance Code Verification**
-   - Input field for attendance code validation.
-   - Feedback on successful or failed code verification.
-
 3. **Event & Location Navigation**
    - Region selection (7 regions).
    - Country selection within a region.
@@ -98,7 +94,6 @@ The frontend of **SpeakWise** aims to provide an intuitive and seamless experien
 
 4. **Attendee Management**
    - View registered attendees.
-   - Send attendance codes.
    - Monitor attendance verification.
 
 5. **Analytics Dashboard**
@@ -305,9 +300,6 @@ These components are shared across different user roles.
 3. **SessionForm**
    - Form to create or edit sessions.
    - Inputs for session details and assignment of speakers.
-
-4. **AttendeeList**
-   - Table displaying attendees with options to send codes.
 
 5. **AnalyticsCharts**
    - Visual representations of feedback data.
