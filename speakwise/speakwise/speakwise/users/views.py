@@ -1,46 +1,142 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
-from django.db.models import QuerySet
-from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView
-from django.views.generic import RedirectView
-from django.views.generic import UpdateView
+"""API views for the users app."""
+
+from django.contrib.auth import authenticate
+from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from drf_spectacular.utils import extend_schema
 
 from speakwise.users.models import User
 
-
-class UserDetailView(LoginRequiredMixin, DetailView):
-    model = User
-    slug_field = "id"
-    slug_url_kwarg = "id"
+from .serializers import UserSerializer
 
 
-user_detail_view = UserDetailView.as_view()
+class UserListView(APIView):
+    """User list view."""
+
+    def get_permissions(self):
+        """Authentication is required to get the list of users."""
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [AllowAny()]
+
+    @extend_schema(
+        description="Get the list of users.",
+        responses={200: UserSerializer(many=True)},
+    )
+    def get(self, request):
+        """Authentication (JWT) is required to get the list of users."""
+        queryset = User.objects.all()
+        serializer = UserSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(
+        description="Create a user.",
+        request=UserSerializer,
+        responses={201: UserSerializer},
+    )
+    def post(self, request):
+        """Create a user."""
+        request_data = request.data
+        token = request_data.pop("token", None)
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        # serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = User
-    fields = ["name"]
-    success_message = _("Information successfully updated")
+class UserDetailView(APIView):
+    """User detail view."""
 
-    def get_success_url(self) -> str:
-        assert self.request.user.is_authenticated  # type guard
-        return self.request.user.get_absolute_url()
+    permission_classes = [AllowAny]
 
-    def get_object(self, queryset: QuerySet | None = None) -> User:
-        assert self.request.user.is_authenticated  # type guard
-        return self.request.user
+    def get_user(self, pk):
+        """Get a user by pk."""
+        try:
+            return User.objects.get(pk=pk)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    @extend_schema(
+        description="Get a user by pk.",
+        responses={200: UserSerializer},
+    )
+    def get(self, request, pk=None):
+        """Get a user by pk."""
+        user = self.get_user(pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(description="Update a user by pk.", responses={200: UserSerializer})
+    def patch(self, request, pk=None):
+        """Update a user by pk."""
+        user = self.get_user(pk)
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk=None):
+        """Delete a user by pk."""
+        user = self.get_user(pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-user_update_view = UserUpdateView.as_view()
+class UserLoginView(APIView):
+    """
+    User login view.
+    """
+
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        """
+        Login a user.
+
+        required fields: email, password
+
+        """
+
+        email = request.data.get("email")
+        password = request.data.get("password")
+        user = authenticate(request, email=email, password=password)
+        print(email, password, user)
+        if user is None:
+            return Response(
+                {"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response(
+            data={
+                "user": UserSerializer(user).data,
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
-class UserRedirectView(LoginRequiredMixin, RedirectView):
-    permanent = False
+class LogoutView(APIView):
+    """Logout a user."""
 
-    def get_redirect_url(self) -> str:
-        return reverse("users:detail", kwargs={"pk": self.request.user.pk})
+    permission_classes = [AllowAny]
 
+    def post(self, request):
+        """Blacklist a refresh token requires a refresh token.
 
-user_redirect_view = UserRedirectView.as_view()
+        Example:
+            {'refresh_token': 'token'}
+        """
+        refresh_token = request.data["refresh_token"]
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)

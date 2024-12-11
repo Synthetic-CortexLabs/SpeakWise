@@ -4,7 +4,9 @@
 from pathlib import Path
 
 import environ
-from decouple import config
+import os
+
+# from decouple import config
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # speakwise/
@@ -50,11 +52,11 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_DB"),
-        "USER": config("POSTGRES_USER"),
-        "PASSWORD": config("POSTGRES_PASSWORD"),
-        "HOST": config("POSTGRES_HOST"),
-        "PORT": config("POSTGRES_PORT"),
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": os.getenv("POSTGRES_HOST"),
+        "PORT": os.getenv("POSTGRES_PORT"),
         # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
     },
 }
@@ -91,10 +93,12 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "django_celery_beat",
     "rest_framework",
+    "dj_rest_auth",
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
     "webpack_loader",
+    "rest_framework_simplejwt",
 ]
 
 LOCAL_APPS = [
@@ -107,6 +111,7 @@ LOCAL_APPS = [
     "speakwise.speakers",
     "speakwise.base",
     "speakwise.attendees",
+    "speakwise.authentication",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

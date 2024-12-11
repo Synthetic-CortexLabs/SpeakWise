@@ -3,6 +3,7 @@
 from django.db import models
 
 from speakwise.base.models import TimestampedModel
+from speakwise.users.models import User
 from speakwise.events.models import Event
 
 
@@ -15,6 +16,7 @@ class Attendee(TimestampedModel):
     notification_preference = models.CharField(max_length=255, null=True)
     organization = models.CharField(max_length=255, null=True)
     is_verified = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
 
 
 class AttendanceCode(TimestampedModel):
