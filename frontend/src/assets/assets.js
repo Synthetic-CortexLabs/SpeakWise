@@ -25,9 +25,16 @@ import EarthGlobe from './Earth Globe.png'
 import Region from './Region.png'
 import Thumbs from './Thumbs Up Down.png'
 import Training from './Training.png'
-
+import twitter from './prime_twitter.png'
+import linkedin from './mdi_linkedin.png'
+import instagram from './ri_instagram-line.png'
+import facebook from './ic_sharp-facebook.png'
 
 export const assets = {
+  twitter,
+  linkedin,
+  instagram,
+  facebook,
   vector,
   landing_page_image,
   devfest2,

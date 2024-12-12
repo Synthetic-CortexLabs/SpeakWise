@@ -70,6 +70,51 @@ const Home = () => {
           </div>
         </div>
         </div>
+        <div className="contact-container">
+        <div className="contact-container-top">
+            <div className="contact-container-left">
+            <h1><span>Got Any Questions?</span></h1>
+            <h1>We&apos;ve Got Answers</h1>
+          </div>
+          <div className="contact-container-right">
+            <input type="email" placeholder='Email' />
+            <button>Connect</button>
+          </div>
+        </div>
+        <div className="contact-container-bottom">
+          <div className="contact-us">
+            <p>Ready to get started?</p>
+            <button>CONTACT US</button>
+        </div>
+        </div>
+        </div> 
+        <div className="footer">
+          <div className='footer-top'>
+            <h1>Speak<span>Wise</span></h1>
+          </div>
+          <div className='footer-middle'>
+            <ul>
+              <a href='#home'>Home</a>
+              <a href='#about'>About</a>
+              <a href='#speakers'>Speakers</a>
+              <a href='#events'>Events</a>
+              <a href='#review'>Review</a>
+              <a href='#contact'>Contact Us</a>
+            </ul>
+          </div>
+          <div className='footer-bottom'>
+            <div className='social-icons'>
+              <img src={assets.twitter} alt="" />
+              <img src={assets.linkedin} alt="" />
+              <img src={assets.instagram} alt="" />
+              <img src={assets.facebook} alt="" />
+            </div>
+            <div className='footer-bottom'>
+              <p> Copyright© 2024. SpeakWise. <br/> All rights reserved.</p>
+            </div>
+          </div>
+        </div>
+        
     </div>
   )
 }
