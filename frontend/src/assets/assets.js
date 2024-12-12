@@ -19,6 +19,12 @@ import devfest from './devfest 1.png'
 import flutter1 from './flutter 1.png'
 import googleIo1 from './google io 1.png'
 import googleIoExtended1 from './Google_IO_Extended 1.png'
+import Calender from './Calendar 12.png'
+import Conference from './Conference.png'
+import EarthGlobe from './Earth Globe.png'
+import Region from './Region.png'
+import Thumbs from './Thumbs Up Down.png'
+import Training from './Training.png'
 
 
 export const assets = {
@@ -42,5 +48,11 @@ export const assets = {
   devfest,
   flutter1,
   googleIo1,
-  googleIoExtended1
+  googleIoExtended1,
+  Calender,
+  Conference,
+  EarthGlobe,
+  Region,
+  Thumbs,
+  Training
 }

@@ -33,10 +33,42 @@ const Home = () => {
           </div>
         </div>
         <div  className='how-it-works'>
+        <div className="how-it-works-top">
           <h1>See How It <span>Works</span></h1>
-          <div className='how-it-works-grid'>
-            
+          <p>How was your conference experience? Share your thoughts and help shape the future of speaking with Speak<span>Wise</span>.</p>
+        </div>
+        <div className='how-it-works-grid'>
+          <div className='how-it-works-grid-item'>
+            <img src={assets.EarthGlobe} alt="" />
+            <b>Select a Country</b>
+            <p>After you logon to Speak<span>Wise</span>, you go ahead to select the country in which the conference was hosted.</p>
           </div>
+          <div className='how-it-works-grid-item'>
+            <img src={assets.Region} alt="" />
+            <b>Select a Region</b>
+            <p>In the selected country, you can now select the Region where the conference was held</p>
+          </div>
+          <div className='how-it-works-grid-item'>
+            <img src={assets.Conference} alt="" />
+            <b>Select the Conference/Event</b>
+            <p>Now you can go ahead and select the conference you attended, all conferences attended will be available here</p>
+          </div>
+          <div className='how-it-works-grid-item'>
+            <img src={assets.Calender} alt="" />
+            <b>Choose the Day</b>
+            <p>Normally, some conferences are hosted over several days, in which you select the day you attended.</p>
+          </div>
+          <div className='how-it-works-grid-item'>
+            <img src={assets.Training} alt="" />
+            <b>Select the Speaker</b>
+            <p>Now go ahead and select the speaker you want rate or give review.</p>
+          </div>
+          <div className='how-it-works-grid-item'>
+            <img src={assets.Thumbs} alt="" />
+            <b>Give Speaker Feedback</b>
+            <p>Go ahead and rate and give a speaker a feedback, note your feedback are anonymous.</p>
+          </div>
+        </div>
         </div>
     </div>
   )
