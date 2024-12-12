@@ -13,4 +13,65 @@
 .frameworks-container img:first-of-type{
     width: 10%;
 }
+.frameworks-container img:nth-of-type(2){
+    width: 23%;
+}
+.devfest-info{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: #020817;
+    padding: 20px 60px;
+    height: 75vh;
+}
+.devfest-info-left{
+    width: 35%;
+}
+.devfest-info-left h1{
+    font-size: 3rem;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 50px;
+}
+.devfest-info-left h1 span{
+    color: #EB5017;
+}
+.devfest-info-left ul{
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    color: #fff;
+}
+.devfest-info-left ul li{
+    font-weight: 300;
+    line-height: 1.5;
+}
+.devfest-info-right{
+    width: 65%;
+    position: relative;
+    height: 400px;
+}
+.devfest-info-right img{
+    position: absolute;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+.devfest-info-right .devfest-uk{
+    top: 30%;
+    right: 10%;
+    z-index: 2;
+    transform: rotate(-5deg);
+    width: 450px;
+}
+.devfest-info-right .devfest-namibia{
+    width: 500px;
+    top: -10%;
+    right: 35%;
+    z-index: 1;
+    transform: rotate(5deg);
+}
+
+
+
 
