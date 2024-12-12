@@ -1,0 +1,16 @@
+.frameworks-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background-color: #111827;
+    padding: 20px 60px;
+}
+.frameworks-container img{
+    width: 18%;
+    height: auto;
+}
+.frameworks-container img:first-of-type{
+    width: 10%;
+}
+

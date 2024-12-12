@@ -14,8 +14,15 @@ import pyconNamibia from './pycon namibia 1.png'
 import blackImage from './Rectangle 4.png'
 import speakwise from './speakwise 1.png'
 import countrySele from './Country Sele.png'
+import vector from './Vector.png'
+import devfest from './devfest 1.png'
+import flutter1 from './flutter 1.png'
+import googleIo1 from './google io 1.png'
+import googleIoExtended1 from './Google_IO_Extended 1.png'
+
 
 export const assets = {
+  vector,
   landing_page_image,
   devfest2,
   devfestUk,
@@ -31,5 +38,9 @@ export const assets = {
   pyconNamibia,
   blackImage,
   speakwise,
-  countrySele
+  countrySele,
+  devfest,
+  flutter1,
+  googleIo1,
+  googleIoExtended1
 }
