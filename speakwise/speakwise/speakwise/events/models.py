@@ -19,6 +19,9 @@ class Event(TimestampedModel):
         """Return a string representation of the model."""
         return self.title
 
+    class Meta:
+        app_label = "events"
+
 
 class Country(TimestampedModel):
     """A model for countries in the SpeakWise application."""
@@ -30,6 +33,10 @@ class Country(TimestampedModel):
         null=True,
         related_name="country",
     )
+
+    class Meta:
+        verbose_name = "Country"
+        verbose_name_plural = "Countries"
 
     def __str__(self):
         """Return a string representation of the model."""
@@ -46,6 +53,11 @@ class Region(TimestampedModel):
         null=True,
         related_name="region",
     )
+    
+    class Meta:
+        verbose_name = "Region"
+        verbose_name_plural = "Regions"
+        
 
     def __str__(self):
         """Return a string representation of the model."""
@@ -70,5 +82,11 @@ class Session(TimestampedModel):
     # TODO: Add speaker field
     speaker = models.CharField(max_length=255, null=True)
 
+    
+    
+    class Meta:
+        verbose_name = "Session"
+        verbose_name_plural = "Sessions"
+        
     def __str__(self):
         return self.name

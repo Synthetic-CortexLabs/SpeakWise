@@ -1,6 +1,10 @@
-from .models import Speaker
 from django.contrib import admin
+
+from .models import Handles
+from .models import Speaker
+
 # Register your models here.
 
 
 admin.site.register(Speaker)
+admin.site.register(Handles)

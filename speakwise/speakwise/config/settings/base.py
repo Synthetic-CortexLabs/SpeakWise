@@ -48,16 +48,16 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 # DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES = {
-    'default': {
-        'ENGINE': 'mssql',
-        'NAME': 'speakwise-db',
-        'USER': 'speakwise',
-        'PASSWORD': '#3Ewoksss',
-        'HOST': 'speakwise.database.windows.net',
-        'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',
+    "default": {
+        "ENGINE": "mssql",
+        "NAME": "speakwise-db",
+        "USER": "speakwise",
+        "PASSWORD": "#3Ewoksss",
+        "HOST": "speakwise.database.windows.net",
+        "OPTIONS": {
+            "driver": "ODBC Driver 17 for SQL Server",
         },
-    }
+    },
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
@@ -114,7 +114,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # MIGRATIONS
 # ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
+# https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules # Ensure this is correct
 MIGRATION_MODULES = {"sites": "speakwise.contrib.sites.migrations"}
 
 # AUTHENTICATION

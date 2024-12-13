@@ -1,8 +1,8 @@
 """This module contains the model for the talks app."""
 
+from base.models import TimestampedModel
 from django.db import models
 
-from speakwise.base.models import TimestampedModel
 from speakwise.events.models import Event
 from speakwise.speakers.models import Speaker
 
