@@ -8,7 +8,6 @@ from django.urls import reverse
 # Speakers file upload directory
 SPEAKERS_UPLOAD_DIR = "speakers/avatars/"
 
-
 class Speaker(TimestampedModel):
     """Speaker Model for the SpeakWise application."""
 
@@ -17,10 +16,11 @@ class Speaker(TimestampedModel):
         on_delete=models.CASCADE,
         related_name="speaker_profile",
     )
-    twitter = models.CharField(max_length=50)
+    # TODO: ADD EVENT FOREIGN KEY
     organization = models.CharField(max_length=100)
     bio = models.TextField()
-    avatar = models.ImageField(upload_to=SPEAKERS_UPLOAD_DIR, null=True, blank=True)
+    avatar = models.ImageField(upload_to=SPEAKERS_UPLOAD_DIR, null=True,
+                               blank=True)
 
     class Meta:
         db_table = "speakers"

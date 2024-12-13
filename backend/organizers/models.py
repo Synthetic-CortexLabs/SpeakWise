@@ -2,7 +2,7 @@
 
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 # Create your models here.
 
@@ -11,7 +11,7 @@ class Organizer(models.Model):
     """
     Model representing an Organizer.
     Attributes:
-        user_id (OneToOneField): A one-to-one relationship with the User model.
+        user (OneToOneField): A one-to-one relationship with the User model.
         twitter (CharField): Twitter handle of the organizer, optional.
         facebook (CharField): Facebook profile of the organizer, optional.
         instagram (CharField): Instagram handle of the organizer, optional.
@@ -26,7 +26,7 @@ class Organizer(models.Model):
         get_absolute_url(): Returns the absolute URL for the Organizer detail view.
     """
 
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     twitter = models.CharField(max_length=255, blank=True, null=True)
     facebook = models.CharField(max_length=255, blank=True, null=True)
     instagram = models.CharField(max_length=255, blank=True, null=True)
@@ -42,7 +42,6 @@ class Organizer(models.Model):
         verbose_name_plural = "Organizers"
 
     def __str__(self):
-        """String representation of the Organizer."""
         return self.name
 
     def get_absolute_url(self):
