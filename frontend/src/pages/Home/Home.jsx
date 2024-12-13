@@ -1,9 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Home.css'
 import Header from '../../components/Header/Header'
 import { assets } from '../../assets/assets'
+import Footer from '../../components/Footer/Footer'
 
 const Home = () => {
+  const [activeImage, setActiveImage] = useState(0);
+  const images = [assets.devfestUkMobile, assets.pyconNamibiaMobile];
+  
+  const nextImage = () => {
+    setActiveImage((prev) => (prev + 1) % images.length);
+  };
+  
+  const prevImage = () => {
+    setActiveImage((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   return (
     <div>
         <Header/>
@@ -30,6 +42,28 @@ const Home = () => {
           <div className='devfest-info-right'>
             <img className='devfest-uk' src={assets.devfestUk} alt="" />
             <img className='devfest-namibia' src={assets.pyconNamibia} alt="" />
+          </div>
+          <div className='devfest-info-right-mobile'>
+            {images.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt=""
+                className={index === activeImage ? 'active' : ''}
+              />
+            ))}
+            <div className="carousel-controls">
+              <img 
+                src={assets.chevronLeft} 
+                alt="Previous" 
+                onClick={prevImage}
+              />
+              <img 
+                src={assets.chevronRight} 
+                alt="Next" 
+                onClick={nextImage}
+              />
+            </div>
           </div>
         </div>
         <div  className='how-it-works'>
@@ -88,32 +122,7 @@ const Home = () => {
         </div>
         </div>
         </div> 
-        <div className="footer">
-          <div className='footer-top'>
-            <h1>Speak<span>Wise</span></h1>
-          </div>
-          <div className='footer-middle'>
-            <ul>
-              <a href='#home'>Home</a>
-              <a href='#about'>About</a>
-              <a href='#speakers'>Speakers</a>
-              <a href='#events'>Events</a>
-              <a href='#review'>Review</a>
-              <a href='#contact'>Contact Us</a>
-            </ul>
-          </div>
-          <div className='footer-bottom'>
-            <div className='social-icons'>
-              <img src={assets.twitter} alt="" />
-              <img src={assets.linkedin} alt="" />
-              <img src={assets.instagram} alt="" />
-              <img src={assets.facebook} alt="" />
-            </div>
-            <div className='footer-bottom'>
-              <p> Copyright© 2024. SpeakWise. <br/> All rights reserved.</p>
-            </div>
-          </div>
-        </div>
+        <Footer/>
         
     </div>
   )

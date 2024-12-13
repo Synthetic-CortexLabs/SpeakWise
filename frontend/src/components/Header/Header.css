@@ -70,3 +70,33 @@
    color: #020817;
 }
 
+/* Media Queries for Mobile */
+@media screen and (max-width: 768px) {
+   .header {
+      height: auto;
+      padding: 40px 20px;
+   }
+
+   .header-contents h2 {
+      font-size: 25px;
+      line-height: 1.2;
+   }
+
+   .header-contents p {
+      font-size: 14px;
+      margin: 20px 0;
+   }
+
+   .header-contents-buttons {
+      scale: 0.9;
+      gap: 15px;
+   }
+
+   .header-contents button:first-of-type,
+   .header-contents button:last-of-type {
+      text-wrap: nowrap;
+      width: 100%;
+      padding: 12px 20px;
+   }
+}
+
