@@ -1,3 +1,7 @@
+body {
+  min-height: 100vh;
+  background-color: #020817;
+}
 .frameworks-container{
     display: flex;
     align-items: center;

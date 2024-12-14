@@ -33,6 +33,10 @@ import instagram from './ri_instagram-line.png'
 import facebook from './ic_sharp-facebook.png'
 import chevronLeft from './Chevron Left.png'
 import chevronRight from './Forward.png'
+import linkedinBlack from './linkedin.png'
+import twitterBlack from './twitter black.png'
+import eyeOpen from './eye-svgrepo-com.png'
+import eyeClosed from './eye-off-svgrepo-com.png'
 
 export const assets = {
   twitter,
@@ -69,5 +73,9 @@ export const assets = {
   Thumbs,
   Training,
   chevronLeft,
-  chevronRight
+  chevronRight,
+  linkedinBlack,
+  twitterBlack,
+  eyeOpen,
+  eyeClosed
 }
