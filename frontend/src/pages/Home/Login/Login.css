@@ -25,6 +25,7 @@ span{
     position: relative;
         background-color: black;
         border-radius: 17px;
+        opacity: 0;
 }
 .login-left h1,
 .login-left h2,
@@ -55,7 +56,8 @@ span{
 .login-left img{
     width: 350px;
     height: auto;
-    
+    opacity: 0;
+    animation: fadeIn 0.3s ease-out forwards;
 }
 .login-right{
     display: flex;
@@ -178,6 +180,7 @@ span{
 }
 .sign-in-form form div{
     position: relative;
+    width: 100%;
 }
 .sign-in-form form img{
     width: 15px;
@@ -247,7 +250,30 @@ span{
 }
 
 .login-left {
+    position: relative;
+    background-color: black;
+    border-radius: 17px;
+    opacity: 0;
+}
+
+.login-left.animate {
     animation: slideInFromLeft 0.8s ease-out forwards;
+}
+
+.login-left img {
+    width: 350px;
+    height: auto;
+    opacity: 0;
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .sign-up-form form {

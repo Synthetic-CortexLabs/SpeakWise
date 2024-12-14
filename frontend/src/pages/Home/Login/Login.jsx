@@ -3,18 +3,27 @@ import './Login.css';
 import { assets } from '../../../assets/assets';
 
 const Login = () => {
-  const [view, setView] = useState('buttons'); // Tracks the current view
-  const [showPassword, setShowPassword] = useState(false); 
+  const [view, setView] = useState('buttons');
+  const [showPassword, setShowPassword] = useState(false);
+  const [animate, setAnimate] = useState(true);
+
+  const handleViewChange = (newView) => {
+    setAnimate(false);
+    setTimeout(() => {
+      setView(newView);
+      setAnimate(true);
+    }, 10);
+  };
 
   return (
     <div className='login-container'>
-      <div className='login-left'>
+      <div className={`login-left ${animate ? 'animate' : ''}`}>
         <h1>
           Speak<span>Wise</span>
         </h1>
         {view === 'buttons' && (
           <>
-          <img src={assets.blackImage} alt='' />
+            <img src={assets.blackImage} alt='' />
             <h2>You need to track your Speaking engagements?</h2>
             <p>
               Whichever tech conference you attended recently, you can find your
@@ -41,12 +50,12 @@ const Login = () => {
               Speak<span>Wise</span>
             </h1>
             <p>Select User Type</p>
-            <button onClick={() => setView('signin')}>Sign in as Attendee</button>
-            <button onClick={() => setView('signin')}>Sign in as Speaker</button>
-            <button onClick={() => setView('signin')}>Sign in as Organizer</button>
+            <button onClick={() => handleViewChange('signin')}>Sign in as Attendee</button>
+            <button onClick={() => handleViewChange('signin')}>Sign in as Speaker</button>
+            <button onClick={() => handleViewChange('signin')}>Sign in as Organizer</button>
             <p>
               Don&apos;t have an account?{' '}
-              <span onClick={() => setView('signup')}>Sign up</span>
+              <span onClick={() => handleViewChange('signup')}>Sign up</span>
             </p>
           </div>
         )}
@@ -55,7 +64,7 @@ const Login = () => {
             <h1>Welcome back!</h1>
              <p>
               Don&apos;t have an account?{' '}
-              <span onClick={() => setView('signup')}>Sign up</span>
+              <span onClick={() => handleViewChange('signup')}>Sign up</span>
             </p>
             <form>
               <div>
@@ -82,7 +91,7 @@ const Login = () => {
             <h1>Create account</h1>
              <p>
               Already have an account?{' '}
-              <span onClick={() => setView('signin')}>Sign In</span>
+              <span onClick={() => handleViewChange('signin')}>Sign In</span>
             </p>
             <form>
               <label>Your Name</label>
