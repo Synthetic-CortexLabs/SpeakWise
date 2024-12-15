@@ -1,12 +1,13 @@
-from django.urls import path
+"""users urls."""
 
-from .views import user_detail_view
-from .views import user_redirect_view
-from .views import user_update_view
+from django.urls import path
+from . import views
 
 app_name = "users"
+
 urlpatterns = [
-    path("~redirect/", view=user_redirect_view, name="redirect"),
-    path("~update/", view=user_update_view, name="update"),
-    path("<int:pk>/", view=user_detail_view, name="detail"),
+    path("users/register/", views.UserListView.as_view(), name="list"),
+    path("users/<int:pk>/", views.UserDetailView.as_view(), name="detail"),
+    path("users/login/", views.UserLoginView.as_view(), name="login"),
+    path("users/logout/", views.LogoutView.as_view(), name="logout"),
 ]
