@@ -6,7 +6,11 @@ const Login = () => {
   const [view, setView] = useState('buttons');
   const [showPassword, setShowPassword] = useState(false);
   const [animate, setAnimate] = useState(true);
+ 
 
+  // This section is responsible for handling the state of the login view and password visibility
+  // The animate state is used to control the animation of the view transition
+  // The showPassword state is used to toggle the visibility of the password input field
   const handleViewChange = (newView) => {
     setAnimate(false);
     setTimeout(() => {
