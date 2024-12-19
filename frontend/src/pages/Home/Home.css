@@ -1,7 +1,4 @@
-body {
-  min-height: 100vh;
-  background-color: #020817;
-}
+
 .frameworks-container{
     display: flex;
     align-items: center;
@@ -82,6 +79,7 @@ body {
   height: 100vh;
   scale: 0.9;
 }
+/* this code is for hwo it works at the to */
 
 .how-it-works-top {
   text-align: center;
@@ -498,12 +496,3 @@ span{
     display: block;
   }
 }
-
-
-
-
-
-
-
-
-
