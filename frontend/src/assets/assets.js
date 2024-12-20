@@ -37,6 +37,8 @@ import linkedinBlack from './linkedin.png'
 import twitterBlack from './twitter black.png'
 import eyeOpen from './eye-svgrepo-com.png'
 import eyeClosed from './eye-off-svgrepo-com.png'
+import aboutImage from './about image.png'
+import Julius from './Julius.png'
 
 export const assets = {
   twitter,
@@ -77,5 +79,67 @@ export const assets = {
   linkedinBlack,
   twitterBlack,
   eyeOpen,
-  eyeClosed
+  eyeClosed,
+  aboutImage,
+  Julius
 }
+
+
+export const team_members = [
+  {
+    _id: '1',
+    name: 'John Doe',
+    image: Julius,
+    description:
+        'Lorem ipsium dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et adolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat'
+  },
+  {
+    _id: '2',
+    name: 'John Doe',
+    image: Julius,
+    description:
+        'Lorem ipsium dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et adolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat'
+  },
+  {
+    _id: '3',
+    name: 'John Doe',
+    image: Julius,
+    description:
+        'Lorem ipsium dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et adolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat'
+  },
+  {
+    _id: '4',
+    name: 'John Doe',
+    image: Julius,
+    description:
+        'Lorem ipsium dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et adolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat'
+  },
+  {
+    _id: '5',
+    name: 'John Doe',
+    image: Julius,
+    description:
+        'Lorem ipsium dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et adolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat'
+  },
+  {
+    _id: '6',
+    name: 'John Doe',
+    image: Julius,
+    description:
+        'Lorem ipsium dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et adolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat'
+  },
+  {
+    _id: '7',
+    name: 'John Doe',
+    image: Julius,
+    description:
+        'Lorem ipsium dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et adolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat'
+  },
+  {
+    _id: '8',
+    name: 'John Doe',
+    image: Julius,
+    description:
+        'Lorem ipsium dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et adolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat'
+  }
+]

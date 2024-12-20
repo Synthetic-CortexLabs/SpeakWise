@@ -1,9 +1,10 @@
-body{
-  background-color: #f5f4f4;
-  max-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.login-background {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f5f4f4; 
+    height: 100vh;
+    width: 100%; 
 }
 span{
     color: #EB5017;

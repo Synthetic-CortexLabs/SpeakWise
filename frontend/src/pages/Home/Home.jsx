@@ -3,6 +3,8 @@ import './Home.css'
 import Header from '../../components/Header/Header'
 import { assets } from '../../assets/assets'
 import Footer from '../../components/Footer/Footer'
+import Navbar from '../../components/Navbar/Navbar'
+import ContactUs from '../../components/ContactUs/ContactUs'
 
 const Home = () => {
   const [activeImage, setActiveImage] = useState(0);
@@ -18,6 +20,7 @@ const Home = () => {
 
   return (
     <div>
+        <Navbar/>
         <Header/>
         <div className='frameworks-container'>
           <img src={assets.pyconAfrica} alt="" />
@@ -104,24 +107,7 @@ const Home = () => {
           </div>
         </div>
         </div>
-        <div className="contact-container">
-        <div className="contact-container-top">
-            <div className="contact-container-left">
-            <h1><span>Got Any Questions?</span></h1>
-            <h1>We&apos;ve Got Answers</h1>
-          </div>
-          <div className="contact-container-right">
-            <input type="email" placeholder='Email' />
-            <button>Connect</button>
-          </div>
-        </div>
-        <div className="contact-container-bottom">
-          <div className="contact-us">
-            <p>Ready to get started?</p>
-            <button>CONTACT US</button>
-        </div>
-        </div>
-        </div> 
+       <ContactUs/>
         <Footer/>
         
     </div>
