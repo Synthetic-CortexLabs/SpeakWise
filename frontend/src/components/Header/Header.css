@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+.header {
+   height: 100vh;
+   width: 100%;
+   background: #020817;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+.header-contents{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.header-contents h2{
+    color: #fff;
+    font-size: 80px;
+    font-weight: 500;
+    text-align: center;
+}
+.header-contents h2 span{
+   color: #EB5017;
+}
+.header-contents p{
+   color: #FFF;
+      text-align: center;
+      font-size: 25px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 116%;
+      /* 29px */
+}
+.header-contents-buttons{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 30px;
+   margin-top: 20px;
+}
+.header-contents button:first-of-type{
+   border-radius: 5px;
+      background: #F8FAFC;
+      padding: 13px 45px;
+      border: 1px solid #020817;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      color: #020817;
+}
+.header-contents button:first-of-type:hover{
+   cursor: pointer;
+   background: #020817;
+   color: #fff;
+   border: 1px solid #fff;
+}
+.header-contents button:last-of-type{
+   border-radius: 5px;
+   border: 2px solid #EB5017;
+   padding: 13px 25px;
+   background: transparent;
+   color: #fff;
+   font-size: 1rem;
+   font-weight: 500;
+   transition: all 0.3s ease;
+}
+.header-contents button:last-of-type:hover{
+   cursor: pointer;
+   background: #EB5017;
+   color: #020817;
+}
+
+/* Media Queries for Mobile */
+@media screen and (max-width: 768px) {
+   .header {
+      height: auto;
+      padding: 40px 20px;
+   }
+
+   .header-contents h2 {
+      font-size: 25px;
+      line-height: 1.2;
+   }
+
+   .header-contents p {
+      font-size: 14px;
+      margin: 20px 0;
+   }
+
+   .header-contents-buttons {
+      scale: 0.9;
+      gap: 15px;
+   }
+
+   .header-contents button:first-of-type,
+   .header-contents button:last-of-type {
+      text-wrap: nowrap;
+      width: 100%;
+      padding: 12px 20px;
+   }
+}
+

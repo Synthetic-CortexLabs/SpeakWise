@@ -1,0 +1,191 @@
+.about-header {
+    height: 63vw;
+    margin: 0px auto;
+    background: url('/about image.png') no-repeat;
+    background-size: contain;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.about-header h1 {
+    margin-top: 18%;
+    font-size: 90px;
+}
+
+.about-header p:first-of-type {
+    font-size: 1.8rem;
+}
+
+.about-header p:nth-of-type(2) {
+    margin-top: 160px;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    width: 35%;
+    text-align: center;
+}
+
+.meet-our-team {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.meet-our-team h1 {
+    margin-top: 50px;
+    font-size: 3.8rem;
+    font-weight: 600;
+}
+
+.meet-our-team p {
+    font-size: 2rem;
+}
+
+.team-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+    padding: 0 100px;
+}
+
+.team-container::after {
+    content: "";
+    flex: auto;
+}
+
+.team-member {
+    border: 2px solid #EB5017;
+    border-radius: 15px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    height: 400px;
+}
+
+.team-member-image-container {
+    height: 35%;
+    position: relative;
+}
+
+.team-member-info {
+    flex: 3;
+    background-color: white;
+    color: black;
+    padding: 20px;
+    border-top: 3px solid #EB5017;
+}
+
+.team-member:hover {
+    transform: translateY(-10px);
+}
+
+.team-member-image {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    position: absolute;
+    top: 27%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.team-member-name-mobile {
+    display: none;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.team-member-name-desktop {
+    display: block;
+}
+
+.team-member h2 {
+    font-size: 1.5rem;
+    margin-top: 50px;
+}
+
+.team-member p {
+    text-align: left;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .about-header{
+        padding: 0 25px;
+    }
+    .about-header h1{
+        font-size: 2.4rem;
+    }
+        .about-header p:first-of-type{
+            font-size: 0.7rem;
+            text-align: center;
+        }
+                .about-header p:nth-of-type(2){
+                    margin-top: 20px;
+                    font-size: 0.8rem;
+                    width: 80%;
+                    line-height: 1;
+                    font-weight: 400;
+                }
+.meet-our-team h1{
+    font-size: 2.2rem;
+}
+.meet-our-team>p:first-of-type{
+    font-size: 1.4rem;
+}
+    .team-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 0 40px;
+    }
+
+    .team-member {
+        height: 300px;
+    }
+
+    .team-member-image-container {
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        width: 100%;
+    }
+    .team-member-info{
+        height: auto;
+    }
+    .team-member-info p{
+        margin-top: 30px;
+    }
+
+    .team-member-image {
+        width: 120px;
+        height: 120px;
+        left: 25%;
+        position: absolute;
+    }
+
+    .team-member-name-mobile {
+        display: block;
+        font-size: 1.2rem;
+        position: absolute;
+        right: 5%;
+        bottom: 10%;
+    }
+
+    .team-member-name-desktop {
+        display: none;
+    }
+}
