@@ -5,7 +5,6 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
-
 from speakwise.feedbacks.models import Feedback
 from speakwise.feedbacks.serializers import FeedbackSerializer
 
@@ -26,3 +25,5 @@ class FeedbackDetailView(RetrieveUpdateDestroyAPIView):
     serializer_class = FeedbackSerializer
     queryset = Feedback.objects.all()
     permission_classes = [IsAuthenticated]
+
+
