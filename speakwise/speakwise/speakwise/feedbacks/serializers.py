@@ -1,8 +1,14 @@
-from rest_framework import serializers
-from feedbacks.models import Feedback
+"""feedback serializers."""
+
+from rest_framework.serializers import ModelSerializer
+from speakwise.feedbacks.models import Feedback
 
 
-class FeedbackSerializer(serializers.ModelSerializer):
+class FeedbackSerializer(ModelSerializer):
+    """Feedback serializer."""
+
     class Meta:
+        """Meta class."""
+
         model = Feedback
-        fields = "__all__"
+        exclude = ["created_at", "updated_at"]

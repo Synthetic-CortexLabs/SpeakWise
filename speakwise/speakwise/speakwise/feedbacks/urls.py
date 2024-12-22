@@ -1,7 +1,15 @@
+"""feedback urls."""
+
 from django.urls import path
-from feedbacks.views import FeedbackListCreateView, RetrieveUpdateDestroyFeedbackView
+from . import views
+
+app_name = "feedbacks"
 
 urlpatterns = [
-    path("feedbacks/", FeedbackListCreateView.as_view(), name="feedback-list-create"),
-    path("feedbacks/<int:pk>/", RetrieveUpdateDestroyFeedbackView.as_view(), name="feedback-retrieve-update-destroy"),
+    path("", views.FeedbackListCreateView.as_view(), name="list_view"),
+    path(
+        "<int:pk>/",
+        views.FeedbackDetailView.as_view(),
+        name="detail_view",
+    ),
 ]

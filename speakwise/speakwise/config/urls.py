@@ -1,4 +1,5 @@
-# ruff: noqa
+"""project URL Configuration."""
+
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -8,11 +9,6 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView
 from drf_spectacular.views import SpectacularSwaggerView
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
-from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
@@ -24,24 +20,21 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
-    path("users/", include("speakwise.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     path("api/events/", include("speakwise.events.urls", namespace="events")),
-    path("api/auth/", include("speakwise.users.auth_urls", namespace="auth")),
     path("api/talks/", include("speakwise.talks.urls", namespace="talks")),
     path("api/speakers/", include("speakwise.speakers.urls", namespace="speakers")),
-    path("api/feedbacks/", include("speakwise.feedbacks.urls", namespace="feedbacks")
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path("api/attendees/", include("attendees.urls", namespace="attendees")),
+    path("api/feedbacks/", include("feedbacks.urls", namespace="feedbacks")),
+    path("api/", include("speakwise.organizers.urls", namespace="organizers")),
+    path("api/", include("speakwise.users.urls", namespace="users")),
+    path("api/", include("speakwise.authentication.urls", namespace="authentication")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
 
 # API URLS
 urlpatterns += [
-    # API base url
-    path("api/", include("config.api_router")),
-    # DRF auth token
     # path("api/auth-token/", obtain_auth_token),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(

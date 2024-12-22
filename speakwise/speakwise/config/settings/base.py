@@ -4,7 +4,9 @@
 from pathlib import Path
 
 import environ
-from decouple import config
+import os
+
+# from decouple import config
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # speakwise/
@@ -50,11 +52,12 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("POSTGRES_DB"),
-        "USER": config("POSTGRES_USER"),
-        "PASSWORD": config("POSTGRES_PASSWORD"),
-        "HOST": config("POSTGRES_HOST"),
-        "PORT": config("POSTGRES_PORT"),
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": os.getenv("POSTGRES_HOST"),
+        "PORT": os.getenv("POSTGRES_PORT"),
+        # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
     },
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
@@ -90,10 +93,12 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "django_celery_beat",
     "rest_framework",
+    "dj_rest_auth",
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
     "webpack_loader",
+    "rest_framework_simplejwt",
 ]
 
 LOCAL_APPS = [
@@ -105,6 +110,8 @@ LOCAL_APPS = [
     "speakwise.feedbacks",
     "speakwise.speakers",
     "speakwise.base",
+    "speakwise.attendees",
+    "speakwise.authentication",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -351,10 +358,37 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_RENDERER_CLASSES": (
+        "speakwise.core.renderers.CustomJSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ),
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "access-control-allow-origin",
+    "access-control-allow-methods",
+    "allow-origin",
+    "cache-control",
+    "clientId",
+    "clientSecret",
+    "Host",
+    "access-control-allow-headers",
+]
+
 
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
