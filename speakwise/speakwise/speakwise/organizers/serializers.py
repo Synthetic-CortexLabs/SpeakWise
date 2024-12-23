@@ -1,9 +1,10 @@
 """organizers serializer file."""
 
-from rest_framework import serializers
 from drf_writable_nested.serializers import WritableNestedModelSerializer
+from rest_framework import serializers
 
-from speakwise.organizers.models import Organizers, SocialLinks
+from speakwise.organizers.models import Organizers
+from speakwise.organizers.models import SocialLinks
 
 
 class SocialLinksSerializer(serializers.ModelSerializer):

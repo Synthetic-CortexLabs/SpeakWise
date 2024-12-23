@@ -1,3 +1,3 @@
-from django.db import models
+"""authentication models."""
 
 # Create your models here.

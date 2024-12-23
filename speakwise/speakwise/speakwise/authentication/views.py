@@ -1,18 +1,18 @@
 """Authentication views for the Nebula app."""
 
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 
 from dj_rest_auth.views import LoginView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from speakwise.attendees.models import Attendee
+from speakwise.attendees.serializers import AttendeeSerializer
 from speakwise.organizers.models import Organizers
 from speakwise.organizers.serializers import OrganizerSerializer
 from speakwise.speakers.models import Speaker
 from speakwise.speakers.serializers import SpeakerSerializer
-from speakwise.attendees.models import Attendee
-from speakwise.attendees.serializers import AttendeeSerializer
-
 from speakwise.users.models import UserRole
 
 from .exceptions import AuthenticationError
@@ -42,7 +42,6 @@ class LoginBaseClass(ABC, LoginView):
     @abstractmethod
     def login(self):
         """Login in the user."""
-        pass
 
     def get_response(self):
         """Return the response with the refresh token."""

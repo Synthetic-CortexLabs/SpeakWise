@@ -1,17 +1,19 @@
+"""users models."""
+
 from typing import ClassVar
 
-from speakwise.base.models import TimestampedModel
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from speakwise.base.models import TimestampedModel
+
+from .choices import UserRoles
 from .managers import UserManager
-from .choices import UserRoles as ROLE_CHOICES
 
 
 class User(AbstractUser):
-
     first_name = models.CharField(max_length=255, help_text="First name")
     last_name = models.CharField(max_length=255, help_text="Last name ")
     email = models.EmailField(_("email address"), unique=True)
@@ -46,6 +48,6 @@ class UserRole(TimestampedModel):
     display = models.CharField(
         max_length=255,
         help_text="User role display name",
-        choices=ROLE_CHOICES.choices,
+        choices=UserRoles.choices,
         null=True,
     )

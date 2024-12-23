@@ -1,10 +1,10 @@
 # ruff: noqa: ERA001, E501
 """Base settings to build other settings files upon."""
 
+import os
 from pathlib import Path
 
 import environ
-import os
 
 # from decouple import config
 

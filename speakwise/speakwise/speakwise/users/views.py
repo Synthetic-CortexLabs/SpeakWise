@@ -1,12 +1,12 @@
 """API views for the users app."""
 
 from django.contrib.auth import authenticate
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from drf_spectacular.utils import extend_schema
 
 from speakwise.users.models import User
 
@@ -39,12 +39,9 @@ class UserListView(APIView):
     )
     def post(self, request):
         """Create a user."""
-        request_data = request.data
-        token = request_data.pop("token", None)
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        # serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -104,10 +101,10 @@ class UserLoginView(APIView):
         email = request.data.get("email")
         password = request.data.get("password")
         user = authenticate(request, email=email, password=password)
-        print(email, password, user)
         if user is None:
             return Response(
-                {"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid credentials"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         refresh = RefreshToken.for_user(user)
@@ -138,5 +135,5 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        except Exception as e:
-            return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
+        except ValueError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

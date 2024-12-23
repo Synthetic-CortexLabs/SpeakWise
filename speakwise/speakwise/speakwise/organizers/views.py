@@ -2,7 +2,8 @@
 # organizers/views.py
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Organizers
 from .serializers import OrganizerSerializer

@@ -3,8 +3,8 @@
 from django.db import models
 
 from speakwise.base.models import TimestampedModel
-from speakwise.users.models import User
 from speakwise.events.models import Event
+from speakwise.users.models import User
 
 
 class Attendee(TimestampedModel):
