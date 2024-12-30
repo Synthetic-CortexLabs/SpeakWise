@@ -11,10 +11,26 @@ export const About = () => {
       <Navbar/>
       <div className="about-header">
         <h1>What we do?</h1>
-        <p>Whichever tech conference you attended can be found here</p>
-        <p>Gives you access to conferences you attended. <br />
-            Gives you an opportunity to review talks or conferences you attended. <br />
-            Gives you the power to track your speaking engagements.</p>
+        <p>A Conference feedback platform that facilitates speaker feedback, provides analytics for organizers, and enhances the conference experience for attendees.</p>
+      </div>
+      <div className="mission-and-values">
+        <h1>Building Global Speakers</h1>
+        <div className="missions">
+          <div>
+            <button>Mission Statement</button>
+            <p>Empowering conference organizers and speakers to deliver exceptional experiences through meaningful feedback and analytics.</p>
+          </div>
+          <div>
+            <button>Our Story</button>
+            <p>Speak<span>Wise</span> was founded with the goal of revolutionizing the way conferences are organized and experienced. Our team is passionate about creating a platform that helps speakers improve and attendees have a better time.</p>
+          </div>
+        </div>
+        <h1>Values</h1>
+        <div className="values">
+          <div><p>Transparency</p></div>
+          <div><p>Collaboration</p></div>
+          <div><p>Continuous Improvement</p></div>
+        </div>
       </div>
       <div className="meet-our-team">
         <h1>Meet our team</h1>
