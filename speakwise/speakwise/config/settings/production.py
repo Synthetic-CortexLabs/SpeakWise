@@ -2,7 +2,6 @@
 import logging
 
 import sentry_sdk
-from sentry_sdk.integrations.celery import CeleryIntegration
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
@@ -72,30 +71,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 )
 
 
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID")
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY")
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME")
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_QUERYSTRING_AUTH = False
-# DO NOT change these unless you know what you're doing.
-_AWS_EXPIRY = 60 * 60 * 24 * 7
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_S3_OBJECT_PARAMETERS = {
-    "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate",
-}
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_S3_MAX_MEMORY_SIZE = env.int(
-    "DJANGO_AWS_S3_MAX_MEMORY_SIZE",
-    default=100_000_000,  # 100MB
-)
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None)
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
-AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
-aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+
 # STATIC & MEDIA
 # ------------------------
 STORAGES = {
@@ -198,7 +174,6 @@ sentry_logging = LoggingIntegration(
 integrations = [
     sentry_logging,
     DjangoIntegration(),
-    CeleryIntegration(),
     RedisIntegration(),
 ]
 sentry_sdk.init(
@@ -214,5 +189,3 @@ sentry_sdk.init(
 SPECTACULAR_SETTINGS["SERVERS"] = [
     {"url": "https://example.com", "description": "Production server"},
 ]
-# Your stuff...
-# ------------------------------------------------------------------------------
