@@ -28,7 +28,7 @@ jobs:
           source venv/bin/activate
       
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r speakwise/speakwise/requirements/production.txt
         
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
@@ -67,7 +67,7 @@ jobs:
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_43A5DB10E2574DAB99EAC0B383EB026C }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_91961C6B5A1E4D07BF48AD9CB8D65F70 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2818C8F461F34C069855BC500006EDA5 }}
+
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
