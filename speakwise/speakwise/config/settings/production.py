@@ -13,13 +13,24 @@ from .base import INSTALLED_APPS
 from .base import REDIS_URL
 from .base import SPECTACULAR_SETTINGS
 from .base import env
+import os
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["example.com"])
+ALLOWED_HOSTS = env.list(
+    "DJANGO_ALLOWED_HOSTS",
+    default=["speakwise-e0h8d5b7cpfbe6c6.westus-01.azurewebsites.net"],
+)
+
+CSRF_TRUSTED_ORIGINS = (
+    ["https://" + os.environ["WEBSITE_HOSTNAME"]]
+    if "WEBSITE_HOSTNAME" in os.environ
+    else []
+)
+
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -30,14 +41,12 @@ DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
+        "LOCATION": os.environ.get("AZURE_REDIS_CONNECTIONSTRING"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            # Mimicing memcache behavior.
-            # https://github.com/jazzband/django-redis#memcached-exceptions-behavior
-            "IGNORE_EXCEPTIONS": True,
+            "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
         },
-    },
+    }
 }
 
 # SECURITY

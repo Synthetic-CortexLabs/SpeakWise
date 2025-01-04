@@ -1,10 +1,10 @@
 # ruff: noqa: ERA001, E501
 """Base settings to build other settings files upon."""
 
+# import os
 from pathlib import Path
 
 import environ
-import os
 
 # from decouple import config
 
@@ -49,16 +49,31 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 # DATABASES = {"default": env.db("DATABASE_URL")}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("POSTGRES_DB"),
+#         "USER": os.getenv("POSTGRES_USER"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+#         "HOST": os.getenv("POSTGRES_HOST"),
+#         "PORT": os.getenv("POSTGRES_PORT"),
+#         # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
+#     },
+# }
+
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST"),
-        "PORT": os.getenv("POSTGRES_PORT"),
-        # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
-    },
+        "ENGINE": "mssql",
+        "NAME": "speakwise-db",
+        "USER": "speakwise",
+        "PASSWORD": "#3Ewoksss",
+        "HOST": "speakwise.database.windows.net",
+        "PORT": "",
+        "OPTIONS": {
+            "driver": "ODBC Driver 17 for SQL Server",
+        },
+    }
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
