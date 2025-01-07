@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from .models import Speaker
+from .models import Speaker, SpeakerProfile, SkillTag, SpeakerSocialLink
 from .serializers import SpeakerSerializer
 
 User = get_user_model()
@@ -148,3 +148,36 @@ class SpeakerAPITest(APITestCase):
         response = self.client.delete(self.detail_url)
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert Speaker.objects.count() == 0
+
+
+class SpeakerProfileTests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='testpass123'
+        )
+        self.client.force_authenticate(user=self.user)
+        self.speaker = SpeakerProfile.objects.create(
+            speaker_user=self.user,
+            organization='Test Org',
+            short_bio='Test Bio'
+        )
+
+    def test_create_speaker_profile(self):
+        response = self.client.post('/api/speakers/', {
+            'organization': 'New Org',
+            'short_bio': 'New Bio',
+            'country': 'USA'
+        })
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_get_speaker_profile(self):
+        response = self.client.get(f'/api/speakers/{self.speaker.id}/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['organization'], 'Test Org')
+
+
+class SkillTagTests(TestCase):
+    def test_create_skill_tag(self):
+        tag = SkillTag.objects.create(name='Python')
+        self.assertEqual(str(tag), 'Python')
