@@ -4,6 +4,7 @@
 # import os
 from pathlib import Path
 
+import dj_database_url
 import environ
 
 # from decouple import config
@@ -60,21 +61,14 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 #         # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
 #     },
 # }
-
-
 DATABASES = {
-    "default": {
-        "ENGINE": "mssql",
-        "NAME": "speakwise-db",
-        "USER": "speakwise",
-        "PASSWORD": "#3Ewoksss",
-        "HOST": "speakwise.database.windows.net",
-        "PORT": "",
-        "OPTIONS": {
-            "driver": "ODBC Driver 17 for SQL Server",
-        },
-    }
-}
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://speakwise:9sgAUr6RbZ4WS5fVQN0yJWgXc9OhW44r@dpg-ctu8k75umphs73eljteg-a.oregon-postgres.render.com/speakwisedb_xk78',
+        conn_max_age=600
+    )
+
+
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -291,7 +285,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
+            "format": "%(levelname)s %(asctime)s %(module)s %(process%d %(thread)d %(message)s",
         },
     },
     "handlers": {
@@ -378,6 +372,8 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
 }
+
+
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
