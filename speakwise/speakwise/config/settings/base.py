@@ -3,8 +3,8 @@
 
 from pathlib import Path
 
+import dj_database_url
 import environ
-import os
 
 # from decouple import config
 
@@ -49,17 +49,25 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 # DATABASES = {"default": env.db("DATABASE_URL")}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("POSTGRES_DB"),
+#         "USER": os.getenv("POSTGRES_USER"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+#         "HOST": os.getenv("POSTGRES_HOST"),
+#         "PORT": os.getenv("POSTGRES_PORT"),
+#         # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
+#     },
+# }
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST"),
-        "PORT": os.getenv("POSTGRES_PORT"),
-        # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
-    },
+    'default': dj_database_url.config(
+        # Replace this value with your local database's connection string.
+        default='postgresql://speakwise:9sgAUr6RbZ4WS5fVQN0yJWgXc9OhW44r@dpg-ctu8k75umphs73eljteg-a.oregon-postgres.render.com/speakwisedb_xk78',
+        conn_max_age=600
+    )
 }
+
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -276,7 +284,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
+            "format": "%(levelname)s %(asctime)s %(module)s %(process%d %(thread)d %(message)s",
         },
     },
     "handlers": {
@@ -363,6 +371,8 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
 }
+
+
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
