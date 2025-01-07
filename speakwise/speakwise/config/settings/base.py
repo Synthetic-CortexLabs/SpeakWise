@@ -1,6 +1,7 @@
 # ruff: noqa: ERA001, E501
 """Base settings to build other settings files upon."""
 
+# import os
 from pathlib import Path
 
 import dj_database_url
@@ -66,7 +67,7 @@ DATABASES = {
         default='postgresql://speakwise:9sgAUr6RbZ4WS5fVQN0yJWgXc9OhW44r@dpg-ctu8k75umphs73eljteg-a.oregon-postgres.render.com/speakwisedb_xk78',
         conn_max_age=600
     )
-}
+
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD

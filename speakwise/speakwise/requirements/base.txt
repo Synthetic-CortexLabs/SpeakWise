@@ -5,6 +5,8 @@ argon2-cffi==23.1.0
 argon2-cffi-bindings==21.2.0
 asgiref==3.8.1
 asttokens==2.4.1
+pyodbc
+mssql-django
 attrs==24.2.0
 babel==2.16.0
 billiard==4.2.1
@@ -51,6 +53,7 @@ django-stubs-ext==5.1.1
 django-timezone-field==7.0
 django-webpack-loader==3.1.1
 djangorestframework==3.15.2
+
 djangorestframework-simplejwt==5.0.0
 djangorestframework-stubs==3.15.1
 djlint==1.35.2
@@ -95,6 +98,7 @@ MarkupSafe==3.0.2
 matplotlib-inline==0.1.7
 more-itertools==10.5.0
 msgpack==1.1.0
+mssql-django==1.5
 mypy==1.13.0
 mypy-extensions==1.0.0
 nodeenv==1.9.1
@@ -118,6 +122,7 @@ pure_eval==0.2.3
 pycparser==2.22
 Pygments==2.18.0
 PyJWT==2.10.1
+pyodbc==5.2.0
 pyproject_hooks==1.2.0
 pytest==8.3.3
 pytest-django==4.9.0
