@@ -2,9 +2,7 @@
 """Base settings to build other settings files upon."""
 
 # import os
-from datetime import timedelta
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 import dj_database_url
 import environ
@@ -287,7 +285,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
+            "format": "%(levelname)s %(asctime)s %(module)s %(process%d %(thread)d %(message)s",
         },
     },
     "handlers": {
@@ -375,29 +373,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-# Timezone configuration
-UTC = ZoneInfo('UTC')
 
-# Django REST Framework SimpleJWT settings
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": True,
-    "UPDATE_LAST_LOGIN": False,
-    "ALGORITHM": "HS256",
-    "SIGNING_KEY": env("DJANGO_SECRET_KEY", default="your-secret-key"),
-    "VERIFYING_KEY": None,
-    "AUDIENCE": None,
-    "ISSUER": None,
-    "AUTH_HEADER_TYPES": ("Bearer",),
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "ser_id",
-    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-    "TOKEN_TYPE_CLAIM": "token_type",
-    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
-}
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
