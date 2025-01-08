@@ -22,7 +22,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list(
     "DJANGO_ALLOWED_HOSTS",
-    default=["speakwise-e0h8d5b7cpfbe6c6.westus-01.azurewebsites.net"],
+    default=["speakwise.onrender.com"],
 )
 
 CSRF_TRUSTED_ORIGINS = (
