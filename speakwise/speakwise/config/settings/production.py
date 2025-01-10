@@ -34,14 +34,14 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 
 # Dynamic ALLOWED_HOSTS configuration
-RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-WEBSITE_HOSTNAME = os.environ.get('WEBSITE_HOSTNAME', '')
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+WEBSITE_HOSTNAME = os.environ.get("WEBSITE_HOSTNAME", "")
 
 ALLOWED_HOSTS = [
-    'speakwise.onrender.com',
-    'www.speakwise.onrender.com',
-    'localhost',
-    '127.0.0.1',
+    "speakwise.onrender.com",
+    "www.speakwise.onrender.com",
+    "localhost",
+    "127.0.0.1",
 ]
 
 # Add Render external hostname if available
