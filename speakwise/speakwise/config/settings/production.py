@@ -23,15 +23,43 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 #     default=["speakwise.onrender.com"],
 # )
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = (
-    ["https://" + os.environ["WEBSITE_HOSTNAME"]]
-    if "WEBSITE_HOSTNAME" in os.environ
-    else []
-)
+# CSRF_TRUSTED_ORIGINS = (
+#     ["https://" + os.environ["WEBSITE_HOSTNAME"]]
+#     if "WEBSITE_HOSTNAME" in os.environ
+#     else []
+# )
 
 
+
+# Dynamic ALLOWED_HOSTS configuration
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+WEBSITE_HOSTNAME = os.environ.get("WEBSITE_HOSTNAME", "")
+
+ALLOWED_HOSTS = [
+    "speakwise.onrender.com",
+    "www.speakwise.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
+
+# Add Render external hostname if available
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+
+# Add Website hostname if available
+if WEBSITE_HOSTNAME:
+    ALLOWED_HOSTS.append(WEBSITE_HOSTNAME)
+
+# CSRF configuration
+CSRF_TRUSTED_ORIGINS = [
+    'https://speakwise.onrender.com',
+    'https://www.speakwise.onrender.com',
+]
+
+if WEBSITE_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{WEBSITE_HOSTNAME}")
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
