@@ -358,6 +358,7 @@ SOCIALACCOUNT_ADAPTER = "speakwise.users.adapters.SocialAccountAdapter"
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
 SOCIALACCOUNT_FORMS = {"signup": "speakwise.users.forms.UserSocialSignupForm"}
 
+
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
@@ -376,14 +377,13 @@ REST_FRAMEWORK = {
 }
 
 # Timezone configuration
-UTC = ZoneInfo('UTC')
+TIMEZONE_UTC = ZoneInfo("UTC")
 
 # Django REST Framework SimpleJWT settings
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": True,
+    "ROTATE_REFRESH_TOKENS": True,
     "UPDATE_LAST_LOGIN": False,
     "ALGORITHM": "HS256",
     "SIGNING_KEY": env("DJANGO_SECRET_KEY", default="your-secret-key"),
