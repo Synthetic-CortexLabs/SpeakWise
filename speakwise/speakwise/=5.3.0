@@ -1,7 +1,0 @@
-Requirement already satisfied: djangorestframework-simplejwt in c:\users\julius boakye\documents\github\speakwise\speakwise\env\lib\site-packages (5.3.1)
-Requirement already satisfied: django>=3.2 in c:\users\julius boakye\documents\github\speakwise\speakwise\env\lib\site-packages (from djangorestframework-simplejwt) (5.0.9)
-Requirement already satisfied: djangorestframework>=3.12 in c:\users\julius boakye\documents\github\speakwise\speakwise\env\lib\site-packages (from djangorestframework-simplejwt) (3.15.2)
-Requirement already satisfied: pyjwt<3,>=1.7.1 in c:\users\julius boakye\documents\github\speakwise\speakwise\env\lib\site-packages (from djangorestframework-simplejwt) (2.10.1)
-Requirement already satisfied: asgiref<4,>=3.7.0 in c:\users\julius boakye\documents\github\speakwise\speakwise\env\lib\site-packages (from django>=3.2->djangorestframework-simplejwt) (3.8.1)
-Requirement already satisfied: sqlparse>=0.3.1 in c:\users\julius boakye\documents\github\speakwise\speakwise\env\lib\site-packages (from django>=3.2->djangorestframework-simplejwt) (0.5.1)
-Requirement already satisfied: tzdata in c:\users\julius boakye\documents\github\speakwise\speakwise\env\lib\site-packages (from django>=3.2->djangorestframework-simplejwt) (2024.2)

@@ -10,5 +10,3 @@ DATABASES = {
         'PORT': '5432',         # Default PostgreSQL port
     }
 }
-
-// ...existing code...

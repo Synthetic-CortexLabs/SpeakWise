@@ -23,8 +23,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 #     default=["speakwise.onrender.com"],
 # )
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
-
+ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = (
     ["https://" + os.environ["WEBSITE_HOSTNAME"]]
