@@ -23,38 +23,14 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 #     default=["speakwise.onrender.com"],
 # )
 
-# ALLOWED_HOSTS = ["*"]
-
-# CSRF_TRUSTED_ORIGINS = (
-#     ["https://" + os.environ["WEBSITE_HOSTNAME"]]
-#     if "WEBSITE_HOSTNAME" in os.environ
-#     else []
-# )
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["speakwise.onrender.com"])
 
 
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-# Simple, direct allowed hosts configuration
-ALLOWED_HOSTS = [
-    "speakwise.onrender.com",
-    "*.speakwise.onrender.com",
-    "www.speakwise.onrender.com",
-    "localhost",
-    "127.0.0.1",
-]
-
-# CSRF Configuration
 CSRF_TRUSTED_ORIGINS = [
-    'https://speakwise.onrender.com',
-    'https://www.speakwise.onrender.com',
+    "https://speakwise.onrender.com",
+    "https://www.speakwise.onrender.com",
+    "speakwise.onrender.com",
 ]
-
-# Security Settings
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
