@@ -33,33 +33,28 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 
 
 
-# Dynamic ALLOWED_HOSTS configuration
-RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
-WEBSITE_HOSTNAME = os.environ.get("WEBSITE_HOSTNAME", "")
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False
 
+# Simple, direct allowed hosts configuration
 ALLOWED_HOSTS = [
     "speakwise.onrender.com",
+    "*.speakwise.onrender.com",
     "www.speakwise.onrender.com",
     "localhost",
     "127.0.0.1",
 ]
 
-# Add Render external hostname if available
-if RENDER_EXTERNAL_HOSTNAME:
-    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
-
-# Add Website hostname if available
-if WEBSITE_HOSTNAME:
-    ALLOWED_HOSTS.append(WEBSITE_HOSTNAME)
-
-# CSRF configuration
+# CSRF Configuration
 CSRF_TRUSTED_ORIGINS = [
     'https://speakwise.onrender.com',
     'https://www.speakwise.onrender.com',
 ]
 
-if WEBSITE_HOSTNAME:
-    CSRF_TRUSTED_ORIGINS.append(f"https://{WEBSITE_HOSTNAME}")
+# Security Settings
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
