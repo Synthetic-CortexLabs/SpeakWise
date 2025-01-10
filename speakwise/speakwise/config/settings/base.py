@@ -26,6 +26,28 @@ if READ_DOT_ENV_FILE:
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 # DEBUG = env.bool("DJANGO_DEBUG", False)
 DEBUG = False
+
+# SECURITY WARNING: don't run with debug turned on in production!
+
+# Simple, direct allowed hosts configuration
+ALLOWED_HOSTS = [
+    "speakwise.onrender.com",
+    "*.speakwise.onrender.com",
+    "www.speakwise.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
+
+# CSRF Configuration
+CSRF_TRUSTED_ORIGINS = [
+    'https://speakwise.onrender.com',
+    'https://www.speakwise.onrender.com',
+]
+
+# Security Settings
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
