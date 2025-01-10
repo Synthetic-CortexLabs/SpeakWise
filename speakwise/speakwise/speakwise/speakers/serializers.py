@@ -1,9 +1,13 @@
 """Speakers serializers."""
 
-from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 
-from .models import Speaker, SpeakerProfile, SkillTag, SpeakerSocialLink, SpeakerDashboard
+from .models import SkillTag
+from .models import Speaker
+from .models import SpeakerDashboard
+from .models import SpeakerProfile
+from .models import SpeakerSocialLink
 
 
 class SpeakerSerializer(ModelSerializer):
@@ -19,13 +23,13 @@ class SpeakerSerializer(ModelSerializer):
 class SkillTagSerializer(serializers.ModelSerializer):
     class Meta:
         model = SkillTag
-        fields = ['id', 'name']
+        fields = ["id", "name"]
 
 
 class SpeakerSocialLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpeakerSocialLink
-        fields = ['id', 'social_name', 'social_url', 'is_active', 'display_order']
+        fields = ["id", "social_name", "social_url", "is_active", "display_order"]
 
 
 class SpeakerProfileSerializer(serializers.ModelSerializer):
@@ -36,8 +40,8 @@ class SpeakerProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpeakerProfile
         fields = [
-            'id', 'speaker_user', 'organization', 'short_bio', 'long_bio',
-            'country', 'avatar', 'skill_tags', 'social_links', 'full_name'
+            "id", "speaker_user", "organization", "short_bio", "long_bio",
+            "country", "avatar", "skill_tags", "social_links", "full_name"
         ]
 
     def get_full_name(self, obj):
@@ -49,11 +53,11 @@ class SpeakerDashboardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SpeakerDashboard
-        fields = ['id', 'speaker_profile', 'feedback_stats']
+        fields = ["id", "speaker_profile", "feedback_stats"]
 
     def get_feedback_stats(self, obj):
         return {
-            'total_events': obj.total_events,
-            'average_rating': obj.average_feedback_rating,
-            'conference_ratings': obj.feedback_rate_per_conference
+            "total_events": obj.total_events,
+            "average_rating": obj.average_feedback_rating,
+            "conference_ratings": obj.feedback_rate_per_conference
         }
