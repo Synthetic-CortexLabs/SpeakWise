@@ -23,12 +23,12 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("api/events/", include("speakwise.events.urls", namespace="events")),
     path("api/talks/", include("speakwise.talks.urls", namespace="talks")),
-    path("api/speakers/", include("speakwise.speakers.urls", namespace="speakers")),
+    path("api/speakers/", include(("speakwise.speakers.urls", "speakers"))),
     path("api/attendees/", include("attendees.urls", namespace="attendees")),
     path("api/feedbacks/", include("feedbacks.urls", namespace="feedbacks")),
     path("api/", include("speakwise.organizers.urls", namespace="organizers")),
     path("api/", include("speakwise.users.urls", namespace="users")),
-    path("api/", include("speakwise.authentication.urls", namespace="authentication")),
+    path("api/", include(("speakwise.authentication.urls", "authentication"))),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]

@@ -1,18 +1,18 @@
 """Authentication views for the Nebula app."""
 
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 
 from dj_rest_auth.views import LoginView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from speakwise.organizers.models import Organizers
-from speakwise.organizers.serializers import OrganizerSerializer
-from speakwise.speakers.models import Speaker
-from speakwise.speakers.serializers import SpeakerSerializer
 from speakwise.attendees.models import Attendee
 from speakwise.attendees.serializers import AttendeeSerializer
-
+from speakwise.organizers.models import Organizers
+from speakwise.organizers.serializers import OrganizerSerializer
+from speakwise.speakers.models import SpeakerProfile
+from speakwise.speakers.serializers import SpeakerSerializer
 from speakwise.users.models import UserRole
 
 from .exceptions import AuthenticationError
@@ -111,6 +111,6 @@ class SpeakerLoginView(LoginBaseClass):
 
     def get_extra_payload(self) -> dict:
         """Return the speaker data."""
-        admin = Speaker.objects.get(user=self.user)
+        admin = SpeakerProfile.objects.get(user=self.user)
         serializer = SpeakerSerializer(admin)
         return {"speaker": serializer.data}

@@ -1,8 +1,10 @@
 """Speakers models."""
 
+from base.models import SocialLink
 from base.models import TimestampedModel
 from django.conf import settings
 from django.db import models
+from django.forms import ValidationError
 from django.urls import reverse
 
 from speakwise.events.models import Event
@@ -50,6 +52,11 @@ class SpeakerProfile(TimestampedModel):
     skill_tags = models.ManyToManyField(SkillTag, blank=True)
 
     class Meta:
+        """
+        Meta class for speaker profile model configuration.
+        Specifies custom database table name.
+        """
+
         db_table = "speaker_profile"
 
     def get_absolute_url(self):
@@ -63,8 +70,19 @@ class SpeakerProfile(TimestampedModel):
 
 
 class SpeakerDashboard(TimestampedModel):
+    """SpeakerDashboard Model for the SpeakWise application.
+    This model is used to store and manage speaker dashboard information including
+    feedback and profile relationships.
+
+    Attributes:
+        speaker_profile (ForeignKey): Reference to SpeakerProfile
+        feedback (ForeignKey): Reference to Feedback model
+    """
+
     speaker_profile = models.ForeignKey(
-        SpeakerProfile, on_delete=models.CASCADE, related_name="speaker_dashboard"
+        SpeakerProfile,
+        on_delete=models.CASCADE,
+        related_name="speaker_dashboard",
     )
     feedback = models.ForeignKey(
         Feedback, on_delete=models.CASCADE, related_name="speaker_dashboard"
@@ -74,10 +92,17 @@ class SpeakerDashboard(TimestampedModel):
         db_table = "speaker_dashboard"
 
     def get_absolute_url(self):
+        """Returns the absolute URL for the speaker dashboard detail view."""
+
         return reverse("speaker_detail", kwargs={"pk": self.pk})
 
     @property
     def feedback_rate_per_conference(self):
+        """Calculates average feedback ratings grouped by conference.
+
+        Returns:
+            dict: Conference names as keys and their average ratings as values
+        """
         # Get all events the speaker has participated in
         speaker_events = self.speaker_profile.events_spoken.all()
         conference_feedback = {}
@@ -160,6 +185,41 @@ class Handles(TimestampedModel):
 
 
 class SpeakerSocialLink(SocialLink):
+    """Model for speaker's social media profiles.
+
+    Extends the base SocialLink model to associate social media
+    links specifically with speakers.
+
+    Attributes:
+        speaker (ForeignKey): Reference to associated SpeakerProfile
+    """
+
     speaker = models.ForeignKey(
-        SpeakerProfile, on_delete=models.CASCADE, related_name="social_links"
+        SpeakerProfile,
+        on_delete=models.CASCADE,
+        related_name="social_links",
     )
+
+    class Meta:
+        verbose_name = "Speaker Social Link"
+        verbose_name_plural = "Speaker Social Links"
+        unique_together = ["speaker", "social_name"]
+        ordering = ["display_order", "social_name"]
+
+    def __str__(self) -> str:
+        return f"{self.speaker}'s {self.social_name} link"
+
+    def clean(self) -> None:
+        """Speaker-specific validation."""
+        super().clean()
+        if (
+            SpeakerSocialLink.objects.filter(
+                speaker=self.speaker, social_name=self.social_name
+            )
+            .exclude(id=self.id)
+            .exists()
+        ):
+            msg = f"Speaker already has a {self.social_name} profile linked"
+            raise ValidationError(
+                msg,
+            )

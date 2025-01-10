@@ -2,7 +2,7 @@
 
 from django.urls import path
 
-from . import views
+from speakwise.speakers import views
 
 urlpatterns = [
     path("speakers/", views.SpeakerProfileList.as_view(), name="speaker-list"),

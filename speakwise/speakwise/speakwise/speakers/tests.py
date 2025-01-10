@@ -1,183 +1,233 @@
-"""Speakers app tests."""
-
+import pytest
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.forms import ValidationError
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from .models import Speaker, SpeakerProfile, SkillTag, SpeakerSocialLink
-from .serializers import SpeakerSerializer
+from speakwise.events.models import Event
+from speakwise.feedbacks.models import Feedback
+
+from .models import SkillTag
+from .models import SpeakerDashboard
+from .models import SpeakerProfile
+from .models import SpeakerSocialLink
+from .serializers import SkillTagSerializer
+from .serializers import SpeakerProfileSerializer
 
 User = get_user_model()
 
 
-class SpeakerModelTest(TestCase):
-    """Test speaker model."""
+class SkillTagTests(TestCase):
+    """Test suite for SkillTag model."""
 
     def setUp(self):
-        """Set up test data."""
-        self.user = User.objects.create_user(
-            name="testuser",
-            password="password123",
-            email="example@mail.com",
-        )
-        self.speaker = Speaker.objects.create(
-            user_id=self.user.pk,
-            twitter="test_twitter",
-            organization="Test Organization",
-            bio="This is a test bio",
-            avatar="path/to/avatar.jpg",
-        )
+        self.skill_tag = SkillTag.objects.create(name="Python")
 
-    def test_str_method(self):
-        """Test string representation of the speaker."""
-        self.assertEqual(str(self.speaker.user.name), "testuser")
+    def test_skill_tag_creation(self):
+        assert str(self.skill_tag) == "Python"
+        assert isinstance(self.skill_tag, SkillTag)
+
+    def test_unique_constraint(self):
+        with pytest.raises(Exception):  # noqa: B017, PT011
+            SkillTag.objects.create(name="Python")
 
 
-class SpeakerSerializerTest(TestCase):
-    """Test speaker serializer."""
+class SpeakerProfileTests(TestCase):
+    """Test suite for SpeakerProfile model."""
 
     def setUp(self):
-        """Set up test data."""
         self.user = User.objects.create_user(
-            name="testuser",
-            password="password123",
-            email="user@mail.com",
+            username="speaker1",
+            email="speaker1@test.com",
+            password="testpass123",  # noqa: S106
         )
-        self.speaker_data = {
-            "user_id": self.user.pk,
-            "twitter": "test_twitter",
-            "organization": "Test Organization",
-            "bio": "This is a test bio",
-        }
-        self.speaker = Speaker.objects.create(**self.speaker_data)
-        self.serializer = SpeakerSerializer(instance=self.speaker)
+        self.profile = SpeakerProfile.objects.create(
+            speaker_user=self.user,
+            organization="Test Org",
+            short_bio="Test Bio",
+            long_bio="Detailed Bio",
+            country="Test Country",
+        )
+        self.skill_tag = SkillTag.objects.create(name="Python")
 
-    def test_contains_expected_fields(self):
-        """Test that the serializer contains the expected fields."""
-        data = self.serializer.data
-        objects = ["user_id", "twitter", "organization", "bio"]
-        assert [i in data for i in objects]
+    def test_profile_creation(self):
+        assert str(self.profile) == self.user.get_full_name()
 
-    def test_field_content(self):
-        """Test that the serializer returns the expected content."""
-        data = self.serializer.data
-        assert data["id"] == self.speaker.pk
-        assert data["twitter"] == "test_twitter"
-        assert data["organization"] == "Test Organization"
-        assert data["bio"] == "This is a test bio"
+    def test_add_skill_tags(self):
+        self.profile.skill_tags.add(self.skill_tag)
+        assert self.profile.skill_tags.count() == 1
+
+    def test_avatar_upload(self):
+        image = SimpleUploadedFile(
+            "test_image.jpg",
+            b"file_content",
+            content_type="image/jpeg",
+        )
+        self.profile.avatar = image
+        self.profile.save()
+        assert self.profile.avatar
 
 
-class SpeakerAPITest(APITestCase):
-    """Test speaker API."""
+class SpeakerDashboardTests(TestCase):
+    """Test suite for SpeakerDashboard functionality."""
 
     def setUp(self):
-        """Set up test data."""
         self.user = User.objects.create_user(
-            name="testuser",
-            password="password123",
-            email="example@mail.com",
+            username="speaker1",
+            email="speaker1@test.com",
+            password="testpass123",  # noqa: S106
         )
-        self.user2 = User.objects.create_user(
-            name="testsuser",
-            password="password123",
-            email="example1@mail.com",
+        self.profile = SpeakerProfile.objects.create(
+            speaker_user=self.user,
+            organization="Test Org",
         )
-        self.speaker = Speaker.objects.create(
-            user_id=self.user.pk,
-            twitter="test_twitter",
-            organization="Test Organization",
-            bio="This is a test bio",
-            avatar="path/to/avatar.jpg",
+        self.event = Event.objects.create(
+            name="Test Event",
+            date="2024-03-20",
         )
-        self.list_create_url = reverse("speakers:list_create_speakers")
-        self.detail_url = reverse(
-            "speakers:speaker_detail",
-            kwargs={"pk": self.speaker.pk},
+        self.profile.events_spoken.add(self.event)
+        self.feedback = Feedback.objects.create(
+            speaker=self.profile,
+            event=self.event,
+            rating=4.5,
+        )
+        self.dashboard = SpeakerDashboard.objects.create(
+            speaker_profile=self.profile,
+            feedback=self.feedback,
         )
 
-    def test_create_speaker(self):
-        """Test creating a new speaker."""
-        data = {
-            "user_id": self.user2.id,
-            "twitter": "new_twitter",
-            "organization": "New Organization",
-            "bio": "This is another test bio",
-            "user": self.user2.pk,
-        }
-        self.client.force_login(self.user)
+    def test_feedback_calculations(self):
+        assert self.dashboard.total_events == 1
+        assert self.dashboard.average_feedback_rating == 4.5  # noqa: PLR2004
 
-        response = self.client.post(self.list_create_url, data)
-        assert response.status_code == status.HTTP_201_CREATED
-        assert Speaker.objects.count() == 2
-
-    def test_list_speakers(self):
-        """Test listing all speakers."""
-        self.client.force_login(self.user)
-
-        response = self.client.get(self.list_create_url)
-        assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == Speaker.objects.count()
-
-    def test_retrieve_speaker(self):
-        """Test retrieving a speaker."""
-        self.client.force_login(self.user)
-
-        response = self.client.get(
-            self.detail_url,
-        )
-        assert response.status_code == status.HTTP_200_OK
-        assert response.data["twitter"] == self.speaker.twitter
-
-    def test_update_speaker(self):
-        """Test updating a speaker."""
-        self.client.force_login(self.user)
-
-        data = {"twitter": "updated_twitter"}
-        response = self.client.patch(self.detail_url, data)
-
-        self.speaker.refresh_from_db()
-        assert response.status_code == status.HTTP_200_OK
-        assert self.speaker.twitter == "updated_twitter"
-
-    def test_delete_speaker(self):
-        """Test deleting a speaker."""
-        self.client.force_login(self.user)
-
-        response = self.client.delete(self.detail_url)
-        assert response.status_code == status.HTTP_204_NO_CONTENT
-        assert Speaker.objects.count() == 0
+    def test_feedback_per_conference(self):
+        conference_ratings = self.dashboard.feedback_rate_per_conference
+        assert isinstance(conference_ratings, dict)
 
 
-class SpeakerProfileTests(APITestCase):
+class APITests(APITestCase):
+    """Test suite for API endpoints."""
+
     def setUp(self):
         self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
+            username="testuser",
+            password="testpass123",  # noqa: S106
         )
         self.client.force_authenticate(user=self.user)
-        self.speaker = SpeakerProfile.objects.create(
+        self.profile = SpeakerProfile.objects.create(
             speaker_user=self.user,
-            organization='Test Org',
-            short_bio='Test Bio'
+            organization="Test Org",
+        )
+        self.skill_tag = SkillTag.objects.create(name="Python")
+
+    def test_speaker_profile_list(self):
+        url = reverse("speaker-profile-list")
+        response = self.client.get(url)
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_speaker_profile_create(self):
+        url = reverse("speaker-profile-create")
+        data = {
+            "organization": "New Org",
+            "short_bio": "New Bio",
+            "country": "New Country",
+        }
+        response = self.client.post(url, data)
+        assert response.status_code == status.HTTP_201_CREATED
+
+    def test_speaker_profile_update(self):
+        url = reverse("speaker-profile-detail", kwargs={"pk": self.profile.pk})
+        data = {"organization": "Updated Org"}
+        response = self.client.patch(url, data)
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data["organization"] == "Updated Org"
+
+
+class SerializerTests(TestCase):
+    """Test suite for serializers."""
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testuser",
+            password="testpass123",  # noqa: S106
+        )
+        self.profile = SpeakerProfile.objects.create(
+            speaker_user=self.user,
+            organization="Test Org",
+        )
+        self.skill_tag = SkillTag.objects.create(name="Python")
+        self.profile.skill_tags.add(self.skill_tag)
+
+    def test_speaker_profile_serializer(self):
+        serializer = SpeakerProfileSerializer(self.profile)
+        assert "skill_tags" in serializer.data
+        assert "social_links" in serializer.data
+        assert "full_name" in serializer.data
+
+    def test_skill_tag_serializer(self):
+        serializer = SkillTagSerializer(self.skill_tag)
+        assert serializer.data["name"] == "Python"
+
+
+class SpeakerSocialLinkTests(TestCase):
+    """Test suite for SpeakerSocialLink model."""
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="testspeaker",
+            email="speaker@test.com",
+            password="testpass123", # noqa: S106
+        )
+        self.profile = SpeakerProfile.objects.create(
+            speaker_user=self.user,
+            organization="Test Org",
+            short_bio="Test Bio",
+        )
+        self.social_link = SpeakerSocialLink.objects.create(
+            speaker=self.profile,
+            social_name="Twitter",
+            social_url="https://twitter.com/testuser",
+            display_order=1,
         )
 
-    def test_create_speaker_profile(self):
-        response = self.client.post('/api/speakers/', {
-            'organization': 'New Org',
-            'short_bio': 'New Bio',
-            'country': 'USA'
-        })
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    def test_social_link_creation(self):
+        """Test basic social link creation."""
+        assert self.social_link.social_name == "Twitter"
+        assert self.social_link.social_url == "https://twitter.com/testuser"
+        assert self.social_link.is_active
+        assert self.social_link.display_order == 1
 
-    def test_get_speaker_profile(self):
-        response = self.client.get(f'/api/speakers/{self.speaker.id}/')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['organization'], 'Test Org')
+    def test_string_representation(self):
+        """Test string representation of social link."""
+        expected = f"{self.profile}'s Twitter link"
+        assert str(self.social_link) == expected
 
+    def test_unique_constraint(self):
+        """Test unique constraint for speaker and social_name."""
+        with pytest.raises(ValidationError):  # noqa: PT012
+            duplicate = SpeakerSocialLink(
+                speaker=self.profile,
+                social_name="Twitter",
+                social_url="https://twitter.com/another",
+            )
+            duplicate.full_clean()
+            duplicate.save()
 
-class SkillTagTests(TestCase):
-    def test_create_skill_tag(self):
-        tag = SkillTag.objects.create(name='Python')
-        self.assertEqual(str(tag), 'Python')
+    def test_ordering(self):
+        """Test social links ordering."""
+        second_link = SpeakerSocialLink.objects.create(
+            speaker=self.profile,
+            social_name="LinkedIn",
+            social_url="https://linkedin.com/testuser",
+            display_order=0,
+        )
+        links = SpeakerSocialLink.objects.all()
+        assert links[0] == second_link  # Lower display_order comes first
+
+    def test_related_name_access(self):
+        """Test accessing social links through speaker profile."""
+        assert self.profile.social_links.count() == 1
+        assert self.profile.social_links.first() == self.social_link
