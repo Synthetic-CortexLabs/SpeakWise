@@ -39,6 +39,10 @@ import eyeOpen from './eye-svgrepo-com.png'
 import eyeClosed from './eye-off-svgrepo-com.png'
 import aboutImage from './about image.png'
 import Julius from './Julius.png'
+import dropDown from './Down Button.png'
+import reviewIcon from './Review Icon.png'
+import previous from './Prev.png'
+import next from './Next.png'
 
 export const assets = {
   twitter,
@@ -81,7 +85,11 @@ export const assets = {
   eyeOpen,
   eyeClosed,
   aboutImage,
-  Julius
+  Julius,
+  dropDown,
+  reviewIcon,
+  previous,
+  next
 }
 
 
@@ -141,5 +149,36 @@ export const team_members = [
     image: Julius,
     description:
         'Lorem ipsium dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et adolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat'
+  }
+]
+
+export const eventsFilter = [
+  {
+    _id: '1',
+    name: 'All'
+  },
+  {
+    _id: '2',
+    name: 'Popular'
+  },
+  {
+    _id: '3',
+    name: 'DjangoCons'
+  },
+  {
+    _id: '4',
+    name: 'PyCons'
+  },
+  {
+    _id: '5',
+    name: 'DevFest'
+  },
+  {
+    _id: '6',
+    name: 'PyCons'
+  },
+  {
+    _id: '7',
+    name: 'DevFest'
   }
 ]
