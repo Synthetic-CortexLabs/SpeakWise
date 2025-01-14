@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './Footer.css'
 import { assets } from '../../assets/assets'
 
@@ -8,17 +9,17 @@ const Footer = () => {
           <div className='footer-top'>
             <h1>Speak<span>Wise</span></h1>
           </div>
-          <div className='footer-middle'>
+            <div className='footer-middle'>
             <div className='footer-links'>
-                <div className='footer-links-left'>
-                <a href='#home'>Home</a>
-                <a href='#about'>About</a>
-                <a href='#speakers'>Speakers</a>
-                </div>
+                <ul className='footer-links-left'>
+                <Link to='/'>Home</Link>
+                <Link to='/about'>About</Link>
+                <Link to='#speakers'>Speakers</Link>
+                </ul>
                 <div className='footer-links-right'>
-                <a href='#events'>Events</a>
-                <a href='#review'>Review</a>
-                <a href='#contact'>Contact us</a>
+                <Link to='/events'>Events</Link>
+                <Link to='#review'>Review</Link>
+                <Link to='#contact'>Contact us</Link>
                 </div>
             </div>
             </div>
