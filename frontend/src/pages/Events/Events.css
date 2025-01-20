@@ -254,6 +254,99 @@
     position: relative;
 }
 
+@media screen and (max-width: 768px) {
+  .events-header {
+      padding: 0 25px;
+   }
+
+   .events-header h1 {
+      font-size: 25px;
+      line-height: 1.2;
+   }
+
+    .events-header p {
+        font-size: 0.7rem;
+        margin-top: 5px;
+        text-align: center;
+        width: 95%;
+    }
+    .events-filter {
+    padding: 45px 10px;
+    gap: 20px;
+}
+.events-filter::-webkit-scrollbar {
+    display: none;
+}
+
+.events-filter-button {
+    min-width: 120px;
+    height: 30px;
+    font-size: .8rem;
+}
+
+.country-and-region {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 40px; /* Space between region and country */
+}
+
+.region, .country {
+  position: relative; /* For dropdown positioning */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Space between label and selected value */
+  gap: 10px;
+  align-items: start; /* Center items vertically */
+  transition: background-color 0.3s; /* Smooth background transition */
+}
+.region label, .country label {
+  font-size: .8rem;
+  font-weight: 500;
+  color: white;
+}
+.selected-region, .selected-country {
+    background-color: #D9D9D9;
+  font-size: .8rem;
+  text-wrap: nowrap;
+  padding: 0 10px;
+  font-weight: 500;
+  color: black;
+  width: 140px;
+  height: 30px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+}
+.selected-region img, .selected-country img {
+  width: 30px;
+  height: auto;
+}
+.events-grid-container>p {
+  font-size: 1.2rem;
+}
+.events-grid-container{
+  padding: 20px;
+}
+.events-grid {
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+}
+.events-pagination-container{
+  flex-direction: row;
+  justify-content: center;
+}
+ .events-contact-container {
+            padding: 30px 20px;
+            height: auto;
+            margin-top: 60px;
+        }
+
+}
+
 
 
 
