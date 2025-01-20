@@ -18,7 +18,7 @@ const Events = () => {
   const [isRegionDropdownOpen, setIsRegionDropdownOpen] = useState(false);
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const eventsPerPage = 9;
+  const eventsPerPage = 6;
 
   const handleRegionClick = () => {
     setIsRegionDropdownOpen(!isRegionDropdownOpen);
