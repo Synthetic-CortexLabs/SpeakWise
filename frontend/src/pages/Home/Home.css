@@ -167,20 +167,21 @@ span{
 @media screen and (max-width: 768px) {
   .frameworks-container{
     padding: 20px 10px;
-    gap: 10px;
+    gap: 20px;
+    overflow-x: scroll;
   }
 
 .frameworks-container img {
-    width: 25%;
+    width: 200px;
     height: auto;
   }
 
   .frameworks-container img:first-of-type {
-    width: 14%;
+    width: 100px;
   }
 
   .frameworks-container img:nth-of-type(2) {
-    width: 28%;
+    width: 200px;
     scale: 1.5;
   }
   /* Devfest Info Section */
