@@ -157,33 +157,173 @@ body {
   color: #EB5017;
 }
 
-span{
-    color: #EB5017;
+.home-contact-container {
+  margin-top: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  background-color: black;
+  padding: 40px 80px;
+  padding-bottom: 0;
+  height: 270px;
+  position: relative;
+}
+
+.home-contact-container-left {
+  width: 50%;
+}
+
+.home-contact-container-left h1 {
+  font-size: 3rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.home-contact-container-right {
+  width: 40%;
+  background-color: white;
+  height: 70px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.home-contact-container-right input {
+  width: 70%;
+  height: 50%;
+  border: none;
+  outline: none;
+  padding: 0 20px;
+}
+
+.home-contact-container-right input::placeholder {
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.home-contact-container-right button {
+  background-color: #0D1423;
+  color: white;
+  padding: 10px 45px;
+  border-radius: 50px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.home-contact-container-right button:hover {
+  background-color: #EB5017;
+  cursor: pointer;
+}
+
+.home-contact-container-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.home-contact-container-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-contact-us {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  gap: 20px;
+  background-color: #EB5017;
+  height: 100px;
+  width: 60%;
+  border-radius: 10px;
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.home-contact-us p {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.home-contact-us button {
+  background-color: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  font-size: 1rem;
+  padding: 23px 45px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.home-contact-us button:hover {
+  background-color: #fff;
+  color: #EB5017;
+  cursor: pointer;
+}
+
+span {
+  color: #EB5017;
 }
 
 
 
 /* Media Queries for Mobile */
 @media screen and (max-width: 768px) {
-  .frameworks-container{
-    padding: 20px 10px;
-    gap: 20px;
-    overflow-x: scroll;
+  .frameworks-container {
+    position: relative;
+    padding: 20px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    width: 100%;
   }
 
-.frameworks-container img {
-    width: 200px;
-    height: auto;
+  .frameworks-container div {
+    display: inline-block;
+    animation: ticker 20s linear infinite;
   }
 
-  .frameworks-container img:first-of-type {
-    width: 100px;
+  .frameworks-container img {
+    width: auto;
+    height: 40px;
+    margin-right: 40px;
+    display: inline-block;
   }
 
+  .frameworks-container::before,
+  .frameworks-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 50px;
+    height: 100%;
+    z-index: 2;
+  }
+
+  .frameworks-container::before {
+    left: 0;
+    background: linear-gradient(to right, #111827, transparent);
+  }
+
+  .frameworks-container::after {
+    right: 0;
+    background: linear-gradient(to left, #111827, transparent);
+  }
+
+  /* Override specific image sizes for consistency in the ticker */
+  .frameworks-container img:first-of-type,
   .frameworks-container img:nth-of-type(2) {
-    width: 200px;
-    scale: 1.5;
+    width: auto;
+    height: 40px;
   }
+
   /* Devfest Info Section */
   .devfest-info {
     flex-direction: column;
@@ -264,37 +404,37 @@ span{
     margin-top: 60px;
   }
 
-  .contact-container-top {
+  .home-contact-container-top {
     flex-direction: column;
     gap: 30px;
   }
 
-  .contact-container-left {
+  .home-contact-container-left {
     width: 100%;
     text-align: center;
   }
 
-  .contact-container-left h1 {
+  .home-contact-container-left h1 {
     font-size: 2rem;
   }
 
-  .contact-container-right {
+  .home-contact-container-right {
     width: 100%;
     height: auto;
     padding: 15px;
     gap: 15px;
   }
 
-  .contact-container-right input {
+  .home-contact-container-right input {
     width: 100%;
     padding: 10px;
   }
 
-  .contact-container-right button {
+  .home-contact-container-right button {
     padding: 10px 20px;
   }
 
-  .contact-us {
+  .home-contact-us {
     width: 90%;
     height: auto;
     padding: 14px 15px;
@@ -302,18 +442,76 @@ span{
     text-align: center;
   }
 
-  .contact-us p {
+  .home-contact-us p {
     font-size: 1.0rem;
   }
 
-  .contact-us button {
+  .home-contact-us button {
     padding: 13px 25px;
     font-size: 0.7rem;
     text-wrap: nowrap;
     border-radius: 15px;
   }
 
+         /* Home Contact Container */
+         .home-contact-container {
+           padding: 30px 20px;
+           height: auto;
+           margin-top: 60px;
+         }
+    
+         .home-contact-container-top {
+           flex-direction: column;
+           gap: 30px;
+         }
+    
+            .home-contact-container-left {
+           width: 100%;
+           text-align: center;
+         }
+    
+         .home-contact-container-left h1 {
+           font-size: 2rem;
+         }
+    
+         .home-contact-container-right {
+           width: 100%;
+           height: auto;
+           padding: 15px;
+           gap: 15px;
+         }
+    
+         .home-contact-container-right input {
+           width: 100%;
+           padding: 10px;
+         }
+    
+         .home-contact-container-right button {
+           padding: 10px 20px;
+         }
+    
+         .home-contact-us {
+           width: 90%;
+           height: auto;
+           padding: 14px 15px;
+           gap: 15px;
+           text-align: center;
+         }
+    
+         .home-contact-us p {
+           font-size: 1.0rem;
+         }
+    
+         .home-contact-us button {
+           padding: 13px 25px;
+           font-size: 0.7rem;
+           text-wrap: nowrap;
+           border-radius: 15px;
+         }
   
+  .frameworks-container:hover img {
+    animation-play-state: paused;
+  }
 }
 
 /* Additional adjustments for very small screens */
@@ -326,15 +524,15 @@ span{
     font-size: 1.8rem;
   }
 
-  .contact-container-left h1 {
+  .home-contact-container-left h1 {
     font-size: 1.8rem;
   }
 
-  .contact-us {
+  .home-contact-us {
     width: 95%;
   }
 
-  .contact-us p {
+  .home-contact-us p {
     font-size: 1.1rem;
   }
 }
@@ -401,6 +599,16 @@ span{
   
   .devfest-info-right-mobile {
     display: block;
+  }
+}
+
+/* Add new styles for the ticker animation */
+@keyframes ticker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
   }
 }
 

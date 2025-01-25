@@ -1,16 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Events.css'
 import Navbar from '../../components/Navbar/Navbar'
 import { assets, eventsFilter } from '../../assets/assets'
 import { events } from '../../assets/Events and Conferences/events';
 import Footer from '../../components/Footer/Footer';
-
-const regions = ['Africa', 'Asia', 'Europe'];
-const countries = {
-  Africa: ['Ghana', 'Nigeria', 'Kenya'],
-  Asia: ['India', 'China', 'Japan'],
-  Europe: ['Germany', 'France', 'UK'],
-};
 
 const Events = () => {
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -19,6 +12,34 @@ const Events = () => {
   const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const eventsPerPage = 6;
+  const [regions, setRegions] = useState([]);
+  const [countries, setCountries] = useState({});
+
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch('https://restcountries.com/v3.1/all');
+        const data = await response.json();
+        
+        // Group countries by region
+        const groupedByRegion = data.reduce((acc, country) => {
+          const region = country.region;
+          if (!acc[region]) {
+            acc[region] = [];
+          }
+          acc[region].push(country.name.common);
+          return acc;
+        }, {});
+        
+        setRegions(Object.keys(groupedByRegion));
+        setCountries(groupedByRegion);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      }
+    };
+
+    fetchCountries();
+  }, []);
 
   const handleRegionClick = () => {
     setIsRegionDropdownOpen(!isRegionDropdownOpen);

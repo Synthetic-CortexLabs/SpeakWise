@@ -23,10 +23,26 @@ const Home = () => {
         <Navbar/>
         <Header/>
         <div className='frameworks-container'>
-          <img src={assets.pyconAfrica} alt="" />
-          <img src={assets.googleIoExtended1} alt="" />
-          <img src={assets.devfest} alt="" />
-          <img src={assets.flutter1} alt="" />
+          <div>
+            <img src={assets.pyconAfrica} alt="" />
+            <img src={assets.googleIoExtended1} alt="" />
+            <img src={assets.devfest} alt="" />
+            <img src={assets.flutter1} alt="" />
+            <img src={assets.pyconAfrica} alt="" />
+            <img src={assets.googleIoExtended1} alt="" />
+            <img src={assets.devfest} alt="" />
+            <img src={assets.flutter1} alt="" />
+          </div>
+          <div>
+            <img src={assets.pyconAfrica} alt="" />
+            <img src={assets.googleIoExtended1} alt="" />
+            <img src={assets.devfest} alt="" />
+            <img src={assets.flutter1} alt="" />
+            <img src={assets.pyconAfrica} alt="" />
+            <img src={assets.googleIoExtended1} alt="" />
+            <img src={assets.devfest} alt="" />
+            <img src={assets.flutter1} alt="" />
+          </div>
         </div>
         <div className="devfest-info">
           <div className='devfest-info-left'>
@@ -107,7 +123,24 @@ const Home = () => {
           </div>
         </div>
         </div>
-       <ContactUs/>
+       <div className="home-contact-container">
+        <div className="home-contact-container-top">
+            <div className="home-contact-container-left">
+            <h1><span>Got Any Questions?</span></h1>
+            <h1>We&apos;ve Got Answers</h1>
+          </div>
+          <div className="home-contact-container-right">
+            <input type="email" placeholder='Email' />
+            <button>Connect</button>
+          </div>
+        </div>
+        <div className="home-contact-container-bottom">
+          <div className="home-contact-us">
+            <p>Ready to get started?</p>
+            <button>CONTACT US</button>
+        </div>
+        </div>
+        </div> 
         <Footer/>
         
     </div>
