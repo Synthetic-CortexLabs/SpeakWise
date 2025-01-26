@@ -1,7 +1,7 @@
 .about-header {
     height: 47vw;
     margin: 0px auto;
-    background: url('/about image.png') no-repeat;
+    background: url('/about image.webp') no-repeat;
     background-size: contain;
     position: relative;
     display: flex;
