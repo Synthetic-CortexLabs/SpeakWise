@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import './Events.css'
 import Navbar from '../../components/Navbar/Navbar'
-import { assets, eventsFilter } from '../../assets/assets'
+import { assets} from '../../assets/assets'
 import { events } from '../../assets/Events and Conferences/events';
 import Footer from '../../components/Footer/Footer';
+import { useNavigate } from 'react-router-dom';
+import EventsFilter from '../../components/EventsFilter/EventsFilter';
 
 const Events = () => {
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -14,6 +16,7 @@ const Events = () => {
   const eventsPerPage = 6;
   const [regions, setRegions] = useState([]);
   const [countries, setCountries] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -70,6 +73,10 @@ const Events = () => {
     setCurrentPage(pageNumber);
   };
 
+  const handleStartReview = (event) => {
+    navigate(`/events/${event.id}`, { state: { eventDetails: event } });
+  };
+
   return (
     <div className='events-container'>
         <Navbar/>
@@ -77,11 +84,7 @@ const Events = () => {
             <h1>Conferences & Events</h1>
             <p>All conferences and events here, local and international.</p>
         </div>
-        <div className="events-filter">
-            {eventsFilter.map((event) => (
-                <button key={event._id} className='events-filter-button'>{event.name}</button>
-            ))}
-        </div>
+        <EventsFilter/>
         <div className="events-grid-container">
             <div className="country-and-region">
                 <div className="region" onClick={handleRegionClick}>
@@ -115,9 +118,9 @@ const Events = () => {
                         <div className='event-card-details'>
                         <div className="event-card-details-left">
                             <h3>{event.title}</h3>
-                        <p>{event.location}</p>
+                        <p>{event.location.town}, {event.location.region}</p>
                     </div>
-                    <div className="event-card-details-right">
+                    <div className="event-card-details-right" onClick={() => handleStartReview(event)}>
                         <p>Start Review</p>
                         <img src={assets.reviewIcon} alt="reviewIcon" />
                     </div>

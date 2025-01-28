@@ -1,0 +1,274 @@
+.event-header {
+    height: 40vw;
+    margin: 0px auto;
+    background: url('/event header.webp') no-repeat;
+    background-size: contain;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.event-header h1 {
+    margin-top: 18%;
+    font-size: 90px;
+}
+
+.event-header p {
+    font-size: 1.6rem;
+    font-weight: 300;
+    margin-top: 20px;
+    width: 75%;
+    text-align: center;
+}
+.event-grid-container {
+  background-color: #161616;
+  padding: 20px 40px;
+  width: 100%;
+}
+.day-selector {
+    position: relative; /* For dropdown positioning */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Space between label and selected value */
+    gap: 10px;
+    align-items: start; /* Center items vertically */
+    transition: background-color 0.3s; /* Smooth background transition */
+  }
+  .day-selector label {
+     font-size: 1.4rem;
+  font-weight: 500;
+  color: white;
+  }
+  .day-selector label small {
+    font-size: 1rem;
+    font-weight: 300;
+    color: #d9d9d9;
+  }
+  .selected-day {
+     background-color: #d9d9d9;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: black;
+  width: 230px;
+  height: 45px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  cursor: pointer;
+  }
+  .selected-day img {
+    width: 50px;
+  height: auto;
+  }
+
+.selected-day img.open {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 10;
+  width: 150px;
+  top: -130px;
+  max-height: 150px; /* Limit height */
+  overflow-y: auto; /* Scroll if too many items */
+  border-radius: 8px; /* Rounded corners for dropdown */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for dropdown */
+}
+
+.dropdown div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdown div:hover {
+  background-color: #f0f0f0; /* Highlight on hover */
+}
+
+.event-grid-container > p {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: white;
+  margin: 20px 0px;
+}
+
+.sessions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 70px;
+}
+
+.session-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.session-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid #eb5017;
+}
+
+.session-card-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.session-card-details-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.session-card-details-left h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: white;
+}
+
+.session-card-details-left p:first-of-type {
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: #eb5017;
+}
+
+.session-card-details-left p:last-of-type {
+  font-size: 0.6rem;
+  width: 100%;
+  font-weight: 500;
+  color: white;
+}
+
+.session-card-details-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background-color: #d9d9d9;
+  border-radius: 40px;
+  padding: 5px 20px;
+}
+.session-card-details-right p {
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.events-pagination-container {
+  display: flex;
+  width: 100%;
+  justify-content: right;
+  align-items: center;
+  padding: 0px 40px;
+  margin: 50px 0px;
+}
+
+.events-pagination {
+  right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.events-pagination button {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-weight: 600;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.events-pagination img {
+  width: 50px;
+  height: auto;
+  cursor: pointer;
+}
+
+.events-pagination button.active {
+  background-color: #eb5017;
+  color: white;
+  border: none;
+}
+
+.events-pagination button:hover:not(.active) {
+  background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+   .event-header {
+        padding: 0 25px;
+    }
+
+    .event-header h1 {
+        font-size: 2.4rem;
+    }
+
+    .event-header p {
+      margin-top: 10px;
+        font-size: 0.7rem;
+        text-align: center;
+        width: 95%;
+    }
+
+    .day-selector label{
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: white;
+  }
+  .day-selector label small {
+    font-size: 0.6rem;
+    font-weight: 300;
+    color: #d9d9d9;
+  }
+  .selected-day {
+    background-color: #d9d9d9;
+    font-size: 0.8rem;
+    text-wrap: nowrap;
+    padding: 0 10px;
+    font-weight: 500;
+    color: black;
+    width: 140px;
+    height: 30px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    cursor: pointer;
+  }
+  .selected-day img {
+    width: 30px;
+    height: auto;
+  }
+    .event-grid-container > p {
+    font-size: 1.2rem;
+  }
+  .event-grid-container {
+    padding: 20px;
+  }
+  .sessions-grid {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+  }
+  .events-pagination-container {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .events-contact-container {
+    padding: 30px 20px;
+    height: auto;
+    margin-top: 60px;
+  }
+    
+}

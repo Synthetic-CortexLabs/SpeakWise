@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './Login.css';
 import { assets } from '../../assets/assets';
+import { handleSignup, handleLogin } from '../../services/api';
 
 const Login = () => {
   const [view, setView] = useState('buttons');
   const [showPassword, setShowPassword] = useState(false);
   const [animate, setAnimate] = useState(true);
- 
+  const signupFormRef = useRef();
+  const signinFormRef = useRef();
 
-  // This section is responsible for handling the state of the login view and password visibility
-  // The animate state is used to control the animation of the view transition
-  // The showPassword state is used to toggle the visibility of the password input field
+  const domain = "https://speakwise.onrender.com/api";
+  // This section is responsible for handling the state of the login view and
+  // password visibility The animate state is used to control the animation of
+  // the view transition The showPassword state is used to toggle the visibility
+  // of the password input field
   const handleViewChange = (newView) => {
     setAnimate(false);
     setTimeout(() => {
@@ -71,21 +75,28 @@ const Login = () => {
               Don&apos;t have an account?{' '}
               <span onClick={() => handleViewChange('signup')}>Sign up</span>
             </p>
-            <form>
+            <form ref={signinFormRef}>
               <div>
                 <label>Email Address</label>
-                <input type='email'  />
+                <input type='email' name='email' />
               </div>
               <div>
                 <label>Password</label>
-                <input type={showPassword ? 'text' : 'password'} />
+                <input type={showPassword ? 'text' : 'password'} name='password' />
                 {showPassword ? (
                   <img src={assets.eyeOpen} alt="" onClick={() => setShowPassword(false)} />
                 ) : (
                   <img src={assets.eyeClosed} alt="" onClick={() => setShowPassword(true)} />
                 )}
               </div>
-              <button type='submit'>Sign In</button>
+              <button type='button' onClick={async () => {
+                const form = signinFormRef.current;
+                const formdata = new FormData(form);
+                const data = Object.fromEntries(formdata.entries());
+                console.log(data);
+                const response = await handleLogin(data);
+                console.log(response);
+                }}>Sign In</button>
             </form>
             <p>Forgot Password? <span>Recover</span></p>
            
@@ -98,16 +109,23 @@ const Login = () => {
               Already have an account?{' '}
               <span onClick={() => handleViewChange('signin')}>Sign In</span>
             </p>
-            <form>
+            <form ref={signupFormRef}>
               <label>Your Name</label>
-              <input type='text' />
+              <input type='text' name='name'/>
               <label>Your Nationality</label>
-              <input type='text'  />
+              <input type='text' name='nationality' />
               <label>Email Address</label>
-              <input type='email' />
+              <input type='email' name='email' />
               <label>Password</label>
-              <input type='password' />
-              <button type='submit'>Create Account</button>
+              <input type='password' name='password' />
+              <button type='button' onClick={async () => {
+                const form = signupFormRef.current;
+                const formdata = new FormData(form);
+                const data = Object.fromEntries(formdata.entries());
+                console.log(data);
+                const response = await handleSignup(data);
+                console.log(response);
+                }}>Create Account</button>
             </form>
            
           </div>

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@splidejs/splide-extension-auto-scroll": "^0.5.3",
+    "axios": "^1.7.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.2"

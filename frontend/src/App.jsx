@@ -4,15 +4,20 @@ import Home from './pages/Home/Home'
 import { About } from './pages/About/About'
 import Login from './pages/Login/Login'
 import Events from './pages/Events/Events'
+import Event from './pages/Event/Event'
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+
 
 const App = () => {
   return (
     <div className='app'>
+      <ScrollToTop />
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/about' element={<About/>}/>
         <Route path='/events' element={<Events/>}/>
+        <Route path='/events/:eventId' element={<Event/>}/>
       </Routes>
     </div>
   )

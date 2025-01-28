@@ -1,0 +1,39 @@
+.events-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 45px 40px;
+  gap: 40px;
+  overflow-x: scroll;
+}
+.events-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.events-filter-button {
+  min-width: 210px;
+  height: 60px;
+  border: 2px solid #eb5017;
+  border-radius: 60px;
+  background-color: #d8d8d8;
+  font-size: 1rem;
+  font-weight: 500;
+  color: black;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .events-filter {
+    padding: 20px 10px;
+    gap: 20px;
+  }
+  .events-filter::-webkit-scrollbar {
+    display: none;
+  }
+
+  .events-filter-button {
+    min-width: 120px;
+    height: 30px;
+    font-size: 0.8rem;
+  }
+}
