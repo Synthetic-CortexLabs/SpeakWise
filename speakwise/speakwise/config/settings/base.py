@@ -425,6 +425,12 @@ CORS_ALLOW_HEADERS = [
     "access-control-allow-headers",
 ]
 
+FRONTEND_COR_HEADERS = [
+    "http://localhost:5173",
+    "https://speakwise-beta.vercel.app",
+]
+
+CORS_ORIGIN_WHITELIST = FRONTEND_COR_HEADERS
 
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
