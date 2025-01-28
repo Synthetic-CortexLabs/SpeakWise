@@ -83,18 +83,11 @@ CELERY_TASK_EAGER_PROPAGATES = True
 
 
 # CORS configurations
-CORS_ORIGIN_ALLOW_ALL = True
-
-
-def allowed_origins_func(request):
-    return [
-        "http://localhost:5173",
-        "https://speakwise-beta.vercel.app",
-    ]
-
+CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ALLOWED_ORIGINS = [
-    allowed_origins_func,
+    "http://localhost:5173",
+    "https://speakwise-beta.vercel.app",
 ]
 CORS_ALLOW_METHODS = [
     "GET",
