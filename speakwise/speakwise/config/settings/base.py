@@ -423,6 +423,8 @@ CORS_ALLOW_HEADERS = [
     "clientSecret",
     "Host",
     "access-control-allow-headers",
+    "http://localhost:5173",
+    "https://speakwise-beta.vercel.app",
 ]
 
 FRONTEND_COR_HEADERS = [
