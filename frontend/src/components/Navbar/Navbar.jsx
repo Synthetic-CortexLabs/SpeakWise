@@ -15,6 +15,8 @@ const Navbar = () => {
     setIsMenuOpen(false);
   };
 
+  const isEventsActive = location.pathname.startsWith('/events');
+
   return (
     <div className='navbar-container'>
       <div className='navbar-left'>
@@ -33,7 +35,7 @@ const Navbar = () => {
         <Link to='/' onClick={handleNavClick} className={location.pathname === '/' ? 'active' : ''}>Home</Link>
         <Link to='/about' onClick={handleNavClick} className={location.pathname === '/about' ? 'active' : ''}>About</Link>
         <Link to='/#speakers' onClick={handleNavClick} className={location.hash === '#speakers' ? 'active' : ''}>Speakers</Link>
-        <Link to='/events' onClick={handleNavClick} className={location.pathname === '/events' ? 'active' : ''}>Events</Link>
+        <Link to='/events' onClick={handleNavClick} className={isEventsActive ? 'active' : ''}>Events</Link>
         <Link to='/#review' onClick={handleNavClick} className={location.hash === '#review' ? 'active' : ''}>Review</Link>
       </ul>
 
@@ -43,7 +45,7 @@ const Navbar = () => {
           <li><Link to='/' onClick={handleNavClick} className={location.pathname === '/' ? 'active' : ''}>Home</Link></li>
           <li><Link to='/about' onClick={handleNavClick} className={location.pathname === '/about' ? 'active' : ''}>About</Link></li>
           <li><Link to='/#speakers' onClick={handleNavClick} className={location.hash === '#speakers' ? 'active' : ''}>Speakers</Link></li>
-          <li><Link to='/events' onClick={handleNavClick} className={location.pathname === '/events' ? 'active' : ''}>Events</Link></li>
+          <li><Link to='/events' onClick={handleNavClick} className={isEventsActive ? 'active' : ''}>Events</Link></li>
           <li><Link to='/#review' onClick={handleNavClick} className={location.hash === '#review' ? 'active' : ''}>Review</Link></li>
         </ul>
       </div>
