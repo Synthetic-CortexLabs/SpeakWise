@@ -2,7 +2,12 @@
 """Base settings to build other settings files upon."""
 
 import os
+
+# import os
+from datetime import timedelta
+
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import dj_database_url
 import environ
@@ -23,6 +28,7 @@ if READ_DOT_ENV_FILE:
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
+
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -60,13 +66,6 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 #         "PORT": os.getenv("POSTGRES_PORT"),
 #         # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
 #     },
-# }
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
 
 DATABASES = {
     "default": dj_database_url.config(
@@ -75,6 +74,8 @@ DATABASES = {
         conn_max_age=600,
     )
 }
+
+
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -362,6 +363,7 @@ SOCIALACCOUNT_ADAPTER = "speakwise.users.adapters.SocialAccountAdapter"
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
 SOCIALACCOUNT_FORMS = {"signup": "speakwise.users.forms.UserSocialSignupForm"}
 
+
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
@@ -377,6 +379,29 @@ REST_FRAMEWORK = {
         "speakwise.core.renderers.CustomJSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
+}
+
+# Timezone configuration
+TIMEZONE_UTC = ZoneInfo("UTC")
+
+# Django REST Framework SimpleJWT settings
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "UPDATE_LAST_LOGIN": False,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": env("DJANGO_SECRET_KEY", default="your-secret-key"),
+    "VERIFYING_KEY": None,
+    "AUDIENCE": None,
+    "ISSUER": None,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "ser_id",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
