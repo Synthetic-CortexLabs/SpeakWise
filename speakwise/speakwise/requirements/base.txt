@@ -31,6 +31,8 @@ cryptography==43.0.3
 cssbeautifier==1.15.1
 decorator==5.1.1
 distlib==0.3.9
+dj-database-url==2.3.0
+dj-rest-auth==5.0.1
 Django==5.0.9
 django-allauth==65.1.0
 django-anymail==12.0
@@ -50,6 +52,7 @@ django-timezone-field==7.0
 django-webpack-loader==3.1.1
 djangorestframework==3.15.2
 djangorestframework-stubs==3.15.1
+djangorestframework_simplejwt==5.4.0
 djlint==1.35.2
 docutils==0.21.2
 drf-spectacular==0.27.2
@@ -114,6 +117,7 @@ ptyprocess==0.7.0
 pure_eval==0.2.3
 pycparser==2.22
 Pygments==2.18.0
+PyJWT==2.10.1
 pyproject_hooks==1.2.0
 pytest==8.3.3
 pytest-django==4.9.0
@@ -167,6 +171,7 @@ urllib3==2.2.3
 uvicorn==0.32.0
 vine==5.1.0
 virtualenv==20.27.1
+waitress==3.0.2
 watchdog==6.0.0
 watchfiles==0.24.0
 wcwidth==0.2.13

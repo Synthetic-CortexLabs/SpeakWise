@@ -1,5 +1,6 @@
 # ruff: noqa: E501
 import logging
+import os
 
 import sentry_sdk
 from sentry_sdk.integrations.celery import CeleryIntegration
@@ -7,10 +8,8 @@ from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.redis import RedisIntegration
 
-from .base import *  # noqa: F403
 from .base import DATABASES
 from .base import INSTALLED_APPS
-from .base import REDIS_URL
 from .base import SPECTACULAR_SETTINGS
 from .base import env
 
@@ -19,8 +18,19 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["example.com"])
+# ALLOWED_HOSTS = env.list(
+#     "DJANGO_ALLOWED_HOSTS",
+#     default=["speakwise.onrender.com"],
+# )
 
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["speakwise.onrender.com"])
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://speakwise.onrender.com",
+    "https://www.speakwise.onrender.com",
+    "speakwise.onrender.com",
+]
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
@@ -30,14 +40,12 @@ DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
+        "LOCATION": os.environ.get("AZURE_REDIS_CONNECTIONSTRING"),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            # Mimicing memcache behavior.
-            # https://github.com/jazzband/django-redis#memcached-exceptions-behavior
-            "IGNORE_EXCEPTIONS": True,
+            "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
         },
-    },
+    }
 }
 
 # SECURITY
