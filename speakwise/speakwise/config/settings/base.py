@@ -64,13 +64,13 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 #         # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
 #     },
 # }
-DATABASES = {
+
     'default': dj_database_url.config(
         # Replace this value with your local database's connection string.
         default='postgresql://speakwise:9sgAUr6RbZ4WS5fVQN0yJWgXc9OhW44r@dpg-ctu8k75umphs73eljteg-a.oregon-postgres.render.com/speakwisedb_xk78',
         conn_max_age=600
     )
-}
+
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
