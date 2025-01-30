@@ -1,8 +1,11 @@
 # ruff: noqa: ERA001, E501
 """Base settings to build other settings files upon."""
 
+import os
+
 # import os
 from datetime import timedelta
+
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -63,14 +66,16 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 #         "PORT": os.getenv("POSTGRES_PORT"),
 #         # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
 #     },
-# }
+
 DATABASES = {
     "default": dj_database_url.config(
         # Replace this value with your local database's connection string.
         default="postgresql://speakwise:9sgAUr6RbZ4WS5fVQN0yJWgXc9OhW44r@dpg-ctu8k75umphs73eljteg-a.oregon-postgres.render.com/speakwisedb_xk78",
         conn_max_age=600,
-    ),
+    )
+
 }
+
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
@@ -423,8 +428,16 @@ CORS_ALLOW_HEADERS = [
     "clientSecret",
     "Host",
     "access-control-allow-headers",
+    "http://localhost:5173",
+    "https://speakwise-beta.vercel.app",
 ]
 
+FRONTEND_COR_HEADERS = [
+    "http://localhost:5173",
+    "https://speakwise-beta.vercel.app",
+]
+
+CORS_ORIGIN_WHITELIST = FRONTEND_COR_HEADERS
 
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
