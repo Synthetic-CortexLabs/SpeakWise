@@ -73,6 +73,7 @@ DATABASES = {
         default="postgresql://speakwise:9sgAUr6RbZ4WS5fVQN0yJWgXc9OhW44r@dpg-ctu8k75umphs73eljteg-a.oregon-postgres.render.com/speakwisedb_xk78",
         conn_max_age=600,
     )
+
 }
 
 
