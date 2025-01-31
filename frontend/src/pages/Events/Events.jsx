@@ -185,10 +185,11 @@ const Events = () => {
 
 
 
-            <p>Let's us know where you watched this session from.</p>
+            <p>Let&apos;s us know where you watched this session from.</p>
+
 
             <div className='physical-or-youtube'>
-              <div className='physical-or-youtube-left' onClick={() => setIsVerifyModalOpen(true)}>
+              <div className='physical-or-youtube-left' onClick={() => {setIsVerifyModalOpen(true); setIsReviewConfirmModalOpen(false)}}>
                 <img src={assets.physical} alt="physical" />
                 <p>Physically Attended</p>
               </div>
