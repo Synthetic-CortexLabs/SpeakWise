@@ -6,6 +6,8 @@ import { events } from '../../assets/Events and Conferences/events';
 import Footer from '../../components/Footer/Footer';
 import { useNavigate } from 'react-router-dom';
 import EventsFilter from '../../components/EventsFilter/EventsFilter';
+import { getEvents } from '../../services/api';
+import{toast} from "react-hot-toast";
 
 const Events = () => {
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -20,6 +22,9 @@ const Events = () => {
   const [isReviewConfirmModalOpen, setIsReviewConfirmModalOpen] = useState(false);
   const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -45,6 +50,25 @@ const Events = () => {
     };
 
     fetchCountries();
+  }, []);
+
+
+  // Fetch events from the API
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setLoading(true);
+        const response = await getEvents();
+        setEvents(response.data);
+      } catch (err) {
+        setError('Failed to fetch events');
+        console.error('Error fetching events:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
   }, []);
 
   const handleRegionClick = () => {
@@ -89,6 +113,16 @@ const Events = () => {
     // Navigate to event page
     navigate(`/events/${event.id}`, { state: { eventDetails: event } });
   };
+ // Loading and error handling
+  if (loading) {
+    // toast.loading('Loading events...');
+    console.log('Loading events...');
+  }
+
+  if (error) {
+    toast.error('Failed to fetch events');
+  }
+
 
   return (
     <div className='events-container'>

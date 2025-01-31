@@ -434,24 +434,18 @@
   background-color: #c0c0c0;
 }
 
+.loading, .error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 1.2rem;
+  color: #333;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.error {
+  color: #eb5017;
+}
 
 @media screen and (max-width: 768px) {
   .events-header {
