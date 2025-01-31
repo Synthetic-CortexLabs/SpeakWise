@@ -4,12 +4,21 @@
   align-items: center;
   padding: 20px 40px;
   background: transparent;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
+  transition: all 0.3s ease;
 }
+
+.navbar-container.scrolled {
+  background: rgba(2, 8, 23, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
 .navbar-left h1{
   font-size: 2rem;
   font-weight: 700;
@@ -148,7 +157,10 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
-    background: #020817;
+  }
+
+  .navbar-container.scrolled {
+    background: rgba(2, 8, 23, 0.9); /* Slightly more opaque on mobile */
   }
 
   .navbar-left h1 {

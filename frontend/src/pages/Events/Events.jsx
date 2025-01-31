@@ -17,6 +17,9 @@ const Events = () => {
   const [regions, setRegions] = useState([]);
   const [countries, setCountries] = useState({});
   const navigate = useNavigate();
+  const [isReviewConfirmModalOpen, setIsReviewConfirmModalOpen] = useState(false);
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -74,6 +77,16 @@ const Events = () => {
   };
 
   const handleStartReview = (event) => {
+    setSelectedEvent(event);
+    setIsReviewConfirmModalOpen(true);
+  };
+
+  const handleVerifyAndNavigate = (event) => {
+    // Close both modals
+    setIsVerifyModalOpen(false);
+    setIsReviewConfirmModalOpen(false);
+    
+    // Navigate to event page
     navigate(`/events/${event.id}`, { state: { eventDetails: event } });
   };
 
@@ -125,6 +138,7 @@ const Events = () => {
                         <img src={assets.reviewIcon} alt="reviewIcon" />
                     </div>
                     </div>
+
                 </div>
             ))}
             </div>
@@ -163,7 +177,50 @@ const Events = () => {
         </div>
         </div> 
         <Footer/>
+        {isReviewConfirmModalOpen && (
+        <div className="review-confirm-modal">
+          <div className="review-confirm-modal-content">
+            <img  className='close-modal-icon' src={assets.closeModal} alt="closeModal" onClick={() => setIsReviewConfirmModalOpen(false)} />
+            <h1>Which one is you?</h1>
+
+
+
+            <p>Let's us know where you watched this session from.</p>
+
+            <div className='physical-or-youtube'>
+              <div className='physical-or-youtube-left' onClick={() => setIsVerifyModalOpen(true)}>
+                <img src={assets.physical} alt="physical" />
+                <p>Physically Attended</p>
+              </div>
+              <div className='physical-or-youtube-right'>
+                <img src={assets.youtube} alt="youtube" />
+                <p>Watched on Youtube</p>
+              </div>
+            </div>
+            <p>@Speak<span>Wise</span></p>
+
+
+          </div>
+        </div>
+        )}
+        {isVerifyModalOpen && (
+        <div className='verify-modal'>
+          <div className='verify-modal-content'>
+            <img  className='close-modal-icon' src={assets.closeModal} alt="closeModal" onClick={() => {setIsVerifyModalOpen(false); setIsReviewConfirmModalOpen(false)}} />
+            <h1>Lets verify you</h1>
+
+
+            <p>We want to be sure you attended the conference. <br />Please provide your email below</p>
+            <input type="email" placeholder='Enter your email' />
+            <button onClick={() => handleVerifyAndNavigate(selectedEvent)}>Verify</button>
+          </div>
+        </div>
+        )}
     </div>
+
+
+
+
   )
 }
 

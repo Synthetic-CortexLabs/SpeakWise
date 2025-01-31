@@ -238,6 +238,221 @@
   position: relative;
 }
 
+.review-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.review-confirm-modal-content {
+  background-color: #000;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  text-align: center;
+  height: 70vh;
+  width: 60vw;
+  padding: 40px;
+  position: relative;
+  -webkit-animation: scale-up-ver-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	animation: scale-up-ver-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+@-webkit-keyframes scale-up-ver-center {
+  0% {
+    -webkit-transform: scaleY(0.4);
+            transform: scaleY(0.4);
+  }
+  100% {
+    -webkit-transform: scaleY(1);
+            transform: scaleY(1);
+  }
+}
+@keyframes scale-up-ver-center {
+  0% {
+    -webkit-transform: scaleY(0.4);
+            transform: scaleY(0.4);
+  }
+  100% {
+    -webkit-transform: scaleY(1);
+            transform: scaleY(1);
+  }
+}
+
+
+.review-confirm-modal-content h1 {
+  font-size: 2.3rem;
+  font-weight: 600;
+  color: white;
+}
+
+.review-confirm-modal-content p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+}
+
+.physical-or-youtube {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+
+
+}
+
+.physical-or-youtube-left,
+.physical-or-youtube-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #eb5017;
+  border-radius: 7px;
+  height: 200px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.physical-or-youtube-left:hover,
+.physical-or-youtube-right:hover {
+  transform: scale(1.05);
+}
+
+
+.physical-or-youtube-left img,
+.physical-or-youtube-right img {
+
+  width: 60px;
+  height: auto;
+}
+
+
+.physical-or-youtube-left p,
+.physical-or-youtube-right p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #000;
+}
+
+.close-modal-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 25px;
+  height: auto;
+  cursor: pointer;
+}
+.verify-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.verify-modal-content {
+  background-color: #000;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  text-align: center;
+  height: 70vh;
+  width: 60vw;
+  padding-top: 40px;
+  padding: 100px;
+  position: relative;
+  -webkit-animation: scale-up-ver-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	animation: scale-up-ver-center 0.4s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
+.verify-modal-content h1 {
+  font-size: 2.3rem;
+  font-weight: 600;
+  color: white;
+}
+
+.verify-modal-content p {
+  font-size: 1rem;
+  font-weight: 500;
+  color: white;
+}
+
+.verify-modal-content input {
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  padding: 30px;
+  margin-top: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #0000007d;
+  background-color: #D9D9D9;
+  outline: none;
+}
+
+.verify-modal-content button {
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  padding: 10px;
+  margin-top: 20px;
+  background-color: #eb5017;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+
+.verify-modal-content button:hover {
+  background-color: #c0c0c0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @media screen and (max-width: 768px) {
   .events-header {
     padding: 0 25px;

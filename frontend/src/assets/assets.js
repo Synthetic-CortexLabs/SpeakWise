@@ -43,6 +43,9 @@ import dropDown from './Down Button.webp'
 import reviewIcon from './Review Icon.webp'
 import previous from './Prev.webp'
 import next from './Next.webp'
+import physical from './Users.webp'
+import youtube from './YouTube.webp'
+import closeModal from './close modal.webp'
 
 export const assets = {
   twitter,
@@ -89,8 +92,12 @@ export const assets = {
   dropDown,
   reviewIcon,
   previous,
-  next
+  next,
+  physical,
+  youtube,
+  closeModal
 }
+
 
 
 export const team_members = [

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 import { assets } from '../../assets/assets.js';
@@ -6,6 +6,16 @@ import { assets } from '../../assets/assets.js';
 const Navbar = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -18,7 +28,7 @@ const Navbar = () => {
   const isEventsActive = location.pathname.startsWith('/events');
 
   return (
-    <div className='navbar-container'>
+    <div className={`navbar-container ${isScrolled ? 'scrolled' : ''}`}>
       <div className='navbar-left'>
         <h1>Speak<span>Wise</span></h1>
       </div>
