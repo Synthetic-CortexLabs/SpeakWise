@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import EventsFilter from '../../components/EventsFilter/EventsFilter';
 import { getEvents } from '../../services/api';
 import{toast} from "react-hot-toast";
+import axios from 'axios';
 
 const Events = () => {
   const [selectedRegion, setSelectedRegion] = useState('');
@@ -53,23 +54,47 @@ const Events = () => {
   }, []);
 
 
-  // Fetch events from the API
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        setLoading(true);
-        const response = await getEvents();
-        setEvents(response.data);
-      } catch (err) {
-        setError('Failed to fetch events');
-        console.error('Error fetching events:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const [eventData, setEventData] = useState({
+    event_image: '',
+    event_nickname: '',
+    country: ''
+  });
 
-    fetchEvents();
+  useEffect(() => {
+    // Replace with your actual API endpoint
+    const apiUrl = `https://speakwise.onrender.com/api/events`;
+
+
+    axios.get(apiUrl, {timeout: 7000})
+      .then(response => {
+        const data = response.data;
+        setEventData({
+          event_image: data.event_image,
+          event_nickname: data.event_nickname,
+          country: data.country[0].name // Assuming country is an array and we want the first item's name
+        });
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data: ', error);
+        setError(error);
+        setLoading(false);
+      });
   }, []);
+
+  if (loading) return <div className='loading'>
+    <p>Loading Events...</p>
+    <div className="loader"></div>
+  </div>;
+  if (error) return <div className='error'>
+    <div className='error-message'>Failed to fetch events</div>
+    {toast.error('Failed to fetch events')}
+  </div>;
+
+
+
+
+
 
   const handleRegionClick = () => {
     setIsRegionDropdownOpen(!isRegionDropdownOpen);
@@ -113,15 +138,7 @@ const Events = () => {
     // Navigate to event page
     navigate(`/events/${event.id}`, { state: { eventDetails: event } });
   };
- // Loading and error handling
-  if (loading) {
-    // toast.loading('Loading events...');
-    console.log('Loading events...');
-  }
-
-  if (error) {
-    toast.error('Failed to fetch events');
-  }
+ 
 
 
   return (
@@ -161,11 +178,11 @@ const Events = () => {
             <div className='events-grid'>
                 {currentEvents.map((event) => (
                     <div className='event-card' key={event.id}>
-                        <img src={event.image} alt={event.title} />
+                        <img src={eventData.event_image} alt={eventData.event_nickname} />
                         <div className='event-card-details'>
                         <div className="event-card-details-left">
-                            <h3>{event.title}</h3>
-                        <p>{event.location.town}, {event.location.region}</p>
+                            <h3>{eventData.event_nickname}</h3>
+                        <p>{eventData.country}</p>
                     </div>
                     <div className="event-card-details-right" onClick={() => handleStartReview(event)}>
                         <p>Start Review</p>
