@@ -1,9 +1,8 @@
 # ruff: noqa: ERA001, E501
 """Base settings to build other settings files upon."""
 
-import os
 
-# import os
+import os
 from datetime import timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -69,19 +68,10 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 DATABASES = {
     "default": dj_database_url.config(
         # Replace this value with your local database's connection string.
-        default="postgresql://speakwise:9sgAUr6RbZ4WS5fVQN0yJWgXc9OhW44r@dpg-ctu8k75umphs73eljteg-a.oregon-postgres.render.com/speakwisedb_xk78",
+        default=os.environ.get("DATABASE_URL"),
         conn_max_age=600,
     )
-
 }
-
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
 
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
