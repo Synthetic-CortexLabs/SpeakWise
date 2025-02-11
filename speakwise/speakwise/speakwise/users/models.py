@@ -8,16 +8,16 @@ from django.utils.translation import gettext_lazy as _
 
 from .managers import UserManager
 from .choices import UserRoles as ROLE_CHOICES
+from speakwise.base.models import TimestampedModel
 
 
-class User(AbstractUser):
+class User(AbstractUser, TimestampedModel):
 
     first_name = models.CharField(max_length=255, help_text="First name")
     last_name = models.CharField(max_length=255, help_text="Last name ")
     email = models.EmailField(_("email address"), unique=True)
     username = models.CharField(max_length=255, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    nationality = models.CharField(max_length=255, null=False)
     role = models.OneToOneField(
         "users.UserRole",
         on_delete=models.CASCADE,
