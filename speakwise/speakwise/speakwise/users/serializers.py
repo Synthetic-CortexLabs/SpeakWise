@@ -24,5 +24,5 @@ class UserSerializer(WritableNestedModelSerializer):
         """Meta class."""
 
         model = User
-        fields = ["id", "first_name", "last_name", "email", "role"]
+        fields = ["id", "first_name", "last_name", "email", "role", "nationality"]
         read_only_fields = ["id", "role"]

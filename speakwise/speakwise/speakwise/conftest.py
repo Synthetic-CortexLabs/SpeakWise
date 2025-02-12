@@ -1,6 +1,6 @@
 import pytest
 
-from speakwise.users.ignore_tests.factories import UserFactory
+# from speakwise.users.ignore_tests.factories import UserFactory
 from speakwise.users.models import User
 
 
@@ -11,4 +11,4 @@ def _media_storage(settings, tmpdir) -> None:
 
 @pytest.fixture
 def user(db) -> User:
-    return UserFactory()
+    return
