@@ -1,0 +1,21 @@
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ("events", "0007_session"),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name="event",
+            name="event_image",
+            field=models.ImageField(null=True, upload_to="event_images/"),
+        ),
+        migrations.AddField(
+            model_name="event",
+            name="event_nickname",
+            field=models.CharField(max_length=255, null=True),
+        ),
+    ]

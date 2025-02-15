@@ -1,9 +1,13 @@
 # ruff: noqa: ERA001, E501
 """Base settings to build other settings files upon."""
 
-# import os
-from pathlib import Path
 
+import os
+from datetime import timedelta
+from pathlib import Path
+from zoneinfo import ZoneInfo
+
+import dj_database_url
 import environ
 
 # from decouple import config
@@ -22,6 +26,7 @@ if READ_DOT_ENV_FILE:
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
+
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -49,33 +54,19 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 # DATABASES = {"default": env.db("DATABASE_URL")}
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.getenv("POSTGRES_DB"),
-#         "USER": os.getenv("POSTGRES_USER"),
-#         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-#         "HOST": os.getenv("POSTGRES_HOST"),
-#         "PORT": os.getenv("POSTGRES_PORT"),
-#         # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
-#     },
-# }
-
-
 DATABASES = {
     "default": {
-        "ENGINE": "mssql",
-        "NAME": "speakwise-db",
-        "USER": "speakwise",
-        "PASSWORD": "#3Ewoksss",
-        "HOST": "speakwise.database.windows.net",
-        "PORT": "",
-        "OPTIONS": {
-            "driver": "ODBC Driver 17 for SQL Server",
-        },
-    }
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB"),
+        "USER": os.getenv("POSTGRES_USER"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "HOST": os.getenv("POSTGRES_HOST"),
+        "PORT": os.getenv("POSTGRES_PORT"),
+        # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
+    },
 }
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
+# DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -362,6 +353,7 @@ SOCIALACCOUNT_ADAPTER = "speakwise.users.adapters.SocialAccountAdapter"
 # https://docs.allauth.org/en/latest/socialaccount/configuration.html
 SOCIALACCOUNT_FORMS = {"signup": "speakwise.users.forms.UserSocialSignupForm"}
 
+
 # django-rest-framework
 # -------------------------------------------------------------------------------
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
@@ -377,6 +369,29 @@ REST_FRAMEWORK = {
         "speakwise.core.renderers.CustomJSONRenderer",
         "rest_framework.renderers.BrowsableAPIRenderer",
     ),
+}
+
+# Timezone configuration
+TIMEZONE_UTC = ZoneInfo("UTC")
+
+# Django REST Framework SimpleJWT settings
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": True,
+    "UPDATE_LAST_LOGIN": False,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": env("DJANGO_SECRET_KEY", default="your-secret-key"),
+    "VERIFYING_KEY": None,
+    "AUDIENCE": None,
+    "ISSUER": None,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "ser_id",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
 }
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
@@ -402,8 +417,16 @@ CORS_ALLOW_HEADERS = [
     "clientSecret",
     "Host",
     "access-control-allow-headers",
+    "http://localhost:5173",
+    "https://speakwise-beta.vercel.app",
 ]
 
+FRONTEND_COR_HEADERS = [
+    "http://localhost:5173",
+    "https://speakwise-beta.vercel.app",
+]
+
+CORS_ORIGIN_WHITELIST = FRONTEND_COR_HEADERS
 
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings

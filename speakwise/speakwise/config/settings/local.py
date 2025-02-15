@@ -14,7 +14,7 @@ SECRET_KEY = env(
     default="EUXlrnMZGsNU2r9xIZHsXYMvnMhFvJPFf1A8e7QhuSZU79SkhQrUnDcVjb69MPDA",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]  # noqa: S104
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "speakwise.onrender.com"]  # noqa: S104
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -80,3 +80,24 @@ INSTALLED_APPS += ["django_extensions"]
 CELERY_TASK_EAGER_PROPAGATES = True
 # django-webpack-loader
 # ------------------------------------------------------------------------------
+
+
+# CORS configurations
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "https://speakwise-beta.vercel.app",
+    "https://speakwise.vercel.app",
+]
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "DELETE",
+]
+
+CORS_ALLOW_HEADERS = [
+    "Content-Type",
+    "Authorization",
+]

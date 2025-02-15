@@ -8,6 +8,6 @@ class UsersConfig(AppConfig):
     name = "speakwise.users"
     verbose_name = _("Users")
 
-    def ready(self):
-        with contextlib.suppress(ImportError):
-            import speakwise.users.signals  # noqa: F401
+    # def ready(self):
+    #     with contextlib.suppress(ImportError):
+    #         import speakwise.users.signals  # noqa: F401

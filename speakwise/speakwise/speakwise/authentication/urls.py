@@ -1,7 +1,8 @@
 """authentication urls module."""
 
 from django.urls import path
-from . import views
+
+from speakwise.authentication import views
 
 app_name = "authentication"
 

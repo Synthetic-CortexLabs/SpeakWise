@@ -4,11 +4,15 @@ from base.models import TimestampedModel
 from django.db import models
 from django.utils import timezone
 
+EVENT_IMAGE_UPLOAD = "event_images/"
+
 
 class Event(TimestampedModel):
     """A model for events in the SpeakWise application."""
 
     title = models.CharField(max_length=255, unique=True)
+    event_nickname = models.CharField(max_length=255, null=True)
+    event_image = models.ImageField(upload_to=EVENT_IMAGE_UPLOAD, null=True)
     description = models.TextField(null=True)
     location = models.CharField(max_length=255, null=True)
     start_date_time = models.DateTimeField(default=timezone.now, null=True)

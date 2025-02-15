@@ -70,6 +70,7 @@ cryptography==43.0.3
 cssbeautifier==1.15.1
 decorator==5.1.1
 distlib==0.3.9
+dj-database-url==2.3.0
 dj-rest-auth==5.0.1
 django-anymail==12.0
 django-cors-headers==4.6.0
@@ -77,6 +78,13 @@ django-redis==5.4.0
 django-storages==1.14.4
 django-timezone-field==7.0
 django-webpack-loader==3.1.1
+djangorestframework==3.15.2
+djangorestframework-stubs==3.15.1
+djangorestframework_simplejwt==5.4.0
+djlint==1.35.2
+docutils==0.21.2
+drf-spectacular==0.27.2
+drf-writable-nested==0.7.1
 dulwich==0.21.7
 EditorConfig==0.12.4
 executing==2.1.0
@@ -110,7 +118,7 @@ MarkupSafe==3.0.2
 matplotlib-inline==0.1.7
 more-itertools==10.5.0
 msgpack==1.1.0
-mssql-django==1.5
+mypy==1.13.0
 mypy-extensions==1.0.0
 nodeenv==1.9.1
 packaging==24.1
@@ -130,7 +138,6 @@ pure_eval==0.2.3
 pycparser==2.22
 Pygments==2.18.0
 PyJWT==2.10.1
-pyodbc==5.2.0
 pyproject_hooks==1.2.0
 python-crontab==3.2.0
 python-dateutil==2.9.0.post0
@@ -177,6 +184,7 @@ urllib3==2.2.3
 uvicorn==0.32.0
 vine==5.1.0
 virtualenv==20.27.1
+waitress==3.0.2
 watchdog==6.0.0
 watchfiles==0.24.0
 wcwidth==0.2.13
