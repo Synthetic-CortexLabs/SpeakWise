@@ -46,6 +46,12 @@ import next from './Next.webp'
 import physical from './Users.webp'
 import youtube from './YouTube.webp'
 import closeModal from './close modal.webp'
+import speakerProfileTestimg from './test-image.webp'
+import reviewCalender from './Calendar.webp'
+import reviewFullStar from './Full Star.webp'
+import reviewHalfStar from './Half Star.webp'
+import trophy from './Trophy.webp'
+import people from './People.webp'
 
 export const assets = {
   twitter,
@@ -95,10 +101,14 @@ export const assets = {
   next,
   physical,
   youtube,
-  closeModal
+  closeModal,
+  speakerProfileTestimg,
+  reviewCalender,
+  reviewFullStar,
+  reviewHalfStar,
+  trophy,
+  people
 }
-
-
 
 export const team_members = [
   {

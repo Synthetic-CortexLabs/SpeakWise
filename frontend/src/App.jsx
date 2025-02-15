@@ -7,6 +7,7 @@ import Events from './pages/Events/Events'
 import Event from './pages/Event/Event'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import { Toaster } from 'react-hot-toast';
+import SpeakerReview from './pages/SpeakerReview/SpeakerReview'
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
         <Route path='/about' element={<About/>}/>
         <Route path='/events' element={<Events/>}/>
         <Route path='/events/:eventId' element={<Event/>}/>
+        <Route path='/review' element={<SpeakerReview/>}/>
       </Routes>
     </div>
   )
