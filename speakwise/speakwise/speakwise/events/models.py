@@ -35,6 +35,9 @@ class Country(TimestampedModel):
         related_name="country",
     )
 
+    class Mata:
+        verbose_name_plural = "Countries"
+
     def __str__(self):
         """Return a string representation of the model."""
         return self.name

@@ -37,7 +37,7 @@ class CountrySerializer(WritableNestedModelSerializer):
 class EventSerializer(WritableNestedModelSerializer):
     """Serializer for the Event model."""
 
-    event_image = serializers.CharField(required=False, allow_null=True)
+    event_image = serializers.ImageField(required=False, allow_null=True)
 
     country = CountrySerializer(required=False, many=True)
 
