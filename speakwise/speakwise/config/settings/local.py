@@ -19,7 +19,6 @@ ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "speakwise.onrender.com"]
 CSRF_TRUSTED_ORIGINS = [
     "https://speakwise.onrender.com",
     "https://www.speakwise.onrender.com",
-    "speakwise.onrender.com",
 ]
 # CACHES
 # ------------------------------------------------------------------------------
