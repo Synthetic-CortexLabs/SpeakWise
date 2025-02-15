@@ -633,3 +633,20 @@
 
 
 }
+
+.no-events-message {
+  text-align: center;
+  padding: 40px 20px;
+  background: #f8f8f8;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.no-events-message h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.no-events-message p {
+  color: #666;
+}
