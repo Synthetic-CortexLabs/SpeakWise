@@ -67,14 +67,12 @@ const Events = () => {
     axios.get(apiUrl, {timeout: 7000})
       .then(response => {
         const { data, status, message } = response.data;
+        console.log('Data: ', data);
         
         if (status === 'success') {
           if (data && data.length > 0) {
-            setEventData({
-              event_image: data.event_image,
-              event_nickname: data.event_nickname,
-              country: data.country[0].name
-            });
+            setEvents(data); 
+           
           } else {
             // This will take care of the page when there are no events
             setError({ message: 'No events available' });
@@ -172,79 +170,99 @@ const Events = () => {
  
 
 
+
   return (
     <div className='events-container'>
-        <Navbar/>
-        <div className='events-header'>
-            <h1>Conferences & Events</h1>
-            <p>All conferences and events here, local and international.</p>
-        </div>
-        <EventsFilter/>
-        <div className="events-grid-container">
-            <div className="country-and-region">
-                <div className="region" onClick={handleRegionClick}>
-                    <label htmlFor="region">Select Region</label>
-                    <div className='selected-region'>{selectedRegion || "Select Region"} <img src={assets.dropDown} alt="dropDown" /></div>
-                    {isRegionDropdownOpen && (
-                        <div className="dropdown">
-                            {regions.map((region) => (
-                                <div key={region} onClick={() => handleRegionSelect(region)}>{region}</div>
-                            ))}
-                        </div>
-                    )}
-                </div>
-                <div className="country" onClick={handleCountryClick}>
-                    <label htmlFor="country">Country</label>
-                    <div className='selected-country'>{selectedCountry || "Country"} <img src={assets.dropDown} alt="dropDown" /></div>
-                    {isCountryDropdownOpen && selectedRegion && (
-                        <div className="dropdown">
-                            {countries[selectedRegion].map((country) => (
-                                <div key={country} onClick={() => handleCountrySelect(country)}>{country}</div>
-                            ))}
-                        </div>
-                    )}
-                </div>
+      <Navbar/>
+      <div className='events-header'>
+        <h1>Conferences & Events</h1>
+        <p>All conferences and events here, local and international.</p>
+      </div>
+      <EventsFilter/>
+      <div className="events-grid-container">
+        <div className="country-and-region">
+          <div className="region" onClick={handleRegionClick}>
+            <label htmlFor="region">Select Region</label>
+            <div className='selected-region'>
+              {selectedRegion || "Select Region"} 
+              <img src={assets.dropDown} alt="dropDown" />
             </div>
-            <p>All conference & Events in {selectedCountry}</p>
-            <div className='events-grid'>
-                {currentEvents.map((event) => (
-                    <div className='event-card' key={event.id}>
-                        <img src={eventData.event_image} alt={eventData.event_nickname} />
-                        <div className='event-card-details'>
-                        <div className="event-card-details-left">
-                            <h3>{eventData.event_nickname}</h3>
-                        <p>{eventData.country}</p>
-                    </div>
-                    <div className="event-card-details-right" onClick={() => handleStartReview(event)}>
-                        <p>Start Review</p>
-                        <img src={assets.reviewIcon} alt="reviewIcon" />
-                    </div>
-                    </div>
-
-                </div>
-            ))}
-            </div>
-            <div className='events-pagination-container'>
-                <div className='events-pagination'>
-                        <img src={assets.previous} alt="previous" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}/>
-                {[...Array(totalPages).keys()].map((number) => (
-                    <button
-                        key={number + 1}
-                        onClick={() => handlePageChange(number + 1)}
-                        className={currentPage === number + 1 ? 'active' : ''}
-                    >
-                        {number + 1}
-                    </button>
+            {isRegionDropdownOpen && (
+              <div className="dropdown">
+                {regions.map((region) => (
+                  <div key={region} onClick={() => handleRegionSelect(region)}>{region}</div>
                 ))}
-                    <img src={assets.next} alt="next"  onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}/>
+              </div>
+            )}
+          </div>
+          <div className="country" onClick={handleCountryClick}>
+            <label htmlFor="country">Country</label>
+            <div className='selected-country'>
+              {selectedCountry || "Country"} 
+              <img src={assets.dropDown} alt="dropDown" />
             </div>
-            </div>
+            {isCountryDropdownOpen && selectedRegion && (
+              <div className="dropdown">
+                {countries[selectedRegion]?.map((country) => (
+                  <div key={country} onClick={() => handleCountrySelect(country)}>{country}</div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-          <div className="events-contact-container">
+        <p>All conference & Events in {selectedCountry}</p>
+        
+        <div className='events-grid'>
+          {currentEvents.map((event) => (
+            <div className='event-card' key={event.id}>
+              <img src={event.event_image} alt={event.event_nickname} />
+              <div className='event-card-details'>
+                <div className="event-card-details-left">
+                  <h3>{event.event_nickname}</h3>
+                  <p>{event.location} </p>
+                </div>
+                <div className="event-card-details-right" onClick={() => handleStartReview(event)}>
+                  <p>Start Review</p>
+                  <img src={assets.reviewIcon} alt="reviewIcon" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className='events-pagination-container'>
+          <div className='events-pagination'>
+            <img 
+              src={assets.previous} 
+              alt="previous" 
+              onClick={() => handlePageChange(currentPage - 1)}
+              style={{ opacity: currentPage === 1 ? 0.5 : 1, cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+            />
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={currentPage === index + 1 ? 'active' : ''}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <img 
+              src={assets.next} 
+              alt="next"
+              onClick={() => handlePageChange(currentPage + 1)}
+              style={{ opacity: currentPage === totalPages ? 0.5 : 1, cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Contact Container */}
+      <div className="events-contact-container">
         <div className="contact-container-top">
-            <div className="contact-container-left">
+          <div className="contact-container-left">
             <h1><span>Got Any Questions?</span></h1>
-            <h1>We&apos;ve Got Answers</h1>
+            <h1>We've Got Answers</h1>
           </div>
           <div className="contact-container-right">
             <input type="email" placeholder='Email' />
@@ -255,21 +273,19 @@ const Events = () => {
           <div className="contact-us">
             <p>Ready to get started?</p>
             <button>CONTACT US</button>
+          </div>
         </div>
-        </div>
-        </div> 
-        <Footer/>
-        {isReviewConfirmModalOpen && (
+      </div>
+
+      <Footer/>
+
+      {/* Modals */}
+      {isReviewConfirmModalOpen && (
         <div className="review-confirm-modal">
           <div className="review-confirm-modal-content">
-            <img  className='close-modal-icon' src={assets.closeModal} alt="closeModal" onClick={() => setIsReviewConfirmModalOpen(false)} />
+            <img className='close-modal-icon' src={assets.closeModal} alt="closeModal" onClick={() => setIsReviewConfirmModalOpen(false)} />
             <h1>Which one is you?</h1>
-
-
-
-            <p>Let&apos;s us know where you watched this session from.</p>
-
-
+            <p>Let's us know where you watched this session from.</p>
             <div className='physical-or-youtube'>
               <div className='physical-or-youtube-left' onClick={() => {setIsVerifyModalOpen(true); setIsReviewConfirmModalOpen(false)}}>
                 <img src={assets.physical} alt="physical" />
@@ -281,30 +297,23 @@ const Events = () => {
               </div>
             </div>
             <p>@Speak<span>Wise</span></p>
-
-
           </div>
         </div>
-        )}
-        {isVerifyModalOpen && (
+      )}
+
+      {isVerifyModalOpen && (
         <div className='verify-modal'>
           <div className='verify-modal-content'>
-            <img  className='close-modal-icon' src={assets.closeModal} alt="closeModal" onClick={() => {setIsVerifyModalOpen(false); setIsReviewConfirmModalOpen(false)}} />
+            <img className='close-modal-icon' src={assets.closeModal} alt="closeModal" onClick={() => {setIsVerifyModalOpen(false); setIsReviewConfirmModalOpen(false)}} />
             <h1>Lets verify you</h1>
-
-
             <p>We want to be sure you attended the conference. <br />Please provide your email below</p>
             <input type="email" placeholder='Enter your email' />
             <button onClick={() => handleVerifyAndNavigate(selectedEvent)}>Verify</button>
           </div>
         </div>
-        )}
+      )}
     </div>
+  );
+};
 
-
-
-
-  )
-}
-
-export default Events
+export default Events;
