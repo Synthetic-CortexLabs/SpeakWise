@@ -425,6 +425,7 @@ CORS_ALLOW_HEADERS = [
     "access-control-allow-headers",
     "http://localhost:5173",
     "https://speakwise-beta.vercel.app",
+    "https://speakwise.onrender.com",
 ]
 
 FRONTEND_COR_HEADERS = [
