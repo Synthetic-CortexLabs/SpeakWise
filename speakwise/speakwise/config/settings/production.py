@@ -29,7 +29,6 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["speakwise.onrender.co
 CSRF_TRUSTED_ORIGINS = [
     "https://speakwise.onrender.com",
     "https://www.speakwise.onrender.com",
-    "speakwise.onrender.com",
 ]
 # DATABASES
 # ------------------------------------------------------------------------------
