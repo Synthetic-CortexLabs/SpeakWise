@@ -61,35 +61,66 @@ const Events = () => {
   });
 
   useEffect(() => {
-    // Replace with your actual API endpoint
-    const apiUrl = `https://speakwise.onrender.com/api/events`;
-
-
+    const baseUrl = 'https://speakwise.onrender.com/api/';
+    const apiUrl = `${baseUrl}events/`;
+  
     axios.get(apiUrl, {timeout: 7000})
       .then(response => {
-        const data = response.data;
-        setEventData({
-          event_image: data.event_image,
-          event_nickname: data.event_nickname,
-          country: data.country[0].name // Assuming country is an array and we want the first item's name
-        });
+        const { data, status, message } = response.data;
+        
+        if (status === 'success') {
+          if (data && data.length > 0) {
+            setEventData({
+              event_image: data.event_image,
+              event_nickname: data.event_nickname,
+              country: data.country[0].name
+            });
+          } else {
+            // This will take care of the page when there are no events
+            setError({ message: 'No events available' });
+          }
+        } else {
+          setError({ message: message || 'Failed to fetch events' });
+        }
         setLoading(false);
       })
       .catch(error => {
         console.error('Error fetching data: ', error);
-        setError(error);
+        setError({ message: 'Failed to fetch events. Please try again later.' });
         setLoading(false);
       });
   }, []);
-
-  if (loading) return <div className='loading'>
-    <p>Loading Events...</p>
-    <div className="loader"></div>
-  </div>;
-  if (error) return <div className='error'>
-    <div className='error-message'>Failed to fetch events</div>
-    {toast.error('Failed to fetch events')}
-  </div>;
+  
+  if (loading) return (
+    <div className='loading'>
+      <p>Loading Events...</p>
+      <div className="loader"></div>
+    </div>
+  );
+  
+  if (error) {
+    toast.error(error.message);
+    return (
+      <div className='events-container'>
+        <Navbar/>
+        <div className='events-header'>
+          <h1>Conferences & Events</h1>
+          <p>All conferences and events here, local and international.</p>
+        </div>
+        <EventsFilter/>
+        <div className="events-grid-container">
+          <div className="no-events-message">
+            <h2>{error.message === 'No events available' ? 'No Events Added Yet' : error.message}</h2>
+            <p>Please check back later for upcoming events.</p>
+          </div>
+        </div>
+        <div className="events-contact-container">
+         
+        </div>
+        <Footer/>
+      </div>
+    );
+  }
 
 
 
