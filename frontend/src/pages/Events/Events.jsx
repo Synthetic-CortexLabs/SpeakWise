@@ -76,7 +76,7 @@ const Events = () => {
               country: data.country[0].name
             });
           } else {
-            // Handle case when there are no events
+            // This will take care of the page when there are no events
             setError({ message: 'No events available' });
           }
         } else {
@@ -91,7 +91,6 @@ const Events = () => {
       });
   }, []);
   
-  // Modify the loading and error renders
   if (loading) return (
     <div className='loading'>
       <p>Loading Events...</p>
@@ -116,7 +115,7 @@ const Events = () => {
           </div>
         </div>
         <div className="events-contact-container">
-          {/* ...existing contact container code... */}
+         
         </div>
         <Footer/>
       </div>
