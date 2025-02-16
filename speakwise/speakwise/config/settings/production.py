@@ -25,7 +25,17 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 #     default=["speakwise.onrender.com"],
 # )
 
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["speakwise.onrender.com"])
+# ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["speakwise.onrender.com"])
+# ALLOWED_HOSTS configuration
+ALLOWED_HOSTS = [
+    "speakwise.onrender.com",
+    "www.speakwise.onrender.com",
+    ".onrender.com",  # Allows all subdomains on render.com
+    "localhost",
+    "127.0.0.1",
+]
+
+# Update CSRF_TRUSTED_ORIGINS as well
 
 
 CSRF_TRUSTED_ORIGINS = [
@@ -58,7 +68,7 @@ SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 SESSION_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-name
-SESSION_COOKIE_NAME = "__Secure-sessionid"
+SESSION_COOKIE_NAME = "__Secure-sessionid"`
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
 CSRF_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-name
