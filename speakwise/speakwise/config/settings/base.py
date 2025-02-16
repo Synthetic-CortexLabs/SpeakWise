@@ -111,6 +111,8 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "webpack_loader",
     "rest_framework_simplejwt",
+    "cloudinary_storage",
+    "cloudinary",
 ]
 
 LOCAL_APPS = [

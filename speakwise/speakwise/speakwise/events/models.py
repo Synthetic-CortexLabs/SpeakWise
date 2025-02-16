@@ -1,6 +1,8 @@
 """Models for the events app in the SpeakWise application."""
 
 from base.models import TimestampedModel
+from cloudinary.models import CloudinaryField
+from cloudinary_storage.storage import RawMediaCloudinaryStorage
 from django.db import models
 from django.utils import timezone
 
@@ -12,7 +14,7 @@ class Event(TimestampedModel):
 
     title = models.CharField(max_length=255, unique=True)
     event_nickname = models.CharField(max_length=255, null=True)
-    event_image = models.ImageField(upload_to=EVENT_IMAGE_UPLOAD, null=True)
+    event_image = CloudinaryField("image", folder=EVENT_IMAGE_UPLOAD, null=True)
     description = models.TextField(null=True)
     location = models.CharField(max_length=255, null=True)
     start_date_time = models.DateTimeField(default=timezone.now, null=True)
@@ -22,6 +24,10 @@ class Event(TimestampedModel):
     def __str__(self):
         """Return a string representation of the model."""
         return self.title
+
+    document = models.FileField(
+        upload_to="documents/", storage=RawMediaCloudinaryStorage(),
+    )
 
 
 class Country(TimestampedModel):
