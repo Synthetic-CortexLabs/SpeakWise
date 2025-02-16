@@ -2,12 +2,13 @@
 import logging
 import os
 
-import sentry_sdk
-from sentry_sdk.integrations.celery import CeleryIntegration
-from sentry_sdk.integrations.django import DjangoIntegration
-from sentry_sdk.integrations.logging import LoggingIntegration
-from sentry_sdk.integrations.redis import RedisIntegration
+from .base import *  # noqa: F403
 
+# import sentry_sdk
+# from sentry_sdk.integrations.celery import CeleryIntegration
+# from sentry_sdk.integrations.django import DjangoIntegration
+# from sentry_sdk.integrations.logging import LoggingIntegration
+# from sentry_sdk.integrations.redis import RedisIntegration
 from .base import BASE_DIR
 from .base import DATABASES
 from .base import INSTALLED_APPS
