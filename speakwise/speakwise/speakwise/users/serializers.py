@@ -1,8 +1,10 @@
 """users serializers."""
 
-from rest_framework import serializers
-from speakwise.users.models import User, UserRole
 from drf_writable_nested.serializers import WritableNestedModelSerializer
+from rest_framework import serializers
+
+from speakwise.users.models import User
+from speakwise.users.models import UserRole
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
