@@ -63,18 +63,20 @@ const Events = () => {
   useEffect(() => {
     const baseUrl = 'https://speakwise.onrender.com/api/';
     const apiUrl = `${baseUrl}events/`;
-  
-    axios.get(apiUrl, {timeout: 7000})
-      .then(response => {
+    
+  axios.get(apiUrl, {timeout: 30000})
+    .then(response => {
         const { data, status, message } = response.data;
         console.log('Data: ', data);
         
         if (status === 'success') {
           if (data && data.length > 0) {
-            setEvents(data); 
-           
+            // Sort events by creation date in descending order (newest first)
+            const sortedEvents = [...data].sort((a, b) => {
+              return new Date(b.created_at) - new Date(a.created_at);
+            });
+            setEvents(sortedEvents);
           } else {
-            // This will take care of the page when there are no events
             setError({ message: 'No events available' });
           }
         } else {
@@ -88,7 +90,6 @@ const Events = () => {
         setLoading(false);
       });
   }, []);
-  
   if (loading) return (
     <div className='loading'>
       <p>Loading Events...</p>
