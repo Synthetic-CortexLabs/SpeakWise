@@ -1,6 +1,5 @@
 """Speakers serializers."""
 
-from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
@@ -75,9 +74,9 @@ class SpeakerProfileSerializer(serializers.ModelSerializer):
             "full_name",
         ]
 
-    @extend_schema_field(str)
     def get_full_name(self, obj):
         """Returns the speaker's full name from the user model."""
+
         return obj.speaker_user.get_full_name()
 
 
