@@ -42,7 +42,6 @@ class LoginBaseClass(ABC, LoginView):
     @abstractmethod
     def login(self):
         """Login in the user."""
-        pass
 
     def get_response(self):
         """Return the response with the refresh token."""

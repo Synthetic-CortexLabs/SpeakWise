@@ -14,8 +14,9 @@ SECRET_KEY = env(
     default="EUXlrnMZGsNU2r9xIZHsXYMvnMhFvJPFf1A8e7QhuSZU79SkhQrUnDcVjb69MPDA",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "speakwise.onrender.com"]  
-# noqa: S104
+
+ALLOWED_HOSTS = ["*"]
+
 CSRF_TRUSTED_ORIGINS = [
     "https://speakwise.onrender.com",
     "https://www.speakwise.onrender.com",
@@ -105,3 +106,14 @@ CORS_ALLOW_HEADERS = [
     "Content-Type",
     "Authorization",
 ]
+
+
+#  CLOUDINARY
+"""
+the below cloudinary configurations is a dummy configuration to get the project running locally.
+"""
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": "your_cloud_name",
+    "API_KEY": "your_api_key",
+    "API_SECRET": "your_api_secret",
+}

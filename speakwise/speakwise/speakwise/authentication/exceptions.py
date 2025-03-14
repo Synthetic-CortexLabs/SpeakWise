@@ -1,6 +1,7 @@
 """Authentication exceptions for Nebula."""
 
-from rest_framework.exceptions import ValidationError, _get_error_details
+from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import _get_error_details
 
 
 class AuthenticationError(ValidationError):

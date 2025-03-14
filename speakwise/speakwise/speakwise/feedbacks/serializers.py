@@ -1,6 +1,7 @@
 """feedback serializers."""
 
 from rest_framework.serializers import ModelSerializer
+
 from speakwise.feedbacks.models import Feedback
 
 

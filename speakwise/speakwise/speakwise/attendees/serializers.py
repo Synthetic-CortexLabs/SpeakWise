@@ -1,7 +1,9 @@
 """attendees serializers."""
 
 from drf_writable_nested import WritableNestedModelSerializer
-from rest_framework.serializers import ModelSerializer, Serializer, EmailField
+from rest_framework.serializers import EmailField
+from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import Serializer
 
 from speakwise.attendees.models import AttendanceCode
 from speakwise.attendees.models import Attendee
@@ -32,4 +34,3 @@ class AttendeeSerializer(WritableNestedModelSerializer):
 class VerifyAttendeeWithEmailSerializer(Serializer):
     """verify attendee with email"""
     email = EmailField()
-

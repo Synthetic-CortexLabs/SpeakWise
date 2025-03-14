@@ -1,16 +1,15 @@
 """API views for the users app."""
 
 from django.contrib.auth import authenticate
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-from drf_spectacular.utils import extend_schema
 
 from speakwise.users.models import User
-
-from .serializers import UserSerializer
+from speakwise.users.serializers import UserSerializer
 
 
 class UserListView(APIView):
@@ -44,7 +43,6 @@ class UserListView(APIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        # serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -93,46 +91,41 @@ class UserLoginView(APIView):
 
     permission_classes = [AllowAny]
 
-    def post(self, request):
-        """
-        Login a user.
-
-        required fields: email, password
-
-        """
+    def post(self, request, *args, **kwargs):
+        """Login a user."""
 
         email = request.data.get("email")
         password = request.data.get("password")
         user = authenticate(request, email=email, password=password)
-        print(email, password, user)
-        if user is None:
+        print(user)
+        if user:
+            try:
+                refresh = RefreshToken.for_user(user)
+                serializer = UserSerializer(user)
+            except Exception as e:
+                return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
             return Response(
-                {"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
+                {
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                    "user": serializer.data,
+                },
+                status=status.HTTP_200_OK,
             )
-
-        refresh = RefreshToken.for_user(user)
-
-        return Response(
-            data={
-                "user": UserSerializer(user).data,
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-            },
-            status=status.HTTP_200_OK,
-        )
+        else:
+            return Response(
+                {"error": "Invalid credentials"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
 
 class LogoutView(APIView):
-    """Logout a user."""
+    """Logout view."""
 
     permission_classes = [AllowAny]
 
     def post(self, request):
-        """Blacklist a refresh token requires a refresh token.
-
-        Example:
-            {'refresh_token': 'token'}
-        """
+        """logout a user."""
         refresh_token = request.data["refresh_token"]
         try:
             token = RefreshToken(refresh_token)

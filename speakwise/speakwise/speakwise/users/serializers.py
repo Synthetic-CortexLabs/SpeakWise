@@ -1,8 +1,10 @@
 """users serializers."""
 
-from rest_framework import serializers
-from speakwise.users.models import User, UserRole
 from drf_writable_nested.serializers import WritableNestedModelSerializer
+from rest_framework import serializers
+
+from speakwise.users.models import User
+from speakwise.users.models import UserRole
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
@@ -24,5 +26,25 @@ class UserSerializer(WritableNestedModelSerializer):
         """Meta class."""
 
         model = User
-        fields = ["id", "first_name", "last_name", "email", "role", "nationality"]
-        read_only_fields = ["id", "role"]
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "role",
+            "nationality",
+            "password",
+        ]
+        read_only_fields = ["id", "role", "password"]
+
+    def create(self, validated_data):
+        """Create a user."""
+        role = validated_data.pop("role", None)
+        password = validated_data.pop("password", None)
+        user = User(**validated_data)
+        if role:
+            user.role = UserRole.objects.get_or_create(**role)[0]
+        if password:
+            user.set_password(password)
+        user.save()
+        return user

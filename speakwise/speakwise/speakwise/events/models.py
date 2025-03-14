@@ -26,7 +26,8 @@ class Event(TimestampedModel):
         return self.title
 
     document = models.FileField(
-        upload_to="documents/", storage=RawMediaCloudinaryStorage(),
+        upload_to="documents/",
+        storage=RawMediaCloudinaryStorage(),
     )
 
 

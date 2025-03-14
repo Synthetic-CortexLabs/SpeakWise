@@ -18,12 +18,12 @@ class SpeakerSerializer(ModelSerializer):
         """Meta class."""
 
         model = SpeakerProfile
-        fields = '__all__'
+        fields = "__all__"
 
 
 class SkillTagSerializer(serializers.ModelSerializer):
     """Serializer for the SkillTag model.
-    
+
     Handles serialization of speaker skill tags.
     """
     class Meta:
@@ -33,7 +33,7 @@ class SkillTagSerializer(serializers.ModelSerializer):
 
 class SpeakerSocialLinkSerializer(serializers.ModelSerializer):
     """Serializer for the SpeakerSocialLink model.
-    
+
     Handles serialization of speaker social media links.
     """
     class Meta:
@@ -43,7 +43,7 @@ class SpeakerSocialLinkSerializer(serializers.ModelSerializer):
 
 class SpeakerProfileSerializer(serializers.ModelSerializer):
     """Serializer for the SpeakerProfile model.
-    
+
     Handles serialization of speaker profile information including nested
     skill tags and social links.
 
@@ -60,7 +60,7 @@ class SpeakerProfileSerializer(serializers.ModelSerializer):
         model = SpeakerProfile
         fields = [
             "id", "speaker_user", "organization", "short_bio", "long_bio",
-            "country", "avatar", "skill_tags", "social_links", "full_name"
+            "country", "avatar", "skill_tags", "social_links", "full_name",
         ]
 
     def get_full_name(self, obj):
@@ -71,7 +71,7 @@ class SpeakerProfileSerializer(serializers.ModelSerializer):
 
 class SpeakerDashboardSerializer(serializers.ModelSerializer):
     """Serializer for the SpeakerDashboard model.
-    
+
     Handles serialization of speaker dashboard data including
     feedback statistics.
 
@@ -86,12 +86,12 @@ class SpeakerDashboardSerializer(serializers.ModelSerializer):
 
     def get_feedback_stats(self, obj):
         """Compiles feedback statistics for the speaker.
-        
+
         Returns:
             dict: Contains total events, average rating, and conference-specific ratings
         """
         return {
             "total_events": obj.total_events,
             "average_rating": obj.average_feedback_rating,
-            "conference_ratings": obj.feedback_rate_per_conference
+            "conference_ratings": obj.feedback_rate_per_conference,
         }
