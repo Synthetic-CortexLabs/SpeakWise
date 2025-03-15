@@ -3,7 +3,7 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from rest_framework import permissions
-from rest_framework.decorators import api_view
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
 from .models import SkillTag
@@ -71,13 +71,23 @@ class SpeakerSocialLinkDetail(generics.RetrieveUpdateDestroyAPIView):
         return SpeakerSocialLink.objects.filter(speaker__speaker_user=self.request.user)
 
 
-@api_view(["GET"])
-def speaker_dashboard(request, pk):
+class SpeakerDashboardView(generics.RetrieveAPIView):
     """Get dashboard information for a speaker."""
-    try:
-        speaker = SpeakerProfile.objects.get(pk=pk)
-        dashboard = SpeakerDashboard.objects.get(speaker_profile=speaker)
-        serializer = SpeakerDashboardSerializer(dashboard)
-        return Response(serializer.data)
-    except SpeakerProfile.DoesNotExist:
-        return Response(status=404)
+
+    queryset = SpeakerProfile.objects.all()
+    serializer_class = SpeakerDashboardSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    @extend_schema(
+        operation_id="get_speaker_dashboard",
+        description="Get dashboard information for a speaker",
+        responses={200: SpeakerDashboardSerializer},
+    )
+    def get(self, request, *args, **kwargs):
+        speaker = self.get_object()
+        try:
+            dashboard = SpeakerDashboard.objects.get(speaker_profile=speaker)
+            serializer = self.get_serializer(dashboard)
+            return Response(serializer.data)
+        except SpeakerDashboard.DoesNotExist:
+            raise NotFound("Dashboard not found for this speaker")

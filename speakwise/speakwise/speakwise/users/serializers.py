@@ -1,8 +1,10 @@
 """users serializers."""
 
-from rest_framework import serializers
-from speakwise.users.models import User, UserRole
 from drf_writable_nested.serializers import WritableNestedModelSerializer
+from rest_framework import serializers
+
+from speakwise.users.models import User
+from speakwise.users.models import UserRole
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
@@ -26,3 +28,16 @@ class UserSerializer(WritableNestedModelSerializer):
         model = User
         fields = ["id", "first_name", "last_name", "email", "role", "nationality"]
         read_only_fields = ["id", "role"]
+
+
+class LoginSerializer(serializers.Serializer):
+    """Login serializer."""
+
+    username = serializers.CharField(write_only=True)  # This will receive the email
+    password = serializers.CharField(write_only=True, style={"input_type": "password"})
+
+
+class LogoutSerializer(serializers.Serializer):
+    """Logout serializer."""
+
+    refresh_token = serializers.CharField()
