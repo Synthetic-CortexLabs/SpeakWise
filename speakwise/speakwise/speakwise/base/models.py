@@ -28,8 +28,8 @@ class TimestampedModel(models.Model):
 
 class SocialLink(TimestampedModel):
     """Abstract base model for storing social media links.
-    
-    Base class that provides common fields and functionality for 
+
+    Base class that provides common fields and functionality for
     social media links across different model types.
 
     Attributes:

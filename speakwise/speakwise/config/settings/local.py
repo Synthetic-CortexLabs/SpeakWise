@@ -14,8 +14,7 @@ SECRET_KEY = env(
     default="EUXlrnMZGsNU2r9xIZHsXYMvnMhFvJPFf1A8e7QhuSZU79SkhQrUnDcVjb69MPDA",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "speakwise.onrender.com"]  
-# noqa: S104
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "speakwise.onrender.com"]
 CSRF_TRUSTED_ORIGINS = [
     "https://speakwise.onrender.com",
     "https://www.speakwise.onrender.com",
@@ -105,3 +104,13 @@ CORS_ALLOW_HEADERS = [
     "Content-Type",
     "Authorization",
 ]
+
+
+# CLOUDINARY CONFIGURATIONS
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": "CLOUDINARY_CLOUD_NAME",
+    "API_KEY": "CLOUDINARY_API_KEY",
+    "API_SECRET": "CLOUDINARY_API_SECRET",
+    "SECURE": True,
+}

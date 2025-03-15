@@ -2,9 +2,7 @@
 
 from django.db import models
 
-
 from speakwise.base.models import TimestampedModel
-from speakwise.users.models import User
 from speakwise.events.models import Event
 
 
@@ -26,15 +24,6 @@ class AttendanceCode(TimestampedModel):
 
     """Attendee code model."""
 
-    code = models.CharField(max_length=255, null=True)
-    attendee = models.OneToOneField(
-        Attendee,
-        null=True,
-        on_delete=models.CASCADE,
-        related_name="attendee_unique_code",
-    )
-    event = models.ForeignKey(Event, on_delete=models.DO_NOTHING, null=True)
-    is_used = models.BooleanField(default=False)
     code = models.CharField(max_length=255, null=True)
     attendee = models.OneToOneField(
         Attendee,

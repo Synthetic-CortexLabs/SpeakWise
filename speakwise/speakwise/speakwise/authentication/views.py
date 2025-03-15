@@ -9,8 +9,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from speakwise.attendees.models import Attendee
 from speakwise.attendees.serializers import AttendeeSerializer
-from speakwise.organizers.models import Organizers
-from speakwise.organizers.serializers import OrganizerSerializer
 from speakwise.speakers.models import SpeakerProfile
 from speakwise.speakers.serializers import SpeakerSerializer
 from speakwise.users.models import UserRole
@@ -42,7 +40,6 @@ class LoginBaseClass(ABC, LoginView):
     @abstractmethod
     def login(self):
         """Login in the user."""
-        pass
 
     def get_response(self):
         """Return the response with the refresh token."""
@@ -63,17 +60,10 @@ class OrganizerLoginView(LoginBaseClass):
         """Login the organizer."""
         try:
             self.user = self.serializer.validated_data["user"]
-            # check if user has practitioner among its UserRoles
             self.user.role.get(display="organizer")
             return self.user
         except UserRole.DoesNotExist as err:
             raise AuthenticationError from err
-
-    def get_extra_payload(self) -> dict:
-        """Return the organizer data."""
-        practitioner = Organizers.objects.get(user=self.user)
-        serializer = OrganizerSerializer(practitioner)
-        return {"practitioner": serializer.data}
 
 
 class AttendeeLoginView(LoginBaseClass):
@@ -84,7 +74,6 @@ class AttendeeLoginView(LoginBaseClass):
         try:
             self.user = self.serializer.validated_data["user"]
             print(self.user.role.display)
-            # self.user.role.get(display="attendee")
             self.user.role.display = "attendee"
             return self.user
         except UserRole.DoesNotExist as err:
@@ -92,8 +81,8 @@ class AttendeeLoginView(LoginBaseClass):
 
     def get_extra_payload(self) -> dict:
         """Return the attendee data."""
-        practitioner = Attendee.objects.get(user=self.user)
-        serializer = AttendeeSerializer(practitioner)
+        attendee = Attendee.objects.get(user=self.user)
+        serializer = AttendeeSerializer(attendee)
         return {"attendee": serializer.data}
 
 

@@ -1,5 +1,4 @@
 # ruff: noqa: E501
-import logging
 import os
 
 from .base import *  # noqa: F403
@@ -56,7 +55,7 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "COMPRESSOR": "django_redis.compressors.zlib.ZlibCompressor",
         },
-    }
+    },
 }
 
 # SECURITY
@@ -119,7 +118,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 # ------------------------
 
 
-# STORAGES = {  # noqa: ERA001
+# STORAGES = {
 #     "default": { # noqa: ERA001
 #         "BACKEND": "storages.backends.s3.S3Storage",# noqa: ERA001
 #         "OPTIONS": { # noqa: ERA001
@@ -266,5 +265,5 @@ SPECTACULAR_SETTINGS["SERVERS"] = [
 
 
 print(
-    "Using PRODUCTION settings" if "production" in __file__ else "Using LOCAL settings"
+    "Using PRODUCTION settings" if "production" in __file__ else "Using LOCAL settings",
 )
