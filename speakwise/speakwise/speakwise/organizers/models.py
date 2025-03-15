@@ -1,4 +1,5 @@
-# Create your models here.
+"""Organizer models."""
+
 from django.db import models
 from django.urls import reverse
 
@@ -8,6 +9,8 @@ from speakwise.users.models import User
 
 
 class Organizers(TimestampedModel):
+    """Organizer model."""
+
     user_id = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     events = models.ForeignKey(
         Event,
@@ -43,6 +46,8 @@ class Organizers(TimestampedModel):
 
 
 class SocialLinks(TimestampedModel):
+    """Social Links model."""
+
     social_name = models.CharField(max_length=50, null=True)
     social_link = models.URLField(max_length=200, null=True)
     organizer = models.ForeignKey(
@@ -53,12 +58,15 @@ class SocialLinks(TimestampedModel):
     )
 
     class Meta:
+        """meta options."""
+
         ordering = ["social_name"]
         db_table = "Social Link "
         verbose_name = "Social Link"
         verbose_name_plural = "Social Links"
 
     def __str__(self) -> str:
+        """Return social name and social link."""
         if self.social_name:
             return f"{self.social_name} ({self.social_link})"
         return None  # noqa: PLE0307

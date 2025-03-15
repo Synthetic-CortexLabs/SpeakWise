@@ -9,8 +9,6 @@ from speakwise.events.models import Event
 class Attendee(TimestampedModel):
     """Attendee model."""
 
-    """Attendee model."""
-
     first_name = models.CharField(max_length=255, null=True)
     last_name = models.CharField(max_length=255, null=True)
     email = models.EmailField(unique=True)
@@ -20,8 +18,6 @@ class Attendee(TimestampedModel):
 
 
 class AttendanceCode(TimestampedModel):
-    """Attendee code model."""
-
     """Attendee code model."""
 
     code = models.CharField(max_length=255, null=True)

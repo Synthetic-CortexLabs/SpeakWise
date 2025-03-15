@@ -5,6 +5,9 @@ from django.test import TestCase
 from speakwise.attendees.models import AttendanceCode
 from speakwise.attendees.models import Attendee
 from speakwise.events.models import Event
+from rest_framework import status
+from rest_framework.reverse import reverse
+from rest_framework.test import APIClient
 
 
 class TestModels(TestCase):
