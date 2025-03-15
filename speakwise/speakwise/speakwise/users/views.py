@@ -10,29 +10,28 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from speakwise.users.models import User
 
+from .serializers import LoginSerializer
+from .serializers import LogoutSerializer
 from .serializers import UserSerializer
 
 
-class UserListView(APIView):
+class UserListView(generics.ListCreateAPIView):
     """User list view."""
 
-    def get_permissions(self):
-        """Authentication is required to get the list of users."""
-        if self.request.method == "GET":
-            return [AllowAny()]
-        return [AllowAny()]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 
     @extend_schema(
+        operation_id="list_users",
         description="Get the list of users.",
         responses={200: UserSerializer(many=True)},
     )
-    def get(self, request):
-        """Authentication (JWT) is required to get the list of users."""
-        queryset = User.objects.all()
-        serializer = UserSerializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
     @extend_schema(
+        operation_id="create_user",
         description="Create a user.",
         request=UserSerializer,
         responses={201: UserSerializer},
@@ -46,8 +45,9 @@ class UserListView(APIView):
 
 
 class UserDetailView(APIView):
-    """User detail view."""
+    """View for retrieving and updating user details."""
 
+    serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
     def get_user(self, pk):
@@ -83,23 +83,35 @@ class UserDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserLoginView(APIView):
-    """
-    User login view.
-    """
+class UserLoginView(generics.GenericAPIView):
+    """User login view."""
 
+    serializer_class = LoginSerializer
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        operation_id="user_login",
+        description="Login a user with email and password",
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "user": {"$ref": "#/components/schemas/User"},
+                    "refresh": {"type": "string"},
+                    "access": {"type": "string"},
+                },
+            }
+        },
+    )
     def post(self, request):
-        """
-        Login a user.
+        """Login a user."""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        required fields: email, password
-
-        """
-
-        email = request.data.get("email")
-        password = request.data.get("password")
+        email = serializer.validated_data[
+            "username"
+        ]  # Using username field from LoginSerializer
+        password = serializer.validated_data["password"]
         user = authenticate(request, email=email, password=password)
         if user is None:
             return Response(
@@ -119,19 +131,21 @@ class UserLoginView(APIView):
         )
 
 
-class LogoutView(APIView):
+class LogoutView(generics.GenericAPIView):
     """Logout a user."""
 
+    serializer_class = LogoutSerializer
     permission_classes = [AllowAny]
 
+    @extend_schema(
+        operation_id="user_logout",
+        description="Blacklist a refresh token",
+        responses={204: None},
+    )
     def post(self, request):
-        """Blacklist a refresh token requires a refresh token.
-
-        Example:
-            {'refresh_token': 'token'}
-        """
-        refresh_token = request.data["refresh_token"]
+        """Blacklist a refresh token."""
         try:
+            refresh_token = request.data["refresh_token"]
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response(status=status.HTTP_204_NO_CONTENT)

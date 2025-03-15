@@ -5,6 +5,10 @@ from rest_framework import serializers
 
 from speakwise.users.models import User
 from speakwise.users.models import UserRole
+from rest_framework import serializers
+
+from speakwise.users.models import User
+from speakwise.users.models import UserRole
 
 
 class UserRoleSerializer(serializers.ModelSerializer):

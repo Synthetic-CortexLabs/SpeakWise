@@ -1,5 +1,6 @@
 """Speakers serializers."""
 
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
@@ -26,6 +27,7 @@ class SkillTagSerializer(serializers.ModelSerializer):
 
     Handles serialization of speaker skill tags.
     """
+
     class Meta:
         model = SkillTag
         fields = ["id", "name"]
@@ -36,6 +38,7 @@ class SpeakerSocialLinkSerializer(serializers.ModelSerializer):
 
     Handles serialization of speaker social media links.
     """
+
     class Meta:
         model = SpeakerSocialLink
         fields = ["id", "social_name", "social_url", "is_active", "display_order"]
@@ -52,6 +55,7 @@ class SpeakerProfileSerializer(serializers.ModelSerializer):
         social_links: Nested SpeakerSocialLinkSerializer (read-only)
         full_name: SerializerMethodField for speaker's full name
     """
+
     skill_tags = SkillTagSerializer(many=True, read_only=True)
     social_links = SpeakerSocialLinkSerializer(many=True, read_only=True)
     full_name = serializers.SerializerMethodField()
@@ -59,13 +63,21 @@ class SpeakerProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = SpeakerProfile
         fields = [
-            "id", "speaker_user", "organization", "short_bio", "long_bio",
-            "country", "avatar", "skill_tags", "social_links", "full_name",
+            "id",
+            "speaker_user",
+            "organization",
+            "short_bio",
+            "long_bio",
+            "country",
+            "avatar",
+            "skill_tags",
+            "social_links",
+            "full_name",
         ]
 
+    @extend_schema_field(str)
     def get_full_name(self, obj):
         """Returns the speaker's full name from the user model."""
-
         return obj.speaker_user.get_full_name()
 
 
@@ -78,6 +90,7 @@ class SpeakerDashboardSerializer(serializers.ModelSerializer):
     Attributes:
         feedback_stats: SerializerMethodField for computed feedback statistics
     """
+
     feedback_stats = serializers.SerializerMethodField()
 
     class Meta:
