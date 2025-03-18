@@ -60,9 +60,11 @@ class SpeakerProfile(TimestampedModel):
         db_table = "speaker_profile"
 
     def get_absolute_url(self):
+        """Returns the absolute URL for the speaker profile detail view."""
         return reverse("speaker_detail", kwargs={"pk": self.pk})
 
     def __str__(self):
+        """Returns the speaker's full name."""
         return f"{self.speaker_user.get_full_name()}"
 
 
@@ -85,10 +87,14 @@ class SpeakerDashboard(TimestampedModel):
         related_name="speaker_dashboard",
     )
     feedback = models.ForeignKey(
-        Feedback, on_delete=models.CASCADE, related_name="speaker_dashboard"
+        Feedback,
+        on_delete=models.CASCADE,
+        related_name="speaker_dashboard",
     )
 
     class Meta:
+        """Meta class for speaker dashboard model configuration."""
+
         db_table = "speaker_dashboard"
 
     def get_absolute_url(self):
@@ -115,7 +121,8 @@ class SpeakerDashboard(TimestampedModel):
                 else "No Conference"
             )
             feedbacks = Feedback.objects.filter(
-                event=event, speaker=self.speaker_profile
+                event=event,
+                speaker=self.speaker_profile,
             )
             if feedbacks.exists():
                 avg_rate = feedbacks.aggregate(models.Avg("rating"))["rating__avg"]
@@ -173,12 +180,15 @@ class Handles(TimestampedModel):
     )
 
     class Meta:
+        """Meta options for the Handles model."""
+
         ordering = ["social_name"]
         db_table = "Handles"
         verbose_name = "Social Media Handle"
         verbose_name_plural = "Social Media Handles"
 
     def __str__(self) -> str:
+        """Return social media platform name and URL."""
         if self.social_name:
             return self.social_name
         return "Social Media Handle"
@@ -201,12 +211,15 @@ class SpeakerSocialLink(SocialLink):
     )
 
     class Meta:
+        """Meta options for the SpeakerSocialLink model."""
+
         verbose_name = "Speaker Social Link"
         verbose_name_plural = "Speaker Social Links"
         unique_together = ["speaker", "social_name"]
         ordering = ["display_order", "social_name"]
 
     def __str__(self) -> str:
+        """Return a string representation of the speaker's social media profile."""
         return f"{self.speaker}'s {self.social_name} link"
 
     def clean(self) -> None:
@@ -214,7 +227,8 @@ class SpeakerSocialLink(SocialLink):
         super().clean()
         if (
             SpeakerSocialLink.objects.filter(
-                speaker=self.speaker, social_name=self.social_name
+                speaker=self.speaker,
+                social_name=self.social_name,
             )
             .exclude(id=self.id)
             .exists()

@@ -1,4 +1,3 @@
-import contextlib
 
 from django.apps import AppConfig
 from django.utils.translation import gettext_lazy as _
@@ -10,4 +9,4 @@ class UsersConfig(AppConfig):
 
     # def ready(self):
     #     with contextlib.suppress(ImportError):
-    #         import speakwise.users.signals  # noqa: F401
+    #         import speakwise.users.signals

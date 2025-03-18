@@ -1,6 +1,5 @@
 """Speaker views."""
 
-from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.exceptions import NotFound

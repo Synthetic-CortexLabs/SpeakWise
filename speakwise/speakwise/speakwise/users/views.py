@@ -2,10 +2,8 @@
 
 from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema
-from rest_framework import generics
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -38,10 +36,9 @@ class UserListView(generics.ListCreateAPIView):
         request=UserSerializer,
         responses={201: UserSerializer},
     )
-    def post(self, request, *args, **kwargs):
-        request_data = request.data.copy()
-        request_data.pop("token", None)
-        serializer = self.get_serializer(data=request_data)
+    def post(self, request):
+        """Create a user."""
+        serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -116,10 +113,10 @@ class UserLoginView(generics.GenericAPIView):
         ]  # Using username field from LoginSerializer
         password = serializer.validated_data["password"]
         user = authenticate(request, email=email, password=password)
-
         if user is None:
             return Response(
-                {"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid credentials"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         refresh = RefreshToken.for_user(user)
@@ -152,5 +149,5 @@ class LogoutView(generics.GenericAPIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except refresh_token.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

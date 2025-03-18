@@ -35,7 +35,6 @@ urlpatterns = [
 
 # API URLS
 urlpatterns += [
-    # path("api/auth-token/", obtain_auth_token),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(
         "api/docs/",
@@ -45,8 +44,8 @@ urlpatterns += [
 ]
 
 if settings.DEBUG:
-    # This allows the error pages to be debugged during development, just visit
-    # these url in browser to see how these error pages look like.
+    """This allows the error pages to be debugged during development, just visit
+    these url in browser to see how these error pages look like."""
     urlpatterns += [
         path(
             "400/",

@@ -5,6 +5,10 @@ from rest_framework import serializers
 
 from speakwise.users.models import User
 from speakwise.users.models import UserRole
+from rest_framework import serializers
+
+from speakwise.users.models import User
+from speakwise.users.models import UserRole
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
@@ -14,30 +18,26 @@ class UserRoleSerializer(serializers.ModelSerializer):
         """Meta class."""
 
         model = UserRole
-        fields = ["id", "display"]
+        fields = ["id", "role"]
 
 
 class UserSerializer(WritableNestedModelSerializer):
-    """user serializer."""
+    """User serializer."""
 
     role = UserRoleSerializer(required=False)
 
     class Meta:
-        """Meta class."""
-
         model = User
-        fields = ["id", "first_name", "last_name", "email", "role", "nationality"]
-        read_only_fields = ["id", "role"]
+        fields = ["id", "username", "email", "role", "password"]
 
+        extra_kwargs = {"password": {"write_only": True}}
 
-class LoginSerializer(serializers.Serializer):
-    """Login serializer."""
-
-    username = serializers.CharField(write_only=True)  # This will receive the email
-    password = serializers.CharField(write_only=True, style={"input_type": "password"})
-
-
-class LogoutSerializer(serializers.Serializer):
-    """Logout serializer."""
-
-    refresh_token = serializers.CharField()
+    def create(self, validated_data):
+        role_data = validated_data.pop("role", None)
+        password = validated_data.pop("password")
+        user = User.objects.create(**validated_data)
+        if role_data:
+            UserRole.objects.create(user=user, **role_data)
+        user.set_password(password)
+        user.save()
+        return user

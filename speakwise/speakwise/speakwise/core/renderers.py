@@ -1,5 +1,3 @@
-"""Custom JSON renderer for API responses."""
-
 from typing import Any
 
 from rest_framework import status

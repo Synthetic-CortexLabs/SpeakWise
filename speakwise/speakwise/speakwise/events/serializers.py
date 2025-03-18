@@ -55,7 +55,7 @@ class EventSerializer(WritableNestedModelSerializer):
                     format, imgstr = data["event_image"].split(";base64,")  # noqa: A001
                     ext = format.split("/")[-1]
                     data["event_image"] = ContentFile(
-                        base64.b64decode(imgstr), name=f"temp.{ext}"
+                        base64.b64decode(imgstr), name=f"temp.{ext}",
                     )
             return super().to_internal_value(data)
 
