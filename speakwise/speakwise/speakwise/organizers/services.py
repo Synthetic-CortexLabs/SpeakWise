@@ -55,8 +55,3 @@ class FileHandler:
                 if column == "email":
                     _email_list = data_frame[column].tolist()
                     return self._save_extracted_email(_email_list)
-
-
-# TODO make the save_email function inaccessible outside of the class, by allowing users to pass the EmailDB as a variable to extract_email method, such that, save email method will be called with with the DB passed as an argument.
-# 1. Database model needed to store emails for verification during rating (should emails be deleted after sometime?)
-# 2. Use signals or use services to handle the heavy lifting?
