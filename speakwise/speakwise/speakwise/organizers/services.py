@@ -2,7 +2,7 @@
 
 import os
 import tempfile
-
+from email_validator import validate_email, EmailNotValidError
 import pandas
 
 from speakwise.organizers.models import AttendanceEmails
@@ -15,9 +15,13 @@ class FileHandler:
         """save extracted emails, save unto a database."""
         for email in email_list:
             try:
-                AttendanceEmails.objects.get(email=email, event=event)
-            except AttendanceEmails.DoesNotExist:
-                AttendanceEmails.objects.create(email=email, event=event)
+                validate_email(email)
+                try:
+                    AttendanceEmails.objects.get(email=email, event=event)
+                except AttendanceEmails.DoesNotExist:
+                    AttendanceEmails.objects.create(email=email, event=event)
+            except EmailNotValidError:
+                raise ValueError("Email is not valid.")
 
     def clean_file(self, file_obj):
         """clean uploaded file."""
