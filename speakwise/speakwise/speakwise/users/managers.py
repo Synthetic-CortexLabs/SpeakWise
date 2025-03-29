@@ -1,3 +1,5 @@
+"""Custom managers for the User model."""
+
 from typing import TYPE_CHECKING
 
 from django.contrib.auth.hashers import make_password
@@ -40,4 +42,3 @@ class UserManager(DjangoUserManager["User"]):
             raise ValueError(msg)
 
         return self.create(email, password, **extra_fields)
-

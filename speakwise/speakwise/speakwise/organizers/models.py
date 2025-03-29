@@ -70,3 +70,19 @@ class SocialLinks(TimestampedModel):
         if self.social_name:
             return f"{self.social_name} ({self.social_link})"
         return None  # noqa: PLE0307
+
+
+class AttendanceEmails(TimestampedModel):
+    """Model for storing event attendance emails."""
+
+    email = models.EmailField(null=True, unique=True)
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        related_name="event_attendance_emails",
+    )
+    is_given_feedback = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email

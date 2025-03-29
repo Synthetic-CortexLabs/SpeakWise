@@ -42,7 +42,7 @@ class Country(TimestampedModel):
         related_name="country",
     )
 
-    class Mata:
+    class Meta:
         verbose_name_plural = "Countries"
 
     def __str__(self):

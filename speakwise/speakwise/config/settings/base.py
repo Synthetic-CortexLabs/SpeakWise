@@ -1,8 +1,6 @@
 # ruff: noqa: ERA001, E501
 """Base settings to build other settings files upon."""
 
-
-import os
 from datetime import timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -16,7 +14,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = BASE_DIR / "speakwise"
 env = environ.Env()
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(BASE_DIR / ".env"))
@@ -55,18 +53,29 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 
 # DATABASES = {"default": env.db("DATABASE_URL")}
 
+
+"""having problems connecting to local Db with dj_database_url package."""
+# DATABASES = {
+#     "default": dj_database_url.config(
+#         # Replace this value with your local database's connection string.
+#         default=os.environ.get("DATABASE_URL"),
+#         conn_max_age=600,
+#     ),
+# }
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST"),
-        "PORT": os.getenv("POSTGRES_PORT"),
-        # "OPTIONS": {"ssl": {"ssl-mode": "required"}, "charset": "utf8mb4"},
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "HOST": env("POSTGRES_HOST"),
+        "PORT": env("POSTGRES_PORT"),
     },
 }
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
+
+# DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
