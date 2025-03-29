@@ -33,4 +33,5 @@ class AttendeeSerializer(WritableNestedModelSerializer):
 
 class VerifyAttendeeWithEmailSerializer(Serializer):
     """verify attendee with email"""
+
     email = EmailField()

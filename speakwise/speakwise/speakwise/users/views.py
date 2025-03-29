@@ -38,8 +38,6 @@ class UserListView(APIView):
     )
     def post(self, request):
         """Create a user."""
-        request_data = request.data
-        token = request_data.pop("token", None)
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -97,13 +95,12 @@ class UserLoginView(APIView):
         email = request.data.get("email")
         password = request.data.get("password")
         user = authenticate(request, email=email, password=password)
-        print(user)
         if user:
             try:
                 refresh = RefreshToken.for_user(user)
                 serializer = UserSerializer(user)
-            except Exception as e:
-                return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
+            except user.DoesNotExist as err:
+                return Response(data=str(err), status=status.HTTP_400_BAD_REQUEST)
             return Response(
                 {
                     "refresh": str(refresh),
@@ -112,11 +109,10 @@ class UserLoginView(APIView):
                 },
                 status=status.HTTP_200_OK,
             )
-        else:
-            return Response(
-                {"error": "Invalid credentials"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        return Response(
+            {"error": "Invalid credentials"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 class LogoutView(APIView):
@@ -131,5 +127,8 @@ class LogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        except Exception as e:
-            return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
+        except refresh_token.DoesNotExist:
+            return Response(
+                {"error": "Invalid token"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )

@@ -1,13 +1,13 @@
 from typing import ClassVar
 
-from django.contrib.auth.models import AbstractUser, AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from speakwise.base.models import TimestampedModel
 
-from .choices import UserRoles as ROLE_CHOICES
+from .choices import UserRoles
 from .managers import UserManager
 
 
@@ -48,6 +48,6 @@ class UserRole(TimestampedModel):
     display = models.CharField(
         max_length=255,
         help_text="User role display name",
-        choices=ROLE_CHOICES.choices,
+        choices=UserRoles.choices,
         null=True,
     )
