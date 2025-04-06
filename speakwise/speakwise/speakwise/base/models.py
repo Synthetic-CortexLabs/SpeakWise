@@ -32,6 +32,7 @@ class SocialLink(TimestampedModel):
         is_active (BooleanField): Whether link is currently active
         display_order (IntegerField): Order for display sorting
     """
+
     social_name = models.CharField(max_length=50)
     social_url = models.URLField()
     is_active = models.BooleanField(default=True)

@@ -85,7 +85,9 @@ class SpeakerDashboard(TimestampedModel):
         related_name="speaker_dashboard",
     )
     feedback = models.ForeignKey(
-        Feedback, on_delete=models.CASCADE, related_name="speaker_dashboard",
+        Feedback,
+        on_delete=models.CASCADE,
+        related_name="speaker_dashboard",
     )
 
     class Meta:
@@ -115,7 +117,8 @@ class SpeakerDashboard(TimestampedModel):
                 else "No Conference"
             )
             feedbacks = Feedback.objects.filter(
-                event=event, speaker=self.speaker_profile,
+                event=event,
+                speaker=self.speaker_profile,
             )
             if feedbacks.exists():
                 avg_rate = feedbacks.aggregate(models.Avg("rating"))["rating__avg"]
@@ -214,7 +217,8 @@ class SpeakerSocialLink(SocialLink):
         super().clean()
         if (
             SpeakerSocialLink.objects.filter(
-                speaker=self.speaker, social_name=self.social_name,
+                speaker=self.speaker,
+                social_name=self.social_name,
             )
             .exclude(id=self.id)
             .exists()

@@ -179,7 +179,7 @@ class SpeakerSocialLinkTests(TestCase):
         self.user = User.objects.create_user(
             username="testspeaker",
             email="speaker@test.com",
-            password="testpass123", # noqa: S106
+            password="testpass123",  # noqa: S106
         )
         self.profile = SpeakerProfile.objects.create(
             speaker_user=self.user,

@@ -1,14 +1,9 @@
 """Custom managers for the User model."""
 
-from datetime import timedelta
 from typing import TYPE_CHECKING
 
-from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import UserManager as DjangoUserManager
-from django.db import models
-from django.db.models import Q
-from django.utils import timezone
 
 if TYPE_CHECKING:
     from .models import User  # noqa: F401
@@ -47,25 +42,3 @@ class UserManager(DjangoUserManager["User"]):
             raise ValueError(msg)
 
         return self.create(email, password, **extra_fields)
-
-
-class BaseInvitationManager(models.Manager):
-    """Custom manager for the Invite model."""
-
-    def all_expired(self):
-        """Return all expired invitations."""
-        return self.filter(self.expired_q())
-
-    def all_valid(self):
-        """Return all valid invitations."""
-        return self.exclude(self.expired_q())
-
-    def expired_q(self):
-        """Return the query for expired invitations."""
-        sent_threshold = timezone.now() - timedelta(days=settings.INVITATION_EXPIRY)
-        q = Q(accepted=True) | Q(sent__lt=sent_threshold)
-        return q
-
-    def delete_expired_confirmations(self):
-        """Delete all expired confirmations."""
-        self.all_expired().delete()
