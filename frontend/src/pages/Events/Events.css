@@ -77,7 +77,7 @@
   background: white;
   border: 1px solid #ccc;
   z-index: 10;
-  width: 100%;
+  width: 200px;
   top: -130px;
   max-height: 150px; /* Limit height */
   overflow-y: auto; /* Scroll if too many items */
@@ -92,7 +92,7 @@
 
 .dropdown div:hover {
   background-color: #f0f0f0; /* Highlight on hover */
-}
+}axios.get(url, { timeout: 15000 }) // 15 seconds
 
 .events-grid-container > p {
   font-size: 1.4rem;
@@ -159,7 +159,7 @@
 }
 
 .event-card-details-right p {
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 500;
   color: #eb5017;
 }

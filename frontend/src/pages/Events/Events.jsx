@@ -64,7 +64,7 @@ const Events = () => {
     const baseUrl = 'https://speakwise.onrender.com/api/';
     const apiUrl = `${baseUrl}events/`;
   
-    axios.get(apiUrl, {timeout: 7000})
+    axios.get(apiUrl, {timeout: 15000})
       .then(response => {
         const { data, status, message } = response.data;
         console.log('Data: ', data);
@@ -210,7 +210,7 @@ const Events = () => {
             )}
           </div>
         </div>
-        <p>All conference & Events in {selectedCountry}</p>
+        <p className='selected-country-text'>All conference & Events in {selectedCountry}</p>
         
         <div className='events-grid'>
           {currentEvents.map((event) => (

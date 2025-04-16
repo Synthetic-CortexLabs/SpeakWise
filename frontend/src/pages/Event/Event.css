@@ -74,7 +74,7 @@
   background: white;
   border: 1px solid #ccc;
   z-index: 10;
-  width: 150px;
+  width: 220px;
   top: -130px;
   max-height: 150px; /* Limit height */
   overflow-y: auto; /* Scroll if too many items */
@@ -91,7 +91,14 @@
   background-color: #f0f0f0; /* Highlight on hover */
 }
 
-.event-grid-container > p {
+.event-grid-container {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: white;
+  margin: 20px 0px;
+}
+
+.selected-country-text {
   font-size: 1.4rem;
   font-weight: 500;
   color: white;
