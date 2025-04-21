@@ -1,5 +1,5 @@
-# Create your views here.
-# organizers/views.py
+"""organizers views."""
+
 import os
 
 from django.http import Http404
@@ -73,11 +73,11 @@ class FileUploadViewCreatView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         os.remove(temp_file_path)
-        return Response(
-            {"message": "File processed successfully."},
-            status=status.HTTP_200_OK,
-        )
+        attendance_list = AttendanceEmails.objects.filter(event=event)
+        serializer = FileUploadSerializer(attendance_list, many=True)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    @extend_schema(responses=FileUploadSerializer(many=True))
     def get(self, request):
         """Get all attendance emails."""
 
@@ -97,11 +97,21 @@ class FileUploadDetailview(APIView):
         except AttendanceEmails.DoesNotExist as err:
             raise Http404 from err
 
+    @extend_schema(responses={200: FileUploadSerializer})
+    def patch(self, request, pk=None):
+        """update an email."""
+        email = self.get_object(pk)
+        serializer = FileUploadSerializer(email, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @extend_schema(responses={204: None})
     def delete(self, request, pk):
         """Delete an attendance email."""
         email = self.get_object(pk)
         email.delete()
         return Response(
             {"message": "Email deleted successfully."},
-            status=status.HTTP_200_OK,
+            status=status.HTTP_204_NO_CONTENT,
         )

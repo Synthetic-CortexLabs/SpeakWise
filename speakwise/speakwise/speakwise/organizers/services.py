@@ -2,8 +2,10 @@
 
 import os
 import tempfile
-from email_validator import validate_email, EmailNotValidError
+
 import pandas
+from email_validator import EmailNotValidError
+from email_validator import validate_email
 
 from speakwise.organizers.models import AttendanceEmails
 
