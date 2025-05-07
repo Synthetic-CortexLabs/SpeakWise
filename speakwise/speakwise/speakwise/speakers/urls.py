@@ -15,7 +15,9 @@ urlpatterns = [
     path("skills/", views.SkillTagList.as_view(), name="skill-list"),
     path("skills/<int:pk>/", views.SkillTagDetail.as_view(), name="skill-detail"),
     path(
-        "social-links/", views.SpeakerSocialLinkList.as_view(), name="social-link-list",
+        "social-links/",
+        views.SpeakerSocialLinkList.as_view(),
+        name="social-link-list",
     ),
     path(
         "social-links/<int:pk>/",

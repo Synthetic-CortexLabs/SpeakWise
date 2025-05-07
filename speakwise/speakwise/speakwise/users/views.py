@@ -9,29 +9,29 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from speakwise.users.models import User
-
-from .serializers import LoginSerializer
-from .serializers import LogoutSerializer
-from .serializers import UserSerializer
+from speakwise.users.serializers import UserSerializer
 
 
-class UserListView(generics.ListCreateAPIView):
+class UserListView(APIView):
     """User list view."""
 
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    def get_permissions(self):
+        """Authentication is required to get the list of users."""
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [AllowAny()]
 
     @extend_schema(
-        operation_id="list_users",
         description="Get the list of users.",
         responses={200: UserSerializer(many=True)},
     )
-    def get(self, request, *args, **kwargs):
-        return super().get(request, *args, **kwargs)
+    def get(self, request):
+        """Authentication (JWT) is required to get the list of users."""
+        queryset = User.objects.all()
+        serializer = UserSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @extend_schema(
-        operation_id="create_user",
         description="Create a user.",
         request=UserSerializer,
         responses={201: UserSerializer},
@@ -41,13 +41,13 @@ class UserListView(generics.ListCreateAPIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        # serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class UserDetailView(APIView):
-    """View for retrieving and updating user details."""
+    """User detail view."""
 
-    serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
     def get_user(self, pk):
@@ -83,71 +83,53 @@ class UserDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserLoginView(generics.GenericAPIView):
-    """User login view."""
+class UserLoginView(APIView):
+    """
+    User login view.
+    """
 
-    serializer_class = LoginSerializer
     permission_classes = [AllowAny]
 
-    @extend_schema(
-        operation_id="user_login",
-        description="Login a user with email and password",
-        responses={
-            200: {
-                "type": "object",
-                "properties": {
-                    "user": {"$ref": "#/components/schemas/User"},
-                    "refresh": {"type": "string"},
-                    "access": {"type": "string"},
-                },
-            }
-        },
-    )
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         """Login a user."""
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
 
-        email = serializer.validated_data[
-            "username"
-        ]  # Using username field from LoginSerializer
-        password = serializer.validated_data["password"]
+        email = request.data.get("email")
+        password = request.data.get("password")
         user = authenticate(request, email=email, password=password)
-        if user is None:
+        if user:
+            try:
+                refresh = RefreshToken.for_user(user)
+                serializer = UserSerializer(user)
+            except user.DoesNotExist as err:
+                return Response(data=str(err), status=status.HTTP_400_BAD_REQUEST)
             return Response(
-                {"error": "Invalid credentials"},
-                status=status.HTTP_400_BAD_REQUEST,
+                {
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                    "user": serializer.data,
+                },
+                status=status.HTTP_200_OK,
             )
-
-        refresh = RefreshToken.for_user(user)
-
         return Response(
-            data={
-                "user": UserSerializer(user).data,
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-            },
-            status=status.HTTP_200_OK,
+            {"error": "Invalid credentials"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
 
-class LogoutView(generics.GenericAPIView):
-    """Logout a user."""
+class LogoutView(APIView):
+    """Logout view."""
 
-    serializer_class = LogoutSerializer
     permission_classes = [AllowAny]
 
-    @extend_schema(
-        operation_id="user_logout",
-        description="Blacklist a refresh token",
-        responses={204: None},
-    )
     def post(self, request):
-        """Blacklist a refresh token."""
+        """logout a user."""
+        refresh_token = request.data["refresh_token"]
         try:
-            refresh_token = request.data["refresh_token"]
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except refresh_token.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Invalid token"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )

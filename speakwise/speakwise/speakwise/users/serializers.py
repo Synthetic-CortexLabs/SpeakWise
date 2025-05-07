@@ -5,10 +5,6 @@ from rest_framework import serializers
 
 from speakwise.users.models import User
 from speakwise.users.models import UserRole
-from rest_framework import serializers
-
-from speakwise.users.models import User
-from speakwise.users.models import UserRole
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
@@ -27,6 +23,8 @@ class UserSerializer(WritableNestedModelSerializer):
     role = UserRoleSerializer(required=False)
 
     class Meta:
+        """Meta class."""
+
         model = User
         fields = ["id", "username", "email", "role", "password"]
 

@@ -9,6 +9,7 @@ from speakwise.events.models import Session
 admin.site.register(Country)
 
 
+@admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = (
         "title",
@@ -24,6 +25,5 @@ class EventAdmin(admin.ModelAdmin):
     ordering = ("start_date_time",)
 
 
-admin.site.register(Event, EventAdmin)
 admin.site.register(Region)
 admin.site.register(Session)

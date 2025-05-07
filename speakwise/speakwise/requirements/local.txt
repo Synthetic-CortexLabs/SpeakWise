@@ -35,3 +35,7 @@ django-coverage-plugin==3.1.0  # https://github.com/nedbat/django_coverage_plugi
 pytest-django==4.9.0  # https://github.com/pytest-dev/pytest-django
 djangorestframework_simplejwt==5.0.0  #
 dj-rest-auth==5.0.1 #
+
+
+pandas
+email_validator

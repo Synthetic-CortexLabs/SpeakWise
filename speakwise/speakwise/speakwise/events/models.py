@@ -26,7 +26,8 @@ class Event(TimestampedModel):
         return self.title
 
     document = models.FileField(
-        upload_to="documents/", storage=RawMediaCloudinaryStorage(),
+        upload_to="documents/",
+        storage=RawMediaCloudinaryStorage(),
     )
 
 
@@ -41,7 +42,7 @@ class Country(TimestampedModel):
         related_name="country",
     )
 
-    class Mata:
+    class Meta:
         verbose_name_plural = "Countries"
 
     def __str__(self):

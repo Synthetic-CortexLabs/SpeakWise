@@ -1,3 +1,5 @@
+"""Custom managers for the User model."""
+
 from typing import TYPE_CHECKING
 
 from django.contrib.auth.hashers import make_password
@@ -10,10 +12,8 @@ if TYPE_CHECKING:
 class UserManager(DjangoUserManager["User"]):
     """Custom manager for the User model."""
 
-    def _create(self, email: str, password: str | None, **extra_fields):
-        """
-        Create and save a user with the given email and password.
-        """
+    def create(self, email: str, password: str | None, **extra_fields):
+        """Create and save a user with the given email and password."""
         if not email:
             msg = "The given email must be set"
             raise ValueError(msg)
@@ -23,12 +23,14 @@ class UserManager(DjangoUserManager["User"]):
         user.save(using=self._db)
         return user
 
-    def create(self, email: str, password: str | None = None, **extra_fields):  # type: ignore[override]
+    def create_user(self, email: str, password: str | None = None, **extra_fields):  # type: ignore[override]
+        """Create and save a regular user with the given email and password."""
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
-        return self._create(email, password, **extra_fields)
+        return self.create(email, password, **extra_fields)
 
     def create_superuser(self, email: str, password: str | None = None, **extra_fields):  # type: ignore[override]
+        """Create and save a superuser with the given email and password."""
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
 
@@ -39,4 +41,4 @@ class UserManager(DjangoUserManager["User"]):
             msg = "Superuser must have is_superuser=True."
             raise ValueError(msg)
 
-        return self._create(email, password, **extra_fields)
+        return self.create(email, password, **extra_fields)
