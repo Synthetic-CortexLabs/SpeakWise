@@ -15,7 +15,9 @@ class User(AbstractUser):
     """Custom user model."""
 
     id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=255, help_text="First name")
+    first_name = models.CharField(
+        max_length=255, help_text="First name", default="User"
+    )
     last_name = models.CharField(max_length=255, help_text="Last name ")
     email = models.EmailField(_("email address"), unique=True)
     username = models.CharField(max_length=255, null=True)
