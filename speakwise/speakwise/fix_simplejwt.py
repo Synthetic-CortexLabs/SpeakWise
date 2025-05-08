@@ -17,7 +17,7 @@ def patch_simplejwt():
 
     patched = False
     for path in possible_paths:
-        if not os.path.exists(path):
+        if not os.path.exists(path): 
             continue
 
         with open(path, "r") as file:
