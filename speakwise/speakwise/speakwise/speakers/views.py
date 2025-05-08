@@ -13,6 +13,7 @@ from .serializers import SkillTagSerializer
 from .serializers import SpeakerDashboardSerializer
 from .serializers import SpeakerProfileSerializer
 from .serializers import SpeakerSocialLinkSerializer
+from drf_spectacular.utils import extend_schema
 
 
 class SpeakerProfileList(generics.ListCreateAPIView):
