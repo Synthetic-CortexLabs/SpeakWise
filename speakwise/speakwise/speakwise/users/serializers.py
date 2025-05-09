@@ -14,7 +14,7 @@ class UserRoleSerializer(serializers.ModelSerializer):
         """Meta class."""
 
         model = UserRole
-        fields = ["id", "role"]
+        fields = ["id", "display"]
 
 
 class UserSerializer(WritableNestedModelSerializer):

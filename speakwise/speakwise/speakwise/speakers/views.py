@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 
 from .models import SkillTag
 from .models import SpeakerDashboard
@@ -78,7 +79,6 @@ class SpeakerDashboardView(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @extend_schema(
-        operation_id="get_speaker_dashboard",
         description="Get dashboard information for a speaker",
         responses={200: SpeakerDashboardSerializer},
     )
