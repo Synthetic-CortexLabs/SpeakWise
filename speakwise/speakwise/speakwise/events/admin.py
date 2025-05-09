@@ -1,29 +1,37 @@
 # Register your models here.
 from django.contrib import admin
 
-from speakwise.events.models import Country
-from speakwise.events.models import Event
-from speakwise.events.models import Region
-from speakwise.events.models import Session
+from speakwise.events.models import Country, Session, Event,Region
 
-admin.site.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    """Country admin."""
 
+    list_display = ("id", "name")
+    search_fields = ("name")
+    list_filter = ("created_at",)
+    ordering = ("-created_at",)
 
-@admin.register(Event)
+class RegionAdmin(admin.ModelAdmin):
+    """Region admin."""
+
+    list_display = ("id", "name", "country")
+    search_fields = ("name", "country__name")
+    list_filter = ("created_at",)
+    ordering = ("-created_at",)
+
 class EventAdmin(admin.ModelAdmin):
-    list_display = (
-        "title",
-        "event_nickname",
-        "location",
-        "start_date_time",
-        "end_date_time",
-        "is_active",
-    )
-    search_fields = ("title", "event_nickname", "location")
+    """Event admin."""
+
+    list_display = ("id", "title", "description", "location", "is_active")
+    search_fields = ("title", "description", "location")
     list_filter = ("is_active",)
-    date_hierarchy = "start_date_time"
-    ordering = ("start_date_time",)
+    ordering = ("-created_at",)
 
 
-admin.site.register(Region)
-admin.site.register(Session)
+class SessionAdmin(admin.ModelAdmin):
+    """Session admin."""
+
+    list_display = ("id", "name", "description", "event", "location")
+    search_fields = ("title", "event__title")
+    list_filter = ("event__is_active",)
+    ordering = ("-created_at",)
