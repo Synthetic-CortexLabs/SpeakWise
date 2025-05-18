@@ -1,12 +1,11 @@
 """Speakers models."""
 
-from base.models import SocialLink
-from base.models import TimestampedModel
-from django.conf import settings
+from speakwise.base.models import SocialLink
+from speakwise.base.models import TimestampedModel
 from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
-
+from django.contrib.auth import get_user_model
 from speakwise.events.models import Event
 from speakwise.feedbacks.models import Feedback
 
@@ -37,11 +36,10 @@ class SpeakerProfile(TimestampedModel):
     """
 
     speaker_user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
+        get_user_model(),
         on_delete=models.CASCADE,
         related_name="speaker_profile",
     )
-
     events_spoken = models.ManyToManyField(Event, blank=True, related_name="speakers")
     organization = models.CharField(max_length=255, blank=True)
     short_bio = models.CharField(max_length=255, blank=True)
@@ -153,46 +151,6 @@ class SpeakerDashboard(TimestampedModel):
         if feedbacks.exists():
             return round(feedbacks.aggregate(models.Avg("rating"))["rating__avg"], 2)
         return 0.0
-
-
-class Handles(TimestampedModel):
-    """
-    A model representing social media handles for speakers.
-    This model stores social media account information (name and URL) associated with speakers.
-    Inherits from TimestampedModel to track creation and modification times.
-    Attributes:
-        social_name (CharField): Name of the social media platform (up to 50 chars)
-        social_link (URLField): URL to the social media profile (up to 200 chars)
-        speakers (ForeignKey): Reference to associated Speaker model
-    Meta:
-        ordering: Ordered by social media platform name
-        db_table: "Handles"
-    """
-
-    social_name = models.CharField(max_length=50, null=True)  # noqa: DJ001
-    social_link = models.URLField(max_length=200, null=True)  # noqa: DJ001
-
-    speaker = models.ForeignKey(
-        SpeakerProfile,
-        on_delete=models.DO_NOTHING,
-        related_name="speakers_social_accounts",
-        null=True,
-    )
-
-    class Meta:
-        """Meta options for the Handles model."""
-
-        ordering = ["social_name"]
-        db_table = "Handles"
-        verbose_name = "Social Media Handle"
-        verbose_name_plural = "Social Media Handles"
-
-    def __str__(self) -> str:
-        """Return social media platform name and URL."""
-        if self.social_name:
-            return self.social_name
-        return "Social Media Handle"
-
 
 class SpeakerSocialLink(SocialLink):
     """Model for speaker's social media profiles.
