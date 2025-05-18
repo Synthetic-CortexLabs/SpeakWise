@@ -69,8 +69,6 @@ class SocialLinks(TimestampedModel):
         """Return social name and social link."""
         if self.social_name:
             return f"{self.social_name} ({self.social_link})"
-        return None  # noqa: PLE0307
-
 
 class AttendanceEmails(TimestampedModel):
     """Model for storing event attendance emails."""

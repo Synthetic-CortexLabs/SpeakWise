@@ -5,25 +5,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fbadf9ae-5349-4ab5-8d4c-576652380d14" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/speakwise/attendees/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/speakwise/attendees/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/speakwise/attendees/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/speakwise/attendees/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/speakwise/attendees/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/speakwise/attendees/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/speakwise/attendees/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/speakwise/attendees/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/speakwise/attendees/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/speakwise/attendees/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/settings/base.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/settings/base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/config/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/speakwise/events/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/events/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.github/workflows/dev_speakwise.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.github/workflows/dev_speakwise.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/speakwise.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/speakwise.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements/local.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements/local.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/speakwise/attendees/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/attendees/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/speakwise/events/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/events/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/speakwise/feedbacks/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/feedbacks/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/speakwise/organizers/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/organizers/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/speakwise/organizers/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/organizers/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/speakwise/speakers/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/speakers/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/speakwise/speakers/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/speakers/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/speakwise/talks/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/talks/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/speakwise/users/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/users/admin.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -43,15 +46,52 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "ezra/attendees-crud",
-    "last_opened_file_path": "C:/Users/ezray/Documents/work/Titanium/backend/nebula"
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "code-cleanup",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/home/ezi/workspace/SpeakWise/speakwise/speakwise",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="speakwise" type="Python.DjangoServer" factoryName="Django server">
+      <module name="speakwise" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-d7ad00fb9fc3-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23726.102" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-PY-251.23774.444" />
+        <option value="bundled-python-sdk-890ed5b35930-d9c5bdb153f4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.23774.444" />
       </set>
     </attachedChunks>
   </component>
@@ -63,7 +103,13 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1731018495903</updated>
+      <workItem from="1746791448337" duration="4404000" />
+      <workItem from="1746807895462" duration="163000" />
+      <workItem from="1746808106028" duration="1273000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
