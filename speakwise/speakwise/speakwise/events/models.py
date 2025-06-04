@@ -1,3 +1,4 @@
+# filepath: /Users/macbook/Desktop/Devs/SpeakWise/speakwise/speakwise/speakwise/events/models.py
 """Models for the events app in the SpeakWise application."""
 
 from base.models import TimestampedModel
@@ -9,17 +10,46 @@ from django.utils import timezone
 EVENT_IMAGE_UPLOAD = "event_images/"
 
 
+class Tag(TimestampedModel):
+    """A model for event tags in the SpeakWise application."""
+
+    name = models.CharField(max_length=100, unique=True)
+    color = models.CharField(max_length=20, default="#007bff")
+
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.name
+
+
 class Event(TimestampedModel):
     """A model for events in the SpeakWise application."""
 
     title = models.CharField(max_length=255, unique=True)
-    event_nickname = models.CharField(max_length=255, null=True)
-    event_image = CloudinaryField("image", folder=EVENT_IMAGE_UPLOAD, null=True)
-    description = models.TextField(null=True)
-    location = models.CharField(max_length=255, null=True)
+    event_nickname = models.CharField(max_length=255, blank=True, default="")
+    event_image = CloudinaryField(
+        "image", folder=EVENT_IMAGE_UPLOAD, null=True, blank=True
+    )
+    short_description = models.CharField(
+        max_length=255,
+        blank=True,
+        default="",
+        help_text="Brief description for event cards",
+    )
+    description = models.TextField(
+        blank=True, default="", help_text="Detailed description for event page"
+    )
+    website = models.URLField(max_length=255, blank=True, default="")
+    location = models.CharField(max_length=255, blank=True, default="")
     start_date_time = models.DateTimeField(default=timezone.now, null=True)
     end_date_time = models.DateTimeField(default=timezone.now, null=True)
-    is_active = models.BooleanField(default=False, null=True)
+    is_active = models.BooleanField(default=False)
+    country = models.ForeignKey(
+        "Country",
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="events",
+    )
+    tags = models.ManyToManyField(Tag, related_name="events", blank=True)
 
     def __str__(self):
         """Return a string representation of the model."""
@@ -31,35 +61,29 @@ class Event(TimestampedModel):
     )
 
 
-class Country(TimestampedModel):
-    """A model for countries in the SpeakWise application."""
+class Region(TimestampedModel):
+    """A model for regions in the SpeakWise application."""
 
     name = models.CharField(max_length=255, null=True)
-    event = models.ForeignKey(
-        Event,
-        on_delete=models.DO_NOTHING,
-        null=True,
-        related_name="country",
-    )
-
-    class Meta:
-        verbose_name_plural = "Countries"
 
     def __str__(self):
         """Return a string representation of the model."""
         return self.name
 
 
-class Region(TimestampedModel):
-    """A model for regions in the SpeakWise application."""
+class Country(TimestampedModel):
+    """A model for countries in the SpeakWise application."""
 
     name = models.CharField(max_length=255, null=True)
-    country = models.ForeignKey(
-        Country,
-        on_delete=models.DO_NOTHING,
+    region = models.ForeignKey(
+        Region,
+        on_delete=models.CASCADE,
         null=True,
-        related_name="region",
+        related_name="countries",
     )
+
+    class Meta:
+        verbose_name_plural = "Countries"
 
     def __str__(self):
         """Return a string representation of the model."""

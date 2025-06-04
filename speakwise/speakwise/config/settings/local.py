@@ -89,6 +89,9 @@ CELERY_TASK_EAGER_PROPAGATES = True
 CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:3002",
     "http://localhost:5173",
     "https://speakwise-beta.vercel.app",
     "https://speakwise.vercel.app",
@@ -109,8 +112,8 @@ CORS_ALLOW_HEADERS = [
 # CLOUDINARY CONFIGURATIONS
 
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": "CLOUDINARY_CLOUD_NAME",
-    "API_KEY": "CLOUDINARY_API_KEY",
-    "API_SECRET": "CLOUDINARY_API_SECRET",
+    "CLOUD_NAME": env("CLOUDINARY_CLOUD_NAME", default="demo"),
+    "API_KEY": env("CLOUDINARY_API_KEY", default=""),
+    "API_SECRET": env("CLOUDINARY_API_SECRET", default=""),
     "SECURE": True,
 }

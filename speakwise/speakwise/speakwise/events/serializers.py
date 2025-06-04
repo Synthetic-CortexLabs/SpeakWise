@@ -3,43 +3,65 @@
 import base64
 
 from django.core.files.base import ContentFile
-from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
 
 from .models import Country
 from .models import Event
 from .models import Region
 from .models import Session
+from .models import Tag
 
 
 class RegionSerializer(serializers.ModelSerializer):
     """Serializer for the Region model."""
 
+    countries = serializers.StringRelatedField(many=True, read_only=True)
+
     class Meta:
         """Meta class for the RegionSerializer."""
 
         model = Region
-        exclude = ("created_at", "updated_at", "country")
+        exclude = ("created_at", "updated_at")
 
 
-class CountrySerializer(WritableNestedModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
+    """Serializer for the Tag model."""
+
+    class Meta:
+        """Meta class for the TagSerializer."""
+
+        model = Tag
+        fields = ("id", "name", "color")
+
+
+class CountrySerializer(serializers.ModelSerializer):
     """Serializer for the Country model."""
 
-    region = RegionSerializer(required=False, many=True)
+    region = RegionSerializer(read_only=True)
+    events = serializers.StringRelatedField(many=True, read_only=True)
 
     class Meta:
         """Meta class for the CountrySerializer."""
 
         model = Country
-        exclude = ("created_at", "updated_at", "event")
+        exclude = ("created_at", "updated_at")
 
 
-class EventSerializer(WritableNestedModelSerializer):
+class EventSerializer(serializers.ModelSerializer):
     """Serializer for the Event model."""
 
     event_image = serializers.ImageField(required=False, allow_null=True)
+    country = CountrySerializer(read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
+    website = serializers.URLField(required=False, allow_blank=True)
+    short_description = serializers.CharField(required=False, allow_blank=True)
 
-    country = CountrySerializer(required=False, many=True)
+    # Frontend-specific computed fields
+    name = serializers.CharField(source="title", read_only=True)
+    date = serializers.SerializerMethodField()
+    date_range = serializers.SerializerMethodField()  # New field for start/end dates
+    attendees = serializers.SerializerMethodField()
+    speakers = serializers.SerializerMethodField()
 
     class Meta:
         """Meta class for the EventSerializer."""
@@ -47,18 +69,84 @@ class EventSerializer(WritableNestedModelSerializer):
         model = Event
         fields = "__all__"
 
-        # decodein theimage
-        def to_internal_value(self, data):
-            if data.get("event_image"):
-                # Handle base64 image
-                if ";base64," in data["event_image"]:
-                    format, imgstr = data["event_image"].split(";base64,")  # noqa: A001
-                    ext = format.split("/")[-1]
-                    data["event_image"] = ContentFile(
-                        base64.b64decode(imgstr),
-                        name=f"temp.{ext}",
-                    )
-            return super().to_internal_value(data)
+    def get_date(self, obj):
+        """Format date range for frontend display - keeping for backward compatibility."""
+        if obj.start_date_time and obj.end_date_time:
+            start_date = obj.start_date_time.strftime("%B %d")
+            end_date = obj.end_date_time.strftime("%d, %Y")
+
+            # Check if same month/year
+            if (
+                obj.start_date_time.month == obj.end_date_time.month
+                and obj.start_date_time.year == obj.end_date_time.year
+            ):
+                if obj.start_date_time.day == obj.end_date_time.day:
+                    # Same day
+                    return obj.start_date_time.strftime("%B %d, %Y")
+                # Same month, different days
+                return f"{start_date}-{end_date}"
+            # Different months/years
+            start_full = obj.start_date_time.strftime("%B %d, %Y")
+            end_full = obj.end_date_time.strftime("%B %d, %Y")
+            return f"{start_full} - {end_full}"
+        return None
+
+    def get_date_range(self, obj):
+        """Get separate start and end dates for better display control."""
+        if not obj.start_date_time or not obj.end_date_time:
+            return {"start": None, "end": None, "same_day": False}
+
+        start_date = obj.start_date_time.strftime("%B %d, %Y")
+        start_time = obj.start_date_time.strftime("%I:%M %p")
+        end_date = obj.end_date_time.strftime("%B %d, %Y")
+        end_time = obj.end_date_time.strftime("%I:%M %p")
+
+        same_day = (
+            obj.start_date_time.year == obj.end_date_time.year
+            and obj.start_date_time.month == obj.end_date_time.month
+            and obj.start_date_time.day == obj.end_date_time.day
+        )
+
+        return {
+            "start": {
+                "date": start_date,
+                "time": start_time,
+                "datetime": obj.start_date_time.isoformat(),
+            },
+            "end": {
+                "date": end_date,
+                "time": end_time,
+                "datetime": obj.end_date_time.isoformat(),
+            },
+            "same_day": same_day,
+        }
+
+    def get_attendees(self, obj):
+        """Get count of attendees for this event."""
+        # TODO: Implement when attendees model is connected
+        # For now, return a placeholder count
+        return 0
+
+    def get_speakers(self, obj):
+        """Get count of speakers for this event."""
+        # Count speakers from all sessions in this event
+        sessions = obj.session.all()
+        # TODO: Update when speakers are properly linked to sessions
+        # For now, return number of sessions as placeholder
+        return sessions.count()
+
+    def to_internal_value(self, data):
+        """Handle base64 image encoding."""
+        if data.get("event_image"):
+            # Handle base64 image
+            if ";base64," in data["event_image"]:
+                img_format, imgstr = data["event_image"].split(";base64,")
+                ext = img_format.split("/")[-1]
+                data["event_image"] = ContentFile(
+                    base64.b64decode(imgstr),
+                    name=f"temp.{ext}",
+                )
+        return super().to_internal_value(data)
 
 
 class SessionSerializer(serializers.ModelSerializer):
