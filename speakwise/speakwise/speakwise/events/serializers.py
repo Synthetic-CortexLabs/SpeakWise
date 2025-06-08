@@ -129,11 +129,8 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_speakers(self, obj):
         """Get count of speakers for this event."""
-        # Count speakers from all sessions in this event
-        sessions = obj.session.all()
-        # TODO: Update when speakers are properly linked to sessions
-        # For now, return number of sessions as placeholder
-        return sessions.count()
+        # Count speakers linked through ManyToMany relationship with SpeakerProfile
+        return obj.speakers.count()
 
     def to_internal_value(self, data):
         """Handle base64 image encoding."""
@@ -152,8 +149,18 @@ class EventSerializer(serializers.ModelSerializer):
 class SessionSerializer(serializers.ModelSerializer):
     """Serializer for the Session model."""
 
+    speaker_details = serializers.SerializerMethodField()
+
     class Meta:
         """Meta class for the SessionSerializer."""
 
         model = Session
         exclude = ("created_at", "updated_at")
+
+    def get_speaker_details(self, obj):
+        """Get detailed information about the session's speaker."""
+        if obj.speaker:
+            from speakwise.speakers.serializers import SpeakerProfileSerializer
+
+            return SpeakerProfileSerializer(obj.speaker).data
+        return None

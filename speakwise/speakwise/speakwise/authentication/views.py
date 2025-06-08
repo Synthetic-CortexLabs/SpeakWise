@@ -54,34 +54,32 @@ class LoginBaseClass(ABC, LoginView):
 
 
 class OrganizerLoginView(LoginBaseClass):
-    """Login view for practitioners."""
+    """Login view for organizers."""
 
     def login(self):
         """Login the organizer."""
-        try:
-            self.user = self.serializer.validated_data["user"]
-            self.user.role.get(display="organizer")
-            return self.user
-        except UserRole.DoesNotExist as err:
-            raise AuthenticationError from err
+        self.user = self.serializer.validated_data["user"]
+        if not self.user.role or self.user.role.display != "organizer":
+            raise AuthenticationError
+        return self.user
 
 
 class AttendeeLoginView(LoginBaseClass):
-    """Login view for patients."""
+    """Login view for attendees."""
 
     def login(self):
         """Login the attendee."""
-        try:
-            self.user = self.serializer.validated_data["user"]
-            print(self.user.role.display)
-            self.user.role.display = "attendee"
-            return self.user
-        except UserRole.DoesNotExist as err:
-            raise AuthenticationError from err
+        self.user = self.serializer.validated_data["user"]
+        if not self.user.role or self.user.role.display != "attendee":
+            raise AuthenticationError
+        return self.user
 
     def get_extra_payload(self) -> dict:
         """Return the attendee data."""
-        attendee = Attendee.objects.get(user=self.user)
+        try:
+            attendee = Attendee.objects.get(user=self.user)
+        except Attendee.DoesNotExist as err:
+            raise AuthenticationError from err
         serializer = AttendeeSerializer(attendee)
         return {"attendee": serializer.data}
 
@@ -91,15 +89,16 @@ class SpeakerLoginView(LoginBaseClass):
 
     def login(self):
         """Login the speaker."""
-        try:
-            self.user = self.serializer.validated_data["user"]
-            self.user.role.get(display="speaker")
-            return self.user
-        except UserRole.DoesNotExist as err:
-            raise AuthenticationError from err
+        self.user = self.serializer.validated_data["user"]
+        if not self.user.role or self.user.role.display != "speaker":
+            raise AuthenticationError
+        return self.user
 
     def get_extra_payload(self) -> dict:
         """Return the speaker data."""
-        admin = SpeakerProfile.objects.get(user=self.user)
+        try:
+            admin = SpeakerProfile.objects.get(user=self.user)
+        except SpeakerProfile.DoesNotExist as err:
+            raise AuthenticationError from err
         serializer = SpeakerSerializer(admin)
         return {"speaker": serializer.data}

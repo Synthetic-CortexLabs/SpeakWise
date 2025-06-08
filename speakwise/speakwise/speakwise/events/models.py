@@ -91,7 +91,10 @@ class Country(TimestampedModel):
 
 
 class Session(TimestampedModel):
-    """A model for sessions in the SpeakWise application."""
+    """A model for sessions in the SpeakWise application.
+
+    This model connects events with speakers and includes session-specific details.
+    """
 
     name = models.CharField(max_length=255, null=True)
     description = models.TextField(null=True)
@@ -101,12 +104,17 @@ class Session(TimestampedModel):
         Event,
         on_delete=models.DO_NOTHING,
         null=True,
-        related_name="session",
+        related_name="sessions",
     )
     location = models.CharField(max_length=255, null=True)
 
-    # TODO: Add speaker field
-    speaker = models.CharField(max_length=255, null=True)
+    # Connect to SpeakerProfile directly
+    speaker = models.ForeignKey(
+        "speakers.SpeakerProfile",
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="speaking_sessions",
+    )
 
     def __str__(self):
         return self.name
