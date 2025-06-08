@@ -100,7 +100,9 @@ class UserLoginView(APIView):
             try:
                 refresh = RefreshToken.for_user(user)
                 serializer = UserSerializer(user)
-            except user.DoesNotExist as err:
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.debug("LOGIN RESPONSE USER DATA: %s", serializer.data)
                 return Response(data=str(err), status=status.HTTP_400_BAD_REQUEST)
             return Response(
                 {
@@ -123,12 +125,15 @@ class LogoutView(APIView):
 
     def post(self, request):
         """logout a user."""
-        refresh_token = request.data["refresh_token"]
+        refresh_token = request.data.get("refresh_token")
         try:
             token = RefreshToken(refresh_token)
-            token.blacklist()
+            # Only blacklist if the method exists (i.e., token_blacklist app is installed)
+            if hasattr(token, "blacklist"):
+                token.blacklist()
+            # If not, just return success (client should remove tokens)
             return Response(status=status.HTTP_204_NO_CONTENT)
-        except refresh_token.DoesNotExist:
+        except (TypeError, ValueError):
             return Response(
                 {"error": "Invalid token"},
                 status=status.HTTP_400_BAD_REQUEST,

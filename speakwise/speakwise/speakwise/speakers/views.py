@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 from drf_spectacular.utils import extend_schema
 
 from .models import SkillTag
@@ -14,7 +15,12 @@ from .serializers import SkillTagSerializer
 from .serializers import SpeakerDashboardSerializer
 from .serializers import SpeakerProfileSerializer
 from .serializers import SpeakerSocialLinkSerializer
-from drf_spectacular.utils import extend_schema
+from speakwise.authentication.permissions import (
+    IsSpeaker,
+    IsOrganizerOrAdmin,
+    IsSpeakerOrOrganizerOrAdmin,
+)
+from speakwise.users.choices import UserRoles
 
 
 class SpeakerProfileList(generics.ListCreateAPIView):
@@ -22,7 +28,15 @@ class SpeakerProfileList(generics.ListCreateAPIView):
 
     queryset = SpeakerProfile.objects.all()
     serializer_class = SpeakerProfileSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        """
+        GET request is available to everyone
+        POST requests are available to organizers and admins
+        """
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsOrganizerOrAdmin()]
 
 
 class SpeakerProfileDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -30,7 +44,40 @@ class SpeakerProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = SpeakerProfile.objects.all()
     serializer_class = SpeakerProfileSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        """
+        GET request is available to everyone
+        PUT, PATCH, DELETE requests are available to:
+        - The speaker themselves
+        - Organizers and admins
+        """
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsSpeakerOrOrganizerOrAdmin()]
+
+    def check_object_permissions(self, request, obj):
+        """
+        Check if speaker has permission to edit their own profile
+        """
+        super().check_object_permissions(request, obj)
+
+        # If user has organizer or admin role, they're already allowed
+        if (
+            hasattr(request.user, "role")
+            and request.user.role
+            and request.user.role.display in [UserRoles.ORGANIZER, UserRoles.ADMIN]
+        ):
+            return
+
+        # If user is the speaker of this profile, allow access
+        if obj.user == request.user:
+            return
+
+        # Otherwise, deny access
+        self.permission_denied(
+            request, message="You don't have permission to edit this speaker profile."
+        )
 
 
 class SkillTagList(generics.ListCreateAPIView):
@@ -38,7 +85,15 @@ class SkillTagList(generics.ListCreateAPIView):
 
     queryset = SkillTag.objects.all()
     serializer_class = SkillTagSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        """
+        GET request is available to everyone
+        POST requests are available only to speakers, organizers and admins
+        """
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsSpeakerOrOrganizerOrAdmin()]
 
 
 class SkillTagDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -46,30 +101,51 @@ class SkillTagDetail(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = SkillTag.objects.all()
     serializer_class = SkillTagSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        """
+        GET request is available to everyone
+        PUT, PATCH, DELETE requests are available only to organizers and admins
+        """
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsOrganizerOrAdmin()]
 
 
 class SpeakerSocialLinkList(generics.ListCreateAPIView):
     """List all social links for authenticated user or create a new one."""
 
     serializer_class = SpeakerSocialLinkSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        """Only speakers can manage their social links."""
+        return [IsSpeaker()]
 
     def get_queryset(self):
-        return SpeakerSocialLink.objects.filter(speaker__speaker_user=self.request.user)
+        return SpeakerSocialLink.objects.filter(speaker__user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(speaker=self.request.user.speaker_profile)
+        try:
+            speaker_profile = SpeakerProfile.objects.get(user=self.request.user)
+            serializer.save(speaker=speaker_profile)
+        except SpeakerProfile.DoesNotExist:
+            self.permission_denied(
+                self.request,
+                message="You must have a speaker profile to add social links.",
+            )
 
 
 class SpeakerSocialLinkDetail(generics.RetrieveUpdateDestroyAPIView):
     """Retrieve, update or delete a social link."""
 
     serializer_class = SpeakerSocialLinkSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        """Only speakers can manage their social links."""
+        return [IsSpeaker()]
 
     def get_queryset(self):
-        return SpeakerSocialLink.objects.filter(speaker__speaker_user=self.request.user)
+        return SpeakerSocialLink.objects.filter(speaker__user=self.request.user)
 
 
 class SpeakerDashboardView(generics.RetrieveAPIView):
@@ -77,7 +153,37 @@ class SpeakerDashboardView(generics.RetrieveAPIView):
 
     queryset = SpeakerProfile.objects.all()
     serializer_class = SpeakerDashboardSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_permissions(self):
+        """
+        GET request is available to:
+        - The speaker themselves
+        - Organizers and admins
+        """
+        return [IsSpeakerOrOrganizerOrAdmin()]
+
+    def check_object_permissions(self, request, obj):
+        """
+        Check if speaker has permission to view their own dashboard
+        """
+        super().check_object_permissions(request, obj)
+
+        # If user has organizer or admin role, they're already allowed
+        if (
+            hasattr(request.user, "role")
+            and request.user.role
+            and request.user.role.display in [UserRoles.ORGANIZER, UserRoles.ADMIN]
+        ):
+            return
+
+        # If user is the speaker of this dashboard, allow access
+        if obj.user == request.user:
+            return
+
+        # Otherwise, deny access
+        self.permission_denied(
+            request, message="You don't have permission to view this speaker dashboard."
+        )
 
     @extend_schema(
         description="Get dashboard information for a speaker",

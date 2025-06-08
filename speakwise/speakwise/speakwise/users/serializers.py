@@ -26,16 +26,35 @@ class UserSerializer(WritableNestedModelSerializer):
         """Meta class."""
 
         model = User
-        fields = ["id", "username", "email", "role", "password"]
+        fields = [
+            "id",
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+            "nationality",
+            "role",
+            "password",
+        ]
 
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
         role_data = validated_data.pop("role", None)
         password = validated_data.pop("password")
-        user = User.objects.create(**validated_data)
-        if role_data:
-            UserRole.objects.create(user=user, **role_data)
-        user.set_password(password)
-        user.save()
+        # Look up the UserRole by display value and assign to user
+        if role_data and "display" in role_data:
+            from speakwise.users.models import UserRole
+
+            role_obj = UserRole.objects.get(display=role_data["display"])
+            validated_data["role"] = role_obj
+        user = User.objects.create_user(password=password, **validated_data)
+
+        # Create Attendee profile if role is attendee
+        if role_data and role_data.get("display") == "attendee":
+            from speakwise.attendees.models import Attendee
+
+            Attendee.objects.create(user=user)
+        # (You can add similar logic for Speaker/Organizer if needed)
+
         return user

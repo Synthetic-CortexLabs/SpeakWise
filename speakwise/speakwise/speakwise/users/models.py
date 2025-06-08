@@ -53,3 +53,6 @@ class UserRole(TimestampedModel):
         choices=UserRoles.choices,
         null=True,
     )
+
+    def __str__(self):
+        return self.display or super().__str__()

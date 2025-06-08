@@ -3,11 +3,13 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
-from rest_framework.permissions import AllowAny
-from rest_framework.permissions import IsAuthenticated
 
 from speakwise.feedbacks.models import Feedback
 from speakwise.feedbacks.serializers import FeedbackSerializer
+from speakwise.authentication.permissions import (
+    IsAttendee,
+    IsSpeakerOrOrganizerOrAdmin,
+)
 
 
 @extend_schema(request=FeedbackSerializer, responses=FeedbackSerializer(many=True))
@@ -16,7 +18,15 @@ class FeedbackListCreateView(ListCreateAPIView):
 
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
-    permission_classes = [AllowAny]
+
+    def get_permissions(self):
+        """
+        GET requests are available to speakers, organizers, and admins
+        POST requests are available to authenticated attendees
+        """
+        if self.request.method == "GET":
+            return [IsSpeakerOrOrganizerOrAdmin()]
+        return [IsAttendee()]  # Only attendees should create feedback
 
 
 @extend_schema(request=FeedbackSerializer, responses=FeedbackSerializer(many=True))
@@ -25,4 +35,12 @@ class FeedbackDetailView(RetrieveUpdateDestroyAPIView):
 
     serializer_class = FeedbackSerializer
     queryset = Feedback.objects.all()
-    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        """
+        GET requests are available to speakers, organizers, and admins
+        PUT, PATCH, DELETE requests are available to organizers and admins
+        """
+        if self.request.method == "GET":
+            return [IsSpeakerOrOrganizerOrAdmin()]
+        return [IsSpeakerOrOrganizerOrAdmin()]

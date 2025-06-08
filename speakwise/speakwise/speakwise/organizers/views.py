@@ -18,6 +18,12 @@ from .models import Organizers
 from .serializers import FileUploadSerializer
 from .serializers import OrganizerSerializer
 from .services import FileHandler
+from speakwise.authentication.permissions import IsOrganizerOrAdmin
+from speakwise.authentication.permissions import (
+    IsOrganizer,
+    IsOrganizerOrAdmin,
+)
+from speakwise.users.choices import UserRoles
 
 
 @extend_schema(
@@ -30,7 +36,15 @@ class OrganizerListCreateView(generics.ListCreateAPIView):
 
     queryset = Organizers.objects.all()
     serializer_class = OrganizerSerializer
-    permission_classes = [AllowAny]
+
+    def get_permissions(self):
+        """
+        GET requests can be made by anyone
+        POST requests only by admins (who can create organizers)
+        """
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsOrganizerOrAdmin()]
 
 
 @extend_schema(
@@ -43,13 +57,13 @@ class OrganizerDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Organizers.objects.all()
     serializer_class = OrganizerSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOrganizerOrAdmin]
 
 
 class FileUploadViewCreatView(APIView):
     """File upload view."""
 
-    permission_classes = [AllowAny]
+    permission_classes = [IsOrganizerOrAdmin]
     parser_classes = (
         MultiPartParser,
         FormParser,

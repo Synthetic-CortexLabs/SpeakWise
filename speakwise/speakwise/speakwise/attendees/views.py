@@ -12,20 +12,66 @@ from speakwise.attendees.models import Attendee
 from speakwise.attendees.serializers import AttendeeSerializer
 from speakwise.attendees.serializers import VerifyAttendeeWithEmailSerializer
 from speakwise.organizers.models import AttendanceEmails
+from speakwise.authentication.permissions import (
+    IsAttendee,
+    IsOrganizerOrAdmin,
+)
+from speakwise.users.choices import UserRoles
 
 
 @extend_schema(request=AttendeeSerializer, responses=AttendeeSerializer)
 class AttendeeListCreateView(ListCreateAPIView):
+    """View for listing and creating attendees."""
+
     serializer_class = AttendeeSerializer
-    permission_classes = [AllowAny]
     queryset = Attendee.objects.all()
+
+    def get_permissions(self):
+        """
+        GET request is available to organizers and admins
+        POST request is available to anyone (to register as an attendee)
+        """
+        if self.request.method == "GET":
+            return [IsOrganizerOrAdmin()]
+        return [AllowAny()]
 
 
 @extend_schema(request=AttendeeSerializer, responses=AttendeeSerializer)
 class AttendeeDetailView(RetrieveUpdateDestroyAPIView):
+    """View for retrieving, updating and deleting an attendee."""
+
     serializer_class = AttendeeSerializer
-    permission_classes = [AllowAny]
     queryset = Attendee.objects.all()
+
+    def get_permissions(self):
+        """
+        GET, PUT, PATCH, DELETE requests are available to:
+        - The attendee accessing their own profile
+        - Organizers and admins
+        """
+        # Using separate permission classes instead of the | operator
+        return [IsAttendee(), IsOrganizerOrAdmin()]
+
+    def check_object_permissions(self, request, obj):
+        """Check if attendee has permission to access their own profile."""
+        super().check_object_permissions(request, obj)
+
+        # Organizers and admins can access any attendee profile
+        if request.user.role and request.user.role.display in [
+            UserRoles.ORGANIZER,
+            UserRoles.ADMIN,
+        ]:
+            return
+
+        # Attendees can only access their own profile
+        if obj.user == request.user:
+            return
+
+        # Otherwise, deny permission
+        self.permission_denied(
+            request,
+            message="You don't have permission to access this profile.",
+        )
 
 
 @extend_schema(
