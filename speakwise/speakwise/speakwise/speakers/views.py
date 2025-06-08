@@ -62,6 +62,10 @@ class SpeakerProfileDetail(generics.RetrieveUpdateDestroyAPIView):
         """
         super().check_object_permissions(request, obj)
 
+        # Skip permission check for GET requests (they're already allowed by AllowAny)
+        if request.method == "GET":
+            return
+
         # If user has organizer or admin role, they're already allowed
         if (
             hasattr(request.user, "role")
@@ -71,7 +75,7 @@ class SpeakerProfileDetail(generics.RetrieveUpdateDestroyAPIView):
             return
 
         # If user is the speaker of this profile, allow access
-        if obj.user == request.user:
+        if obj.speaker_user == request.user:
             return
 
         # Otherwise, deny access
