@@ -100,9 +100,8 @@ class UserLoginView(APIView):
             try:
                 refresh = RefreshToken.for_user(user)
                 serializer = UserSerializer(user)
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.debug("LOGIN RESPONSE USER DATA: %s", serializer.data)
+                print("LOGIN RESPONSE USER DATA:", serializer.data)  # Debug print
+            except user.DoesNotExist as err:
                 return Response(data=str(err), status=status.HTTP_400_BAD_REQUEST)
             return Response(
                 {

@@ -11,11 +11,9 @@ from rest_framework.views import APIView
 from speakwise.attendees.models import Attendee
 from speakwise.attendees.serializers import AttendeeSerializer
 from speakwise.attendees.serializers import VerifyAttendeeWithEmailSerializer
+from speakwise.authentication.permissions import IsAttendee
+from speakwise.authentication.permissions import IsOrganizerOrAdmin
 from speakwise.organizers.models import AttendanceEmails
-from speakwise.authentication.permissions import (
-    IsAttendee,
-    IsOrganizerOrAdmin,
-)
 from speakwise.users.choices import UserRoles
 
 

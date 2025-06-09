@@ -1,90 +1,84 @@
-"""Custom permission classes for role-based access control."""
+"""Authentication permissions module."""
 
 from rest_framework.permissions import BasePermission
-
-from speakwise.users.choices import UserRoles
 
 
 class IsAttendee(BasePermission):
     """
-    Permission class to allow only users with attendee role.
+    Permission that allows access to attendees only.
     """
 
     def has_permission(self, request, view):
-        """Check if user has attendee role."""
-        return (
-            request.user.is_authenticated
-            and request.user.role is not None
-            and request.user.role.display == UserRoles.ATTENDEE
-        )
+        """Check if user has permission."""
+        if not request.user or not request.user.is_authenticated:
+            return False
+        
+        return request.user.user_type == "attendee"
 
 
 class IsSpeaker(BasePermission):
     """
-    Permission class to allow only users with speaker role.
+    Permission that allows access to speakers only.
     """
 
     def has_permission(self, request, view):
-        """Check if user has speaker role."""
-        return (
-            request.user.is_authenticated
-            and request.user.role is not None
-            and request.user.role.display == UserRoles.SPEAKER
-        )
+        """Check if user has permission."""
+        if not request.user or not request.user.is_authenticated:
+            return False
+        
+        return request.user.user_type == "speaker"
 
 
 class IsOrganizer(BasePermission):
     """
-    Permission class to allow only users with organizer role.
+    Permission that allows access to organizers only.
     """
 
     def has_permission(self, request, view):
-        """Check if user has organizer role."""
-        return (
-            request.user.is_authenticated
-            and request.user.role is not None
-            and request.user.role.display == UserRoles.ORGANIZER
-        )
-
-
-class IsAdmin(BasePermission):
-    """
-    Permission class to allow only users with admin role.
-    """
-
-    def has_permission(self, request, view):
-        """Check if user has admin role."""
-        return (
-            request.user.is_authenticated
-            and request.user.role is not None
-            and request.user.role.display == UserRoles.ADMIN
-        )
-
-
-class IsOrganizerOrAdmin(BasePermission):
-    """
-    Permission class to allow users with either organizer or admin roles.
-    """
-
-    def has_permission(self, request, view):
-        """Check if user has organizer or admin role."""
-        return (
-            request.user.is_authenticated
-            and request.user.role is not None
-            and request.user.role.display in [UserRoles.ORGANIZER, UserRoles.ADMIN]
-        )
+        """Check if user has permission."""
+        if not request.user or not request.user.is_authenticated:
+            return False
+        
+        return request.user.user_type == "organizer"
 
 
 class IsSpeakerOrOrganizerOrAdmin(BasePermission):
     """
-    Permission class to allow users with either speaker, organizer, or admin roles.
+    Permission that allows access to speakers, organizers, and admins.
     """
 
     def has_permission(self, request, view):
-        """Check if user has speaker, organizer, or admin role."""
-        return (
-            request.user.is_authenticated
-            and request.user.role is not None
-            and request.user.role.display
-            in [UserRoles.SPEAKER, UserRoles.ORGANIZER, UserRoles.ADMIN]
-        )
+        """Check if user has permission."""
+        if not request.user or not request.user.is_authenticated:
+            return False
+        
+        return request.user.user_type in ["speaker", "organizer", "admin"]
+
+
+class IsOrganizerOrAdmin(BasePermission):
+    """
+    Permission that allows access to organizers and admins only.
+    """
+
+    def has_permission(self, request, view):
+        """Check if user has permission."""
+        if not request.user or not request.user.is_authenticated:
+            return False
+        
+        return request.user.user_type in ["organizer", "admin"]
+
+
+class IsOwnerOrReadOnly(BasePermission):
+    """
+    Permission that allows owners to edit their own objects,
+    and read-only access to others.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        """Check if user has object-level permission."""
+        # Read permissions for any authenticated user
+        if request.method in ["GET", "HEAD", "OPTIONS"]:
+            return True
+
+        # Write permissions only to the owner
+        return obj.user == request.user
