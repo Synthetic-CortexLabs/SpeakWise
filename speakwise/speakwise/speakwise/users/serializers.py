@@ -40,6 +40,7 @@ class UserSerializer(WritableNestedModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
+        """Create a new user."""
         role_data = validated_data.pop("role", None)
         password = validated_data.pop("password")
         # Look up the UserRole by display value and assign to user

@@ -41,7 +41,6 @@ class UserListView(APIView):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        # serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -100,7 +99,6 @@ class UserLoginView(APIView):
             try:
                 refresh = RefreshToken.for_user(user)
                 serializer = UserSerializer(user)
-                print("LOGIN RESPONSE USER DATA:", serializer.data)  # Debug print
             except user.DoesNotExist as err:
                 return Response(data=str(err), status=status.HTTP_400_BAD_REQUEST)
             return Response(
@@ -128,8 +126,7 @@ class LogoutView(APIView):
         try:
             token = RefreshToken(refresh_token)
             # Only blacklist if the method exists (i.e., token_blacklist app is installed)
-            if hasattr(token, "blacklist"):
-                token.blacklist()
+            token.blacklist() if hasattr(token, "blacklist") else None
             # If not, just return success (client should remove tokens)
             return Response(status=status.HTTP_204_NO_CONTENT)
         except (TypeError, ValueError):
