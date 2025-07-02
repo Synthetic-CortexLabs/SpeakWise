@@ -9,21 +9,17 @@ from rest_framework import status
 from rest_framework.parsers import FormParser
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import AttendanceEmails
 from .models import Organizers
-from .serializers import FileUploadSerializer
+from .serializers import  AttendanceSerializer
 from .serializers import OrganizerSerializer
 from .services import FileHandler
-from speakwise.authentication.permissions import IsOrganizerOrAdmin
 from speakwise.authentication.permissions import (
-    IsOrganizer,
     IsOrganizerOrAdmin,
 )
-from speakwise.users.choices import UserRoles
 
 
 @extend_schema(
@@ -36,15 +32,16 @@ class OrganizerListCreateView(generics.ListCreateAPIView):
 
     queryset = Organizers.objects.all()
     serializer_class = OrganizerSerializer
+    permission_classes = [AllowAny]
 
-    def get_permissions(self):
-        """
-        GET requests can be made by anyone
-        POST requests only by admins (who can create organizers)
-        """
-        if self.request.method == "GET":
-            return [AllowAny()]
-        return [IsOrganizerOrAdmin()]
+    # def get_permissions(self):
+    #     """
+    #     GET requests can be made by anyone
+    #     POST requests only by admins (who can create organizers)
+    #     """
+        # if self.request.method == "GET":
+        #     return [AllowAny()]
+        # return [IsOrganizerOrAdmin()]
 
 
 @extend_schema(
@@ -63,7 +60,8 @@ class OrganizerDetailView(generics.RetrieveUpdateDestroyAPIView):
 class FileUploadViewCreatView(APIView):
     """File upload view."""
 
-    permission_classes = [IsOrganizerOrAdmin]
+    # permission_classes = [IsOrganizerOrAdmin]
+    permission_classes = [AllowAny]
     parser_classes = (
         MultiPartParser,
         FormParser,
@@ -75,10 +73,12 @@ class FileUploadViewCreatView(APIView):
         file_obj = request.FILES.get("file")
         event = request.data.get("event")
 
+        print(file_obj)
         # Process the file with your FileHandler
         file_handler = FileHandler()
 
         temp_file_path = file_handler.clean_file(file_obj)
+        print(temp_file_path)
 
         try:
             file_handler.extract_emails(temp_file_path, event=event)
@@ -88,15 +88,16 @@ class FileUploadViewCreatView(APIView):
 
         os.remove(temp_file_path)
         attendance_list = AttendanceEmails.objects.filter(event=event)
-        serializer = FileUploadSerializer(attendance_list, many=True)
+        serializer = AttendanceSerializer(data=attendance_list, many=True)
+        serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @extend_schema(responses=FileUploadSerializer(many=True))
+    @extend_schema(responses=AttendanceSerializer(many=True))
     def get(self, request):
         """Get all attendance emails."""
 
         emails = AttendanceEmails.objects.all()
-        serializer = FileUploadSerializer(emails, many=True)
+        serializer = AttendanceSerializer(emails, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -106,16 +107,17 @@ class FileUploadDetailview(APIView):
     permission_classes = [AllowAny]
 
     def get_object(self, pk):
+        """get attendance instance."""
         try:
             return AttendanceEmails.objects.get(pk=pk)
         except AttendanceEmails.DoesNotExist as err:
             raise Http404 from err
 
-    @extend_schema(responses={200: FileUploadSerializer})
+    @extend_schema(responses={200: AttendanceSerializer})
     def patch(self, request, pk=None):
         """update an email."""
         email = self.get_object(pk)
-        serializer = FileUploadSerializer(email, data=request.data, partial=True)
+        serializer = AttendanceSerializer(email, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)

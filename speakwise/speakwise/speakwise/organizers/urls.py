@@ -14,7 +14,7 @@ urlpatterns = [
         name="detail_view",
     ),
     path(
-        "organizers/attendance-list/",
+        "organizers/attendance-sheet/",
         views.FileUploadViewCreatView.as_view(),
         name="attendance-list",
     ),

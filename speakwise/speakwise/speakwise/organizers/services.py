@@ -23,7 +23,7 @@ class FileHandler:
                 except AttendanceEmails.DoesNotExist:
                     AttendanceEmails.objects.create(email=email, event=event)
             except EmailNotValidError:
-                raise ValueError("Email is not valid.")
+                raise ValueError("Email is not valid: ", email)
 
     def clean_file(self, file_obj):
         """clean uploaded file."""
@@ -47,7 +47,7 @@ class FileHandler:
         if not uploaded_file.endswith(".csv") and not uploaded_file.endswith(".xlsx"):
             raise ValueError("File is not a csv or excel file.")
 
-        """use pandas to extract emails."""
+        # use pandas to extract emails from a csv file
         if uploaded_file.endswith(".csv"):
             data_frame = pandas.read_csv(uploaded_file)
             for column in data_frame.columns:
@@ -55,6 +55,7 @@ class FileHandler:
                     _email_list = data_frame[column].tolist()
                     return self._save_extracted_email(_email_list, event=event)
 
+        # use pandas to extract emails from an excel file
         if uploaded_file.endswith(".xlsx"):
             data_frame = pandas.read_excel(uploaded_file)
             for column in data_frame.columns:

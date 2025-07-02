@@ -3,15 +3,27 @@
 from django.db import models
 from django.urls import reverse
 
-from speakwise.base.models import TimestampedModel
+from speakwise.base.models import TimestampedModel, SocialLink
 from speakwise.events.models import Event
 from speakwise.users.models import User
+
+
+class OrganizersSocialLinks(SocialLink):
+    """organizers social links."""
+
+    organizer = models.ForeignKey(
+        "organizers.Organizers",
+        on_delete=models.DO_NOTHING,
+        null=True,
+        related_name="organizers_social_accounts",
+    )
 
 
 class Organizers(TimestampedModel):
     """Organizer model."""
 
-    user_id = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user_id = models.OneToOneField(User, on_delete=models.CASCADE) #
+    # organizer must be a user.
     events = models.ForeignKey(
         Event,
         verbose_name=("events"),
@@ -23,8 +35,6 @@ class Organizers(TimestampedModel):
     avatar = models.ImageField(
         ("Avatar"),
         upload_to="organizers/avatars/",
-        height_field=None,
-        width_field=None,
         max_length=255,
         null=True,
     )
@@ -44,31 +54,6 @@ class Organizers(TimestampedModel):
         """Returns the absolute URL for the Organizer detail view."""
         return reverse("Organizer_detail", kwargs={"pk": self.pk})
 
-
-class SocialLinks(TimestampedModel):
-    """Social Links model."""
-
-    social_name = models.CharField(max_length=50, null=True)
-    social_link = models.URLField(max_length=200, null=True)
-    organizer = models.ForeignKey(
-        Organizers,
-        on_delete=models.DO_NOTHING,
-        related_name="organizers_social_accounts",
-        null=True,
-    )
-
-    class Meta:
-        """meta options."""
-
-        ordering = ["social_name"]
-        db_table = "Social Link "
-        verbose_name = "Social Link"
-        verbose_name_plural = "Social Links"
-
-    def __str__(self) -> str:
-        """Return social name and social link."""
-        if self.social_name:
-            return f"{self.social_name} ({self.social_link})"
 
 class AttendanceEmails(TimestampedModel):
     """Model for storing event attendance emails."""
