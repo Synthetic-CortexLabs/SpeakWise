@@ -14,7 +14,7 @@ from rest_framework.views import APIView
 
 from .models import AttendanceEmails
 from .models import Organizers
-from .serializers import  AttendanceSerializer
+from .serializers import AttendanceSerializer
 from .serializers import OrganizerSerializer
 from .services import FileHandler
 from speakwise.authentication.permissions import (
@@ -34,14 +34,14 @@ class OrganizerListCreateView(generics.ListCreateAPIView):
     serializer_class = OrganizerSerializer
     permission_classes = [AllowAny]
 
-    # def get_permissions(self):
-    #     """
-    #     GET requests can be made by anyone
-    #     POST requests only by admins (who can create organizers)
-    #     """
-        # if self.request.method == "GET":
-        #     return [AllowAny()]
-        # return [IsOrganizerOrAdmin()]
+    def get_permissions(self):
+        """
+        GET requests can be made by anyone
+        POST requests only by admins (who can create organizers)
+        """
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsOrganizerOrAdmin()]
 
 
 @extend_schema(
@@ -60,8 +60,7 @@ class OrganizerDetailView(generics.RetrieveUpdateDestroyAPIView):
 class FileUploadViewCreatView(APIView):
     """File upload view."""
 
-    # permission_classes = [IsOrganizerOrAdmin]
-    permission_classes = [AllowAny]
+    permission_classes = [IsOrganizerOrAdmin]
     parser_classes = (
         MultiPartParser,
         FormParser,
@@ -73,12 +72,9 @@ class FileUploadViewCreatView(APIView):
         file_obj = request.FILES.get("file")
         event = request.data.get("event")
 
-        print(file_obj)
         # Process the file with your FileHandler
         file_handler = FileHandler()
-
         temp_file_path = file_handler.clean_file(file_obj)
-        print(temp_file_path)
 
         try:
             file_handler.extract_emails(temp_file_path, event=event)
