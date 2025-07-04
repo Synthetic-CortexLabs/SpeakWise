@@ -5,6 +5,7 @@ from .serializers import EventSerializer, SessionSerializer
 from speakwise.speakers.serializers import SpeakerProfileSerializer
 
 
+# is this really necessary? I think we can add this to the serializers file and inherit from the EventSerializer as we did here.
 class EventWithGuestSpeakersSerializer(EventSerializer):
     """Extended Event serializer that includes full speaker profile data."""
 

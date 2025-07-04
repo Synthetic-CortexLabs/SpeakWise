@@ -4,6 +4,7 @@ from django.db import models
 from speakwise.base.models import TimestampedModel
 
 
+# think this model is duplicated.
 class Tag(TimestampedModel):
     """A model for event tags in the SpeakWise application."""
 
@@ -15,6 +16,7 @@ class Tag(TimestampedModel):
         return self.name
 
 
+# we could also remve dead code.
 """
 Add this to events/models.py:
 
