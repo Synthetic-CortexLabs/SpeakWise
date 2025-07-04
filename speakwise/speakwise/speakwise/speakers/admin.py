@@ -21,8 +21,8 @@ class SpeakerProfileAdmin(admin.ModelAdmin):
 
 class SpeakerSocialLinkAdmin(admin.ModelAdmin):
     """Admin view for the SpeakerSocialLink model."""
-    list_display = ("speaker", "social_name", "social_url")
-    search_fields = ('speaker__user__username', 'social_name', 'social_url')
+    list_display = ("speaker", "social_name", "social_link")
+    search_fields = ('speaker__user__username', 'social_name', 'social_link')
     list_filter = ('speaker',)
     ordering = ("-created_at",)
 

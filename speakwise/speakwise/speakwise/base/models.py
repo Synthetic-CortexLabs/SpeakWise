@@ -27,20 +27,10 @@ class TimestampedModel(models.Model):
 
 
 class SocialLink(TimestampedModel):
-    """Abstract base model for storing social media links.
-
-    Base class that provides common fields and functionality for
-    social media links across different model types.
-
-    Attributes:
-        social_name (CharField): Name of social media platform
-        social_url (URLField): Full URL to social media profile
-        is_active (BooleanField): Whether link is currently active
-        display_order (IntegerField): Order for display sorting
-    """
+    """Abstract base model for storing social media links."""
 
     social_name = models.CharField(max_length=50)
-    social_url = models.URLField()
+    social_link = models.URLField()
     is_active = models.BooleanField(default=True)
     display_order = models.IntegerField(default=0)
 
@@ -55,6 +45,6 @@ class SocialLink(TimestampedModel):
 
     def clean(self) -> None:
         """Validate social link data."""
-        if not self.social_url.startswith(("http://", "https://")):
-            msg = "Social URL must start with http:// or https://"
+        if not self.social_url.startswith(("https://", "https://")):
+            msg = "Social URL must start with https:// or https://"
             raise ValidationError(msg)

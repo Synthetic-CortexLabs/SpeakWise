@@ -3,25 +3,29 @@
 from drf_writable_nested.serializers import WritableNestedModelSerializer
 from rest_framework import serializers
 
-from speakwise.organizers.models import AttendanceEmails
-from speakwise.organizers.models import Organizers
-from speakwise.organizers.models import SocialLinks
+from speakwise.organizers.models import (
+    AttendanceEmails,
+    Organizers,
+    OrganizersSocialLinks,
+)
 
 
-class SocialLinksSerializer(serializers.ModelSerializer):
+class OrganizersSocialLinksSerializer(serializers.ModelSerializer):
     """social links serializer."""
 
     class Meta:
         """meta options."""
 
-        model = SocialLinks
+        model = OrganizersSocialLinks
         exclude = ["created_at", "updated_at", "organizer"]
 
 
 class OrganizerSerializer(WritableNestedModelSerializer):
     """organizers serializer."""
 
-    organizers_social_accounts = SocialLinksSerializer(many=True, required=False)
+    organizers_social_accounts = OrganizersSocialLinksSerializer(
+        many=True, required=False
+    )
 
     class Meta:
         """meta options."""
@@ -31,7 +35,7 @@ class OrganizerSerializer(WritableNestedModelSerializer):
         read_only_fields = ["id"]
 
 
-class FileUploadSerializer(serializers.ModelSerializer):
+class AttendanceSerializer(serializers.ModelSerializer):
     """file upload serializer."""
 
     class Meta:
