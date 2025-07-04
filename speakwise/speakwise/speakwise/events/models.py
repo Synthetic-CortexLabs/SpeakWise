@@ -1,4 +1,3 @@
-# filepath: /Users/macbook/Desktop/Devs/SpeakWise/speakwise/speakwise/speakwise/events/models.py
 """Models for the events app in the SpeakWise application."""
 
 from speakwise.base.models import TimestampedModel
