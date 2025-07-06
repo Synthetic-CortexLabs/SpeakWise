@@ -3,7 +3,10 @@
 from django.contrib.auth import authenticate
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.decorators import permission_classes
 from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -137,3 +140,22 @@ class LogoutView(APIView):
                 {"error": "Invalid token"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+
+@api_view(["GET", "PATCH"])
+@permission_classes([IsAuthenticated])
+def user_profile_me(request):
+    """Get or update the current user's profile."""
+    user = request.user
+
+    if request.method == "GET":
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    if request.method == "PATCH":
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return None

@@ -27,6 +27,19 @@ class Feedback(TimestampedModel):
     is_anonymous = models.BooleanField(default=False)
     is_editable = models.BooleanField(default=True)
 
+    class Meta:
+        """Meta options for Feedback model."""
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["session", "attendee"],
+                name="unique_feedback_per_attendee_session",
+            )
+        ]
+        verbose_name = "Feedback"
+        verbose_name_plural = "Feedbacks"
+        ordering = ["-created_at"]
+
     def __str__(self):
         """Return string representation."""
         return f"{self.session} - {self.attendee}"
@@ -34,9 +47,9 @@ class Feedback(TimestampedModel):
 
 @receiver(post_save, sender=Feedback)
 def update_editable_status(sender, instance, **kwargs):
-    """make editable status false after 24 hours of feedback submission."""
-
+    """Make editable status false after 24 hours of feedback submission."""
     while instance.created_at + timedelta(days=1) < timezone.now():
         instance.is_editable = False
         instance.save()
+        break
         break

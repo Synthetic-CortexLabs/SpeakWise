@@ -1,8 +1,11 @@
 """organizers views."""
 
+import csv
+import io
 import os
 
 from django.http import Http404
+from django.http import HttpResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from rest_framework import status
@@ -13,17 +16,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from speakwise.authentication.permissions import IsOrganizer
+from speakwise.authentication.permissions import IsOrganizerOrAdmin
+from speakwise.users.choices import UserRoles
+
 from .models import AttendanceEmails
 from .models import Organizers
 from .serializers import FileUploadSerializer
 from .serializers import OrganizerSerializer
 from .services import FileHandler
-from speakwise.authentication.permissions import IsOrganizerOrAdmin
-from speakwise.authentication.permissions import (
-    IsOrganizer,
-    IsOrganizerOrAdmin,
-)
-from speakwise.users.choices import UserRoles
 
 
 @extend_schema(
