@@ -1,0 +1,179 @@
+name: Django CI/CD Pipeline
+
+on:
+  push:
+    branches: ["main", "dev"]
+  pull_request:
+    branches: ["main", "dev"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install black flake8 coverage pillow
+      env:
+        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+    - name: Run Black Formatter and Check for Changes
+      id: black
+      run: |
+        cd backend
+        black .  # Automatically reformat code
+        git diff --quiet || echo "changes_detected" > ../black_changes.log  # Log if Black made changes
+      continue-on-error: true  # Continue even if Black makes changes
+
+    - name: Run Flake8 Linter and Check for Issues
+      id: flake8
+      run: |
+        cd backend
+        flake8 . || echo "issues_detected" > ../flake8_issues.log  # Log if Flake8 finds issues
+
+    - name: Create Pull Request for Formatting and Linting Issues
+      if: |
+        steps.black.outputs.changes_detected == 'true' || steps.flake8.outputs.issues_detected == 'true'
+      uses: peter-evans/create-pull-request@v5
+      with:
+        token: ${{ secrets.SPEAKWISE }}
+        branch: auto-format/dev  # Branch where changes are pushed
+        base: dev  # Target branch for the PR
+        title: "Auto-format and lint fixes with Black and Flake8"
+        body: |
+          This PR contains auto-formatted code using Black and resolves Flake8 linting issues.
+          Please review the changes before merging into dev.
+        commit-message: "Auto-format code with Black and fix Flake8 issues"
+        labels: "auto-format, black, flake8, CI"
+
+    - name: Database Migration Workflow
+      run: |
+        cd backend
+        # Apply migrations
+        python manage.py migrate
+        # Validate rollbacks
+        python manage.py migrate zero  # Rollback all migrations
+        python manage.py migrate  # Reapply all migrations
+        # Rollback specific app as an example
+        python manage.py migrate speakwise zero
+        python manage.py migrate speakwise  # Migrate specific app forward again
+      env:
+        DJANGO_SETTINGS_MODULE: speakwise.settings
+        PYTHONPATH: ${{ github.workspace }}/backend
+
+    - name: Run Tests with Coverage
+      run: |
+        cd backend
+        coverage run --source='.' manage.py test  # Run tests with coverage
+        coverage report -m  # Generate test coverage report
+      env:
+        DJANGO_SETTINGS_MODULE: speakwise.settings
+        PYTHONPATH: ${{ github.workspace }}/backend
+
+    - name: Upload Coverage Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: backend/htmlcov/  # Upload coverage report for review if needed
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v4
+
+    # Deploy to Staging on 'dev' branch
+    - name: Deploy to Staging
+      if: github.ref == 'refs/heads/dev'
+      env:
+        STAGING_HOST: ${{ secrets.STAGING_HOST }}
+        STAGING_USER: ${{ secrets.STAGING_USER }}
+        STAGING_KEY: ${{ secrets.STAGING_KEY }}
+      run: |
+        echo "$STAGING_KEY" > ~/.ssh/staging_key
+        chmod 600 ~/.ssh/staging_key
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/staging_key $STAGING_USER@$STAGING_HOST "
+          cd /path/to/staging/app &&
+          git pull origin dev &&
+          source /path/to/venv/bin/activate &&
+          pip install -r requirements.txt &&
+          python manage.py migrate &&
+          python manage.py collectstatic --noinput &&
+          sudo systemctl restart your-staging-service
+        "
+
+    # Deploy to Production on 'main' branch
+    - name: Deploy to Production
+      if: github.ref == 'refs/heads/main'
+      env:
+        PRODUCTION_HOST: ${{ secrets.PRODUCTION_HOST }}
+        PRODUCTION_USER: ${{ secrets.PRODUCTION_USER }}
+        PRODUCTION_KEY: ${{ secrets.PRODUCTION_KEY }}
+      run: |
+        echo "$PRODUCTION_KEY" > ~/.ssh/production_key
+        chmod 600 ~/.ssh/production_key
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/production_key $PRODUCTION_USER@$PRODUCTION_HOST "
+          cd /path/to/production/app &&
+          git pull origin main &&
+          source /path/to/venv/bin/activate &&
+          pip install -r requirements.txt &&
+          python manage.py migrate &&
+          python manage.py collectstatic --noinput &&
+          sudo systemctl restart your-production-service
+        "
+
+  # Uncomment the Docker and deployment steps when ready to set up containerization and hosting.
+
+  # docker:
+  #   runs-on: ubuntu-latest
+  #   needs: build  # Depends on successful completion of build job
+
+  #   steps:
+  #   - uses: actions/checkout@v4
+    
+  #   - name: Set up Docker Buildx
+  #     uses: docker/setup-buildx-action@v2
+
+  #   - name: Log in to DockerHub
+  #     uses: docker/login-action@v2
+  #     with:
+  #       username: ${{ secrets.DOCKER_USERNAME }}
+  #       password: ${{ secrets.DOCKER_PASSWORD }}
+
+  #   - name: Build Docker Image
+  #     run: |
+  #       docker build -t ${{ secrets.DOCKER_USERNAME }}/speakwise:latest .
+  #       docker push ${{ secrets.DOCKER_USERNAME }}/speakwise:latest
+
+  #   - name: Run Vulnerability Scan
+  #     uses: aquasecurity/trivy-action@v0.0.16
+  #     with:
+  #       image-ref: ${{ secrets.DOCKER_USERNAME }}/speakwise:latest  # Scans for vulnerabilities
+
+  #   - name: Deploy to Staging
+  #     if: github.ref == 'refs/heads/dev'
+  #     run: |
+  #       # Add deployment commands to staging environment
+  #       echo "Deploying to staging..."
+  #       # Example: ssh user@staging-server 'docker pull ... && docker run ...'
+
+  #   - name: Deploy to Production
+  #     if: github.ref == 'refs/heads/main'
+  #     run: |
+  #       # Add deployment commands to production environment
+  #       echo "Deploying to production..."
+  #       # Example: ssh user@production-server 'docker pull ... && docker run ...'
