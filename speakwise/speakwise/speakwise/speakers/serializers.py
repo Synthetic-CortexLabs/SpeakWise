@@ -40,7 +40,7 @@ class SpeakerSocialLinkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SpeakerSocialLink
-        fields = ["id", "social_name", "social_url", "is_active", "display_order"]
+        exclude = ["created_at", "updated_at"]
 
 
 class SpeakerProfileSerializer(serializers.ModelSerializer):
