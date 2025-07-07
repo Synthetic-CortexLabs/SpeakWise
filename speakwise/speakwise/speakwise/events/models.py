@@ -39,16 +39,10 @@ class Event(TimestampedModel):
         blank=True, default="", help_text="Detailed description for event page"
     )
     website = models.URLField(max_length=255, blank=True, default="")
-    location = models.CharField(max_length=255, blank=True, default="")
+    location = models.ForeignKey("Location", on_delete=models.DO_NOTHING, null=True, related_name="event_location")
     start_date_time = models.DateTimeField(default=timezone.now, null=True)
     end_date_time = models.DateTimeField(default=timezone.now, null=True)
     is_active = models.BooleanField(default=False)
-    country = models.ForeignKey(
-        "Country",
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="events",
-    )
     tags = models.ManyToManyField(Tag, related_name="events", blank=True)
     
     # Add organizer relationship
@@ -72,27 +66,29 @@ class Event(TimestampedModel):
         storage=RawMediaCloudinaryStorage(),
     )
 
+class Location(TimestampedModel):
+    """location models for events."""
 
-class Region(TimestampedModel):
-    """A model for regions in the SpeakWise application."""
-
-    name = models.CharField(max_length=255, null=True)
-
-    def __str__(self):
-        """Return a string representation of the model."""
-        return self.name
-
+    venue = models.CharField(max_length=255, unique=True)
+    address = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=255, blank=True)
+    state = models.CharField(max_length=255, blank=True)
+    postal_code = models.CharField(max_length=255, blank=True)
+    latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
+    description = models.TextField(null=True)
+    country = models.ForeignKey(
+        "Country",
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="location_country",
+    )
 
 class Country(TimestampedModel):
     """A model for countries in the SpeakWise application."""
 
     name = models.CharField(max_length=255, null=True)
-    region = models.ForeignKey(
-        Region,
-        on_delete=models.CASCADE,
-        null=True,
-        related_name="countries",
-    )
+    code = models.CharField(max_length=255, null=True)
 
     class Meta:
         verbose_name_plural = "Countries"

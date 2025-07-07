@@ -3,24 +3,31 @@
 import base64
 
 from django.core.files.base import ContentFile
+from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
-
-from .models import Country
-from .models import Event
-from .models import Region
-from .models import Session
-from .models import Tag
+from speakwise.events.models import Event, Location, Country, Session, Tag
 
 
-class RegionSerializer(serializers.ModelSerializer):
+class CountrySerializer(serializers.ModelSerializer):
+    """Serializer for the Country model."""
+
+    class Meta:
+        """Meta class for the CountrySerializer."""
+
+        model = Country
+        exclude = ("created_at", "updated_at")
+
+
+
+class LocationSerializer(WritableNestedModelSerializer):
     """Serializer for the Region model."""
 
-    countries = serializers.StringRelatedField(many=True, read_only=True)
+    country = serializers.StringRelatedField(many=True, required=False)
 
     class Meta:
         """Meta class for the RegionSerializer."""
 
-        model = Region
+        model = Location
         exclude = ("created_at", "updated_at")
 
 
@@ -34,28 +41,15 @@ class TagSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "color")
 
 
-class CountrySerializer(serializers.ModelSerializer):
-    """Serializer for the Country model."""
-
-    region = RegionSerializer(read_only=True)
-    events = serializers.StringRelatedField(many=True, read_only=True)
-
-    class Meta:
-        """Meta class for the CountrySerializer."""
-
-        model = Country
-        exclude = ("created_at", "updated_at")
-
 
 class EventSerializer(serializers.ModelSerializer):
     """Serializer for the Event model."""
 
     event_image = serializers.ImageField(required=False, allow_null=True)
-    country = CountrySerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     website = serializers.URLField(required=False, allow_blank=True)
     short_description = serializers.CharField(required=False, allow_blank=True)
-
+    location = LocationSerializer(required=False)
     # Frontend-specific computed fields
     name = serializers.CharField(source="title", read_only=True)
     date = serializers.SerializerMethodField()
@@ -120,17 +114,6 @@ class EventSerializer(serializers.ModelSerializer):
             },
             "same_day": same_day,
         }
-
-    def get_attendees(self, obj):
-        """Get count of attendees for this event."""
-        # TODO: Implement when attendees model is connected
-        # For now, return a placeholder count
-        return 0
-
-    def get_speakers(self, obj):
-        """Get count of speakers for this event."""
-        # Count speakers linked through ManyToMany relationship with SpeakerProfile
-        return obj.speakers.count()
 
     def to_internal_value(self, data):
         """Handle base64 image encoding."""

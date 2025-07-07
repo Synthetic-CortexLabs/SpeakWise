@@ -3,23 +3,23 @@
 # Register your models here.
 from django.contrib import admin
 
-from speakwise.events.models import Country, Event, Region, Session, Tag
+from speakwise.events.models import Country, Event, Location, Session, Tag
 
 
 class CountryAdmin(admin.ModelAdmin):
     """Country admin."""
 
-    list_display = ("id", "name", "region")
-    search_fields = ("name", "region__name")
-    list_filter = ("created_at", "region")
+    list_display = ("id", "name", "code")
+    search_fields = ("name", "code")
+    list_filter = ("created_at", "code")
     ordering = ("-created_at",)
 
 
-class RegionAdmin(admin.ModelAdmin):
+class LocationAdmin(admin.ModelAdmin):
     """Region admin."""
 
-    list_display = ("id", "name")
-    search_fields = ("name",)
+    list_display = ("id", "venue")
+    search_fields = ("venue",)
     list_filter = ("created_at",)
     ordering = ("-created_at",)
 
@@ -32,14 +32,13 @@ class EventAdmin(admin.ModelAdmin):
         "title",
         "description",
         "location",
-        "country",
         "start_date_time",
         "end_date_time",
         "is_active",
         "get_tags",
     )
-    search_fields = ("title", "description", "location", "country__name", "tags__name")
-    list_filter = ("is_active", "start_date_time", "created_at", "country", "tags")
+    search_fields = ("title", "description", "location","tags__name")
+    list_filter = ("is_active", "start_date_time", "created_at","tags")
     ordering = ("-created_at",)
     date_hierarchy = "start_date_time"
     readonly_fields = ("created_at", "updated_at")
@@ -72,7 +71,7 @@ class TagAdmin(admin.ModelAdmin):
 
 # Register models with admin
 admin.site.register(Country, CountryAdmin)
-admin.site.register(Region, RegionAdmin)
+admin.site.register(Location, LocationAdmin)
 admin.site.register(Event, EventAdmin)
 admin.site.register(Session, SessionAdmin)
 admin.site.register(Tag, TagAdmin)
