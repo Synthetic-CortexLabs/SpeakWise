@@ -1,6 +1,8 @@
 """attendees admin."""
+
 from django.contrib import admin
 from speakwise.attendees.models import AttendanceCode, Attendee
+
 
 class AttendanceCodeAdmin(admin.ModelAdmin):
     """AttendanceCode admin."""
@@ -10,6 +12,7 @@ class AttendanceCodeAdmin(admin.ModelAdmin):
     list_filter = ("created_at",)
     ordering = ("-created_at",)
 
+
 class AttendeeAdmin(admin.ModelAdmin):
     """Attendee admin."""
 
@@ -17,6 +20,7 @@ class AttendeeAdmin(admin.ModelAdmin):
     search_fields = ("email", "first_name", "last_name")
     list_filter = ("is_verified",)
     ordering = ("-created_at",)
+
 
 admin.site.register(AttendanceCode, AttendanceCodeAdmin)
 admin.site.register(Attendee, AttendeeAdmin)

@@ -152,6 +152,7 @@ class SpeakerDashboard(TimestampedModel):
             return round(feedbacks.aggregate(models.Avg("rating"))["rating__avg"], 2)
         return 0.0
 
+
 class SpeakerSocialLink(SocialLink):
     """Model for speaker's social media profiles.
 

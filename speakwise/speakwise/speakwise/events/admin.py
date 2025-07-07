@@ -37,8 +37,8 @@ class EventAdmin(admin.ModelAdmin):
         "is_active",
         "get_tags",
     )
-    search_fields = ("title", "description", "location","tags__name")
-    list_filter = ("is_active", "start_date_time", "created_at","tags")
+    search_fields = ("title", "description", "location", "tags__name")
+    list_filter = ("is_active", "start_date_time", "created_at", "tags")
     ordering = ("-created_at",)
     date_hierarchy = "start_date_time"
     readonly_fields = ("created_at", "updated_at")

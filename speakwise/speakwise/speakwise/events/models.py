@@ -39,7 +39,12 @@ class Event(TimestampedModel):
         blank=True, default="", help_text="Detailed description for event page"
     )
     website = models.URLField(max_length=255, blank=True, default="")
-    location = models.ForeignKey("Location", on_delete=models.DO_NOTHING, null=True, related_name="event_location")
+    location = models.ForeignKey(
+        "Location",
+        on_delete=models.DO_NOTHING,
+        null=True,
+        related_name="event_location",
+    )
     start_date_time = models.DateTimeField(default=timezone.now, null=True)
     end_date_time = models.DateTimeField(default=timezone.now, null=True)
     is_active = models.BooleanField(default=False)
@@ -66,6 +71,7 @@ class Event(TimestampedModel):
         storage=RawMediaCloudinaryStorage(),
     )
 
+
 class Location(TimestampedModel):
     """location models for events."""
 
@@ -83,6 +89,7 @@ class Location(TimestampedModel):
         null=True,
         related_name="location_country",
     )
+
 
 class Country(TimestampedModel):
     """A model for countries in the SpeakWise application."""
@@ -115,7 +122,12 @@ class Session(TimestampedModel):
         related_name="sessions",
     )
     # location could be a model that contain country
-    location = models.CharField(max_length=255, null=True)
+    location = models.ForeignKey(
+        "Location",
+        on_delete=models.DO_NOTHING,
+        null=True,
+        related_name="session_location",
+    )
 
     # Connect to SpeakerProfile directly
     speaker = models.ForeignKey(

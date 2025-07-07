@@ -6,6 +6,7 @@ from django.core.files.base import ContentFile
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
 from speakwise.events.models import Event, Location, Country, Session, Tag
+from speakwise.speakers.serializers import SpeakerProfileSerializer
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -18,11 +19,10 @@ class CountrySerializer(serializers.ModelSerializer):
         exclude = ("created_at", "updated_at")
 
 
-
 class LocationSerializer(WritableNestedModelSerializer):
     """Serializer for the Region model."""
 
-    country = serializers.StringRelatedField(many=True, required=False)
+    country = CountrySerializer(required=False)
 
     class Meta:
         """Meta class for the RegionSerializer."""
@@ -39,7 +39,6 @@ class TagSerializer(serializers.ModelSerializer):
 
         model = Tag
         fields = ("id", "name", "color")
-
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -133,6 +132,7 @@ class SessionSerializer(serializers.ModelSerializer):
     """Serializer for the Session model."""
 
     speaker_details = serializers.SerializerMethodField()
+    location = LocationSerializer(required=False)
 
     class Meta:
         """Meta class for the SessionSerializer."""
@@ -147,3 +147,20 @@ class SessionSerializer(serializers.ModelSerializer):
 
             return SpeakerProfileSerializer(obj.speaker).data
         return None
+
+
+class EventWithGuestSpeakersSerializer(EventSerializer):
+    """Extended Event serializer that includes full speaker profile data."""
+
+    speaker_profiles = serializers.SerializerMethodField()
+    event_sessions = serializers.SerializerMethodField()
+
+    def get_speaker_profiles(self, obj):
+        """Get detailed speaker profiles for this event."""
+        speakers = obj.speakers.all()
+        return SpeakerProfileSerializer(speakers, many=True).data
+
+    def get_event_sessions(self, obj):
+        """Get sessions for this event with speaker details."""
+        sessions = obj.sessions.all()
+        return SessionSerializer(sessions, many=True).data
