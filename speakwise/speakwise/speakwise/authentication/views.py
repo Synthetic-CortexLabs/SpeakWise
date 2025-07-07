@@ -97,7 +97,7 @@ class SpeakerLoginView(LoginBaseClass):
     def get_extra_payload(self) -> dict:
         """Return the speaker data."""
         try:
-            admin = SpeakerProfile.objects.get(user=self.user)
+            admin = SpeakerProfile.objects.get(speaker_user=self.user)
         except SpeakerProfile.DoesNotExist as err:
             raise AuthenticationError from err
         serializer = SpeakerSerializer(admin)

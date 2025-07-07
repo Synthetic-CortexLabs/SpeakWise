@@ -22,6 +22,9 @@ class Attendee(TimestampedModel):
         null=True,
     )
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 class AttendanceCode(TimestampedModel):
     """Attendee code model."""

@@ -1,7 +1,4 @@
-"""organization test."""
-
 # tests/test_organizers.py
-
 from django.urls import reverse
 from rest_framework.test import APITestCase
 
@@ -9,7 +6,7 @@ from speakwise.events.models import Event
 from speakwise.users.models import User
 
 from .models import Organizers
-from .models import OrganizersSocialLinks
+from .models import SocialLinks
 
 
 class OrganizerTests(APITestCase):
@@ -22,7 +19,7 @@ class OrganizerTests(APITestCase):
         )
 
         # Create test social links
-        self.social = OrganizersSocialLinks.objects.create(
+        self.social = SocialLinks.objects.create(
             social_name="Twitter",
             social_link="https://twitter.com/test",
         )
