@@ -13,12 +13,6 @@ class TalkSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Talks
-        fields = [
-            "id",
-            "event_id",
-            "title",
-            "description",
-            "start_time",
-            "end_time",
-            "speaker_id",
-        ]
+        exclude = ["created_at", "updated_at"]
+
+

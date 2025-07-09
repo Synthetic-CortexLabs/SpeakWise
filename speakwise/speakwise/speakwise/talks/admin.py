@@ -1,4 +1,5 @@
-# Register your models here.
+"""talks admin."""
+
 from django.contrib import admin
 from speakwise.talks.models import Talks
 
