@@ -6,12 +6,12 @@ from datetime import timedelta
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
-from events.models import Event
+from speakwise.events.models import Event
 from rest_framework import status
 from rest_framework.test import APIClient
-from speakers.models import Speaker
-from talks.models import Talks
-from talks.serializers import TalkSerializer
+from speakwise.speakers.models import SpeakerProfile
+from speakwise.talks.models import Talks
+from speakwise.talks.serializers import TalkSerializer
 
 
 class TalksModelTest(TestCase):
@@ -25,7 +25,7 @@ class TalksModelTest(TestCase):
             start_date=datetime.now(),
             end_date=datetime.now() + timedelta(days=1),
         )
-        self.speaker = Speaker.objects.create(
+        self.speaker = SpeakerProfile.objects.create(
             user_id=self.user,
             twitter="test_twitter",
             organization="Test Organization",
@@ -59,7 +59,7 @@ class TalksAPITest(TestCase):
             # Provide a value for end_date if required
             end_date=datetime.now() + timedelta(days=1),
         )
-        self.speaker = Speaker.objects.create(
+        self.speaker = SpeakerProfile.objects.create(
             user_id=self.user,
             twitter="test_twitter",
             organization="Test Organization",

@@ -4,7 +4,7 @@ from django.db import models
 
 from speakwise.base.models import TimestampedModel
 from speakwise.events.models import Event
-from speakwise.speakers.models import SpeakerProfile  # Fixed import path
+from speakwise.speakers.models import SpeakerProfile
 
 
 class Talks(TimestampedModel):
@@ -13,11 +13,6 @@ class Talks(TimestampedModel):
         start_time (DateTimeField): The start time of the talk.
         end_time (DateTimeField): The end time of the talk.
         speaker_id (ManyToManyField): Reference to the associated speakers.
-    Methods:
-        __str__: Returns the title of the talk.
-
-        Returns:
-            _type_: _description_
     """
 
     event_id = models.ForeignKey(
