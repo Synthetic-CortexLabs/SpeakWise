@@ -54,7 +54,38 @@ class UserSerializer(WritableNestedModelSerializer):
         if role_data and role_data.get("display") == "attendee":
             from speakwise.attendees.models import Attendee
 
-            Attendee.objects.create(user=user)
-        # (You can add similar logic for Speaker/Organizer if needed)
+            # Create or get attendee with the user's email
+            attendee, created = Attendee.objects.get_or_create(
+                email=user.email,
+                defaults={
+                    "user": user,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                }
+            )
+            if not created:
+                # If attendee already exists, just associate it with the user
+                attendee.user = user
+                attendee.save()
+        
+        # Create SpeakerProfile if role is speaker
+        elif role_data and role_data.get("display") == "speaker":
+            from speakwise.speakers.models import SpeakerProfile
+
+            # Create speaker profile for the user
+            SpeakerProfile.objects.create(
+                speaker_user=user,
+                long_bio="",  # Required field, set to empty initially
+            )
+        
+        # Create OrganizerProfile if role is organizer
+        elif role_data and role_data.get("display") == "organizer":
+            from speakwise.organizers.models import Organizers
+
+            # Create organizer profile for the user
+            Organizers.objects.create(
+                user_id=user,
+                organization="",  # Required field, set to empty initially
+            )
 
         return user

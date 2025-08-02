@@ -1,25 +1,30 @@
 """organizers views."""
 
+import csv
+import io
 import os
 
 from django.http import Http404
+from django.http import HttpResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.parsers import FormParser
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from speakwise.authentication.permissions import IsOrganizer
+from speakwise.authentication.permissions import IsOrganizerOrAdmin
+from speakwise.users.choices import UserRoles
+
 from .models import AttendanceEmails
 from .models import Organizers
-from .serializers import AttendanceSerializer
+from .serializers import FileUploadSerializer
 from .serializers import OrganizerSerializer
 from .services import FileHandler
-from speakwise.authentication.permissions import (
-    IsOrganizerOrAdmin,
-)
 
 
 @extend_schema(
@@ -32,7 +37,6 @@ class OrganizerListCreateView(generics.ListCreateAPIView):
 
     queryset = Organizers.objects.all()
     serializer_class = OrganizerSerializer
-    permission_classes = [AllowAny]
 
     def get_permissions(self):
         """
@@ -74,6 +78,7 @@ class FileUploadViewCreatView(APIView):
 
         # Process the file with your FileHandler
         file_handler = FileHandler()
+
         temp_file_path = file_handler.clean_file(file_obj)
 
         try:
@@ -84,16 +89,15 @@ class FileUploadViewCreatView(APIView):
 
         os.remove(temp_file_path)
         attendance_list = AttendanceEmails.objects.filter(event=event)
-        serializer = AttendanceSerializer(data=attendance_list, many=True)
-        serializer.is_valid(raise_exception=True)
+        serializer = FileUploadSerializer(attendance_list, many=True)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    @extend_schema(responses=AttendanceSerializer(many=True))
+    @extend_schema(responses=FileUploadSerializer(many=True))
     def get(self, request):
         """Get all attendance emails."""
 
         emails = AttendanceEmails.objects.all()
-        serializer = AttendanceSerializer(emails, many=True)
+        serializer = FileUploadSerializer(emails, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -103,17 +107,16 @@ class FileUploadDetailview(APIView):
     permission_classes = [AllowAny]
 
     def get_object(self, pk):
-        """get attendance instance."""
         try:
             return AttendanceEmails.objects.get(pk=pk)
         except AttendanceEmails.DoesNotExist as err:
             raise Http404 from err
 
-    @extend_schema(responses={200: AttendanceSerializer})
+    @extend_schema(responses={200: FileUploadSerializer})
     def patch(self, request, pk=None):
         """update an email."""
         email = self.get_object(pk)
-        serializer = AttendanceSerializer(email, data=request.data, partial=True)
+        serializer = FileUploadSerializer(email, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
