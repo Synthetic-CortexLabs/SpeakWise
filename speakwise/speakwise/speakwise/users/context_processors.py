@@ -1,3 +1,4 @@
+"""users context processor."""
 from django.conf import settings
 
 

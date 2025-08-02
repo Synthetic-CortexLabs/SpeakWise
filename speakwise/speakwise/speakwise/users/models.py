@@ -1,3 +1,5 @@
+"""users models."""
+
 from typing import ClassVar
 
 from django.contrib.auth.models import AbstractUser
@@ -55,4 +57,5 @@ class UserRole(TimestampedModel):
     )
 
     def __str__(self):
+        """Return user role display name."""
         return self.display or super().__str__()
