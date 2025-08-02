@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fbadf9ae-5349-4ab5-8d4c-576652380d14" name="Changes" comment="" />
+    <list default="true" id="fbadf9ae-5349-4ab5-8d4c-576652380d14" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/speakwise/base/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/speakwise/base/models.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,7 +36,7 @@
     "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "ezra/talks-refactor",
+    "git-widget-placeholder": "dev",
     "junie.onboarding.icon.badge.shown": "true",
     "last_opened_file_path": "/home/ezi/workspace/SpeakWise/speakwise/speakwise",
     "node.js.detected.package.eslint": "true",

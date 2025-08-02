@@ -55,6 +55,7 @@ class SocialLink(TimestampedModel):
 
     def clean(self) -> None:
         """Validate social link data."""
-        if not self.social_url.startswith(("http://", "https://")):
-            msg = "Social URL must start with http:// or https://"
+        if not self.social_link.startswith(("https://", "https://")):
+            msg = "Social URL must start with https:// or https://"
+
             raise ValidationError(msg)
