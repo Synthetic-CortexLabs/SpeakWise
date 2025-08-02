@@ -1,7 +1,7 @@
 # filepath: /Users/macbook/Desktop/Devs/SpeakWise/speakwise/speakwise/speakwise/events/models.py
 """Models for the events app in the SpeakWise application."""
 
-from base.models import TimestampedModel
+from speakwise.base.models import TimestampedModel
 from cloudinary.models import CloudinaryField
 from cloudinary_storage.storage import RawMediaCloudinaryStorage
 from django.db import models

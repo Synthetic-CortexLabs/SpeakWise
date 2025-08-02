@@ -34,11 +34,11 @@ class SpeakerProfileList(generics.ListCreateAPIView):
 
     def get_permissions(self):
         """
-        GET request is available to everyone
+        GET request requires authentication (logged-in users only)
         POST requests are available to organizers and admins
         """
         if self.request.method == "GET":
-            return [AllowAny()]
+            return [IsAuthenticated()]
         return [IsOrganizerOrAdmin()]
 
 

@@ -1,7 +1,7 @@
 """Models for event tagging in the SpeakWise application."""
 
 from django.db import models
-from base.models import TimestampedModel
+from speakwise.base.models import TimestampedModel
 
 
 class Tag(TimestampedModel):
