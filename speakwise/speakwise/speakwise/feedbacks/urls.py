@@ -13,4 +13,9 @@ urlpatterns = [
         views.FeedbackDetailView.as_view(),
         name="detail_view",
     ),
+    path(
+        "speaker/<int:speaker_id>/",
+        views.speaker_feedback_view,
+        name="speaker_feedback",
+    ),
 ]

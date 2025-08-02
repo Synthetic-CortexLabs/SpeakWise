@@ -57,6 +57,8 @@ class Event(TimestampedModel):
 
     document = models.FileField(
         upload_to="documents/",
+        blank=True,
+        null=True,
         storage=RawMediaCloudinaryStorage(),
     )
 

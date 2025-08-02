@@ -1,5 +1,6 @@
 """attendees views."""
 
+from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView
@@ -97,3 +98,16 @@ class ValidateAttendeeView(APIView):
             )
         # redirect attendee to feedback page to give feedback
         return Response(email, status=200)
+
+
+@extend_schema(responses=AttendeeSerializer)
+class AttendeeByEmailView(APIView):
+    """Get attendee by email address."""
+
+    permission_classes = [AllowAny]
+
+    def get(self, request, email):
+        """Get attendee by email address."""
+        attendee = get_object_or_404(Attendee, email=email)
+        serializer = AttendeeSerializer(attendee)
+        return Response(serializer.data, status=status.HTTP_200_OK)
