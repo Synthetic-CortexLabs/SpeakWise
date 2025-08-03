@@ -5,19 +5,21 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from speakwise.authentication.permissions import IsSpeaker
+
 from .models import SkillTag, SpeakerProfile
 from .serializers import SkillTagSerializer, SpeakerProfileSerializer
 
 
 @api_view(["GET", "PATCH"])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, IsSpeaker])
 def speaker_profile_me(request):
     """Get or update the current speaker's profile."""
     try:
         speaker_profile = SpeakerProfile.objects.get(speaker_user=request.user)
     except SpeakerProfile.DoesNotExist:
         return Response(
-            {"error": "Speaker profile not found"},
+            {"error": "Speaker profile not found. Please contact admin."},
             status=status.HTTP_404_NOT_FOUND,
         )
 
@@ -38,7 +40,7 @@ def speaker_profile_me(request):
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, IsSpeaker])
 def speaker_upload_avatar(request):
     """Upload avatar for the current speaker."""
     try:

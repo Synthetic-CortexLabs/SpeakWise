@@ -1,7 +1,7 @@
 # filepath: /Users/macbook/Desktop/Devs/SpeakWise/speakwise/speakwise/speakwise/events/models.py
 """Models for the events app in the SpeakWise application."""
 
-from base.models import TimestampedModel
+from speakwise.base.models import TimestampedModel
 from cloudinary.models import CloudinaryField
 from cloudinary_storage.storage import RawMediaCloudinaryStorage
 from django.db import models
@@ -50,6 +50,16 @@ class Event(TimestampedModel):
         related_name="events",
     )
     tags = models.ManyToManyField(Tag, related_name="events", blank=True)
+    
+    # Add organizer relationship
+    organizer = models.ForeignKey(
+        "organizers.Organizers",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="organized_events",
+        help_text="The organizer who created this event",
+    )
 
     def __str__(self):
         """Return a string representation of the model."""
