@@ -38,4 +38,4 @@ class FileUploadSerializer(serializers.ModelSerializer):
         """meta options."""
 
         model = AttendanceEmails
-        fields = ["email"]
+        fields = ["id", "email", "event", "is_given_feedback", "created_at"]

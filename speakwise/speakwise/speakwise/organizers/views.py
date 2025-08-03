@@ -74,7 +74,29 @@ class FileUploadViewCreatView(APIView):
         """Process the uploaded file."""
 
         file_obj = request.FILES.get("file")
-        event = request.data.get("event")
+        event_id = request.data.get("event")
+
+        if not file_obj:
+            return Response(
+                {"error": "No file provided"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if not event_id:
+            return Response(
+                {"error": "Event ID is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Get the event object
+        try:
+            from speakwise.events.models import Event
+            event = Event.objects.get(id=event_id)
+        except Event.DoesNotExist:
+            return Response(
+                {"error": "Event not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
         # Process the file with your FileHandler
         file_handler = FileHandler()
@@ -85,7 +107,10 @@ class FileUploadViewCreatView(APIView):
             file_handler.extract_emails(temp_file_path, event=event)
         except Exception as e:
             os.remove(temp_file_path)
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
         os.remove(temp_file_path)
         attendance_list = AttendanceEmails.objects.filter(event=event)
@@ -116,7 +141,9 @@ class FileUploadDetailview(APIView):
     def patch(self, request, pk=None):
         """update an email."""
         email = self.get_object(pk)
-        serializer = FileUploadSerializer(email, data=request.data, partial=True)
+        serializer = FileUploadSerializer(
+            email, data=request.data, partial=True
+        )
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
