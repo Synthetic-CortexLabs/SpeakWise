@@ -12,11 +12,10 @@ from rest_framework.response import Response
 
 from speakwise.authentication.permissions import IsAuthenticatedUser
 from speakwise.organizers.models import Organizers
-from .models import Country, Event, Region, Session, Tag
-from .serializers import (
+from speakwise.events.models import Country, Event, Session, Tag
+from speakwise.events.serializers import (
     CountrySerializer,
     EventSerializer,
-    RegionSerializer,
     SessionSerializer,
     TagSerializer,
 )
@@ -25,7 +24,7 @@ from .serializers import (
 def is_organizer_or_admin(user):
     """Helper method to check if user is organizer or admin."""
     return (
-        hasattr(user, 'role')
+        hasattr(user, "role")
         and user.role
         and user.role.display in ["organizer", "admin"]
     )
@@ -33,11 +32,7 @@ def is_organizer_or_admin(user):
 
 def is_organizer(user):
     """Helper method to check if user is organizer."""
-    return (
-        hasattr(user, 'role')
-        and user.role
-        and user.role.display == "organizer"
-    )
+    return hasattr(user, "role") and user.role and user.role.display == "organizer"
 
 
 @extend_schema(request=EventSerializer, responses={200: EventSerializer})
@@ -68,7 +63,7 @@ class EventListCreateAPIView(ListCreateAPIView):
     def perform_create(self, serializer):
         """Set the organizer when creating an event."""
         user = self.request.user
-        
+
         # Only organizers and admins can create events
         if is_organizer_or_admin(user):
             try:
@@ -82,7 +77,7 @@ class EventListCreateAPIView(ListCreateAPIView):
                         f"{user.first_name or ''} {user.last_name or ''}".strip()
                         or getattr(user, "username", None)
                         or getattr(user, "email", "Organizer")
-                    )
+                    ),
                 )
                 serializer.save(organizer=organizer)
         else:
@@ -107,9 +102,9 @@ class EventRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         user = self.request.user
         if user.is_authenticated:
             # For read operations, show all events
-            if self.request.method == 'GET':
+            if self.request.method == "GET":
                 return Event.objects.all()
-            
+
             # For write operations, only allow organizers to modify their own
             # events
             if is_organizer_or_admin(user):
@@ -137,24 +132,6 @@ class SessionRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     queryset = Session.objects.all()
     serializer_class = SessionSerializer
-    permission_classes = (AllowAny,)
-
-
-@extend_schema(request=RegionSerializer, responses={200: RegionSerializer})
-class RegionListCreateAPIView(ListCreateAPIView):
-    """View for listing and creating regions."""
-
-    queryset = Region.objects.all()
-    serializer_class = RegionSerializer
-    permission_classes = (AllowAny,)
-
-
-@extend_schema(responses={200: RegionSerializer})
-class RegionRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
-    """View for retrieving, updating, and deleting regions."""
-
-    queryset = Region.objects.all()
-    serializer_class = RegionSerializer
     permission_classes = (AllowAny,)
 
 

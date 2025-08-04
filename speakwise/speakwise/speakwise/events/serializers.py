@@ -16,7 +16,7 @@ class CountrySerializer(serializers.ModelSerializer):
         """Meta class for the CountrySerializer."""
 
         model = Country
-        exclude = ("created_at", "updated_at")
+        exclude = ["created_at", "updated_at"]
 
 
 class LocationSerializer(WritableNestedModelSerializer):
@@ -38,7 +38,7 @@ class TagSerializer(serializers.ModelSerializer):
         """Meta class for the TagSerializer."""
 
         model = Tag
-        fields = ("id", "name", "color")
+        exclude = ["created_at", "updated_at"]
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -60,7 +60,7 @@ class EventSerializer(serializers.ModelSerializer):
         """Meta class for the EventSerializer."""
 
         model = Event
-        fields = "__all__"
+        exclude = ["created_at", "updated_at"]
 
     def get_date(self, obj):
         """Format date range for frontend display - keeping for backward compatibility."""

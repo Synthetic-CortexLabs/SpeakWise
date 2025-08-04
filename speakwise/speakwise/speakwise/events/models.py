@@ -49,7 +49,7 @@ class Event(TimestampedModel):
     end_date_time = models.DateTimeField(default=timezone.now, null=True)
     is_active = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag, related_name="events", blank=True)
-    
+
     # Add organizer relationship
     organizer = models.ForeignKey(
         "organizers.Organizers",
