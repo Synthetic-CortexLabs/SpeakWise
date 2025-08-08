@@ -1,30 +1,26 @@
-"""Team serializers for the SpeakWise application."""
+"""team serializers."""
 
+from speakwise.teams.models import TeamMember, TeamSocial
 from rest_framework import serializers
 
-from .models import TeamMember
+
+class TeamSocialSerializer(serializers.ModelSerializer):
+    """Serializer for the TeamSocial model."""
+
+    class Meta:
+        model = TeamSocial
+        exclude = ["created_at", "updated_at"]
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):
     """Serializer for the TeamMember model."""
 
     avatar_url = serializers.SerializerMethodField()
+    social_links = TeamSocialSerializer(many=True, required=False)
 
     class Meta:
         model = TeamMember
-        fields = [
-            "id",
-            "name",
-            "role",
-            "short_bio",
-            "avatar",
-            "avatar_url",
-            "twitter_url",
-            "linkedin_url",
-            "github_url",
-            "website_url",
-            "display_order",
-        ]
+        exclude = ["created_at", "updated_at"]
 
     def get_avatar_url(self, obj):
         """Get the full URL for the avatar image."""

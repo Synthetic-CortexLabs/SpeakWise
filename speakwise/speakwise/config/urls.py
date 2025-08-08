@@ -32,7 +32,7 @@ urlpatterns = [
     path("api/", include("speakwise.organizers.urls", namespace="organizers")),
     path("api/", include("speakwise.users.urls", namespace="users")),
     path("api/", include(("speakwise.authentication.urls", "authentication"))),
-    path("api/", include("speakwise.base.urls")),
+    path("api/", include("speakwise.teams.urls", namespace="teams")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
 ]
