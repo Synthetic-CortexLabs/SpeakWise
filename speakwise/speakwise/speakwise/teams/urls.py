@@ -8,5 +8,5 @@ from speakwise.teams.views import TeamMemberListView
 app_name = "teams"
 
 urlpatterns = [
-    path("team/", TeamMemberListView.as_view(), name="team-list"),
+    path("teams/", TeamMemberListView.as_view(), name="team-list"),
 ]
