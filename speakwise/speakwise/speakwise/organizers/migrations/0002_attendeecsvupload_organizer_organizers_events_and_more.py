@@ -8,31 +8,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('events', '0003_initial'),
-        ('organizers', '0001_initial'),
+        ("organizers", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='attendeecsvupload',
-            name='organizer',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='csv_uploads', to=settings.AUTH_USER_MODEL),
-            preserve_default=False,
+            model_name="attendeecsvupload",
+            name="organizer",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="csv_uploads",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='organizers',
-            name='events',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='organizers', to='events.event', verbose_name='events'),
+            model_name="organizers",
+            name="events",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="organizers",
+                to="events.event",
+                verbose_name="events",
+            ),
         ),
         migrations.AddField(
-            model_name='organizers',
-            name='user_id',
-            field=models.OneToOneField(null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="organizers",
+            name="user_id",
+            field=models.OneToOneField(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='sociallinks',
-            name='organizer',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='organizers_social_accounts', to='organizers.organizers'),
+            model_name="sociallinks",
+            name="organizer",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.DO_NOTHING,
+                related_name="organizers_social_accounts",
+                to="organizers.organizers",
+            ),
         ),
     ]
