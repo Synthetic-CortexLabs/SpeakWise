@@ -72,6 +72,20 @@ class Event(TimestampedModel):
     )
 
 
+class Region(TimestampedModel):
+    """A model for regions in the SpeakWise application."""
+
+    name = models.CharField(max_length=255, null=True)
+    code = models.CharField(max_length=255, null=True)
+
+    class Meta:
+        verbose_name_plural = "Regions"
+
+    def __str__(self):
+        """Return a string representation of the model."""
+        return self.name
+
+
 class Location(TimestampedModel):
     """location models for events."""
 
@@ -83,6 +97,12 @@ class Location(TimestampedModel):
     latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
     longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
     description = models.TextField(null=True)
+    region = models.ForeignKey(
+        "Region",
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="location_region",
+    )
     country = models.ForeignKey(
         "Country",
         on_delete=models.CASCADE,

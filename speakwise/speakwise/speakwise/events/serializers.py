@@ -5,8 +5,18 @@ import base64
 from django.core.files.base import ContentFile
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
-from speakwise.events.models import Event, Location, Country, Session, Tag
+from speakwise.events.models import Event, Location, Country, Session, Tag, Region
 from speakwise.speakers.serializers import SpeakerProfileSerializer
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    """Serializer for the Region model."""
+
+    class Meta:
+        """Meta class for the RegionSerializer."""
+
+        model = Region
+        exclude = ["created_at", "updated_at"]
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -23,6 +33,7 @@ class LocationSerializer(WritableNestedModelSerializer):
     """Serializer for the Region model."""
 
     country = CountrySerializer(required=False)
+    region = RegionSerializer(required=False)
 
     class Meta:
         """Meta class for the RegionSerializer."""
