@@ -2,7 +2,10 @@
 
 from django.urls import path
 
-from .views import TeamMemberListView
+from speakwise.teams.views import TeamMemberListView
+
+
+app_name = "teams"
 
 urlpatterns = [
     path("team/", TeamMemberListView.as_view(), name="team-list"),

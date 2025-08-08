@@ -134,6 +134,7 @@ LOCAL_APPS = [
     "speakwise.base",
     "speakwise.attendees",
     "speakwise.authentication",
+    "speakwise.teams",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

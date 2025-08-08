@@ -62,6 +62,11 @@ class TeamMember(TimestampedModel):
             return self.avatar.url
         return None
 
+    class Meta:
+        """meta options."""
+
+        ordering = ["display_order", "name"]
+
 
 class TeamSocial(SocialLink):
     """team member social link."""
