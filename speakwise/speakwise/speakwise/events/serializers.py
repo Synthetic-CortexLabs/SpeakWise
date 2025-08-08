@@ -3,24 +3,31 @@
 import base64
 
 from django.core.files.base import ContentFile
+from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
-
-from .models import Country
-from .models import Event
-from .models import Region
-from .models import Session
-from .models import Tag
+from speakwise.events.models import Event, Location, Country, Session, Tag
+from speakwise.speakers.serializers import SpeakerProfileSerializer
 
 
-class RegionSerializer(serializers.ModelSerializer):
+class CountrySerializer(serializers.ModelSerializer):
+    """Serializer for the Country model."""
+
+    class Meta:
+        """Meta class for the CountrySerializer."""
+
+        model = Country
+        exclude = ["created_at", "updated_at"]
+
+
+class LocationSerializer(WritableNestedModelSerializer):
     """Serializer for the Region model."""
 
-    countries = serializers.StringRelatedField(many=True, read_only=True)
+    country = CountrySerializer(required=False)
 
     class Meta:
         """Meta class for the RegionSerializer."""
 
-        model = Region
+        model = Location
         exclude = ("created_at", "updated_at")
 
 
@@ -31,31 +38,17 @@ class TagSerializer(serializers.ModelSerializer):
         """Meta class for the TagSerializer."""
 
         model = Tag
-        fields = ("id", "name", "color")
-
-
-class CountrySerializer(serializers.ModelSerializer):
-    """Serializer for the Country model."""
-
-    region = RegionSerializer(read_only=True)
-    events = serializers.StringRelatedField(many=True, read_only=True)
-
-    class Meta:
-        """Meta class for the CountrySerializer."""
-
-        model = Country
-        exclude = ("created_at", "updated_at")
+        exclude = ["created_at", "updated_at"]
 
 
 class EventSerializer(serializers.ModelSerializer):
     """Serializer for the Event model."""
 
     event_image = serializers.ImageField(required=False, allow_null=True)
-    country = CountrySerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
     website = serializers.URLField(required=False, allow_blank=True)
     short_description = serializers.CharField(required=False, allow_blank=True)
-
+    location = LocationSerializer(required=False)
     # Frontend-specific computed fields
     name = serializers.CharField(source="title", read_only=True)
     date = serializers.SerializerMethodField()
@@ -67,7 +60,7 @@ class EventSerializer(serializers.ModelSerializer):
         """Meta class for the EventSerializer."""
 
         model = Event
-        fields = "__all__"
+        exclude = ["created_at", "updated_at"]
 
     def get_date(self, obj):
         """Format date range for frontend display - keeping for backward compatibility."""
@@ -121,17 +114,6 @@ class EventSerializer(serializers.ModelSerializer):
             "same_day": same_day,
         }
 
-    def get_attendees(self, obj):
-        """Get count of attendees for this event."""
-        # TODO: Implement when attendees model is connected
-        # For now, return a placeholder count
-        return 0
-
-    def get_speakers(self, obj):
-        """Get count of speakers for this event."""
-        # Count speakers linked through ManyToMany relationship with SpeakerProfile
-        return obj.speakers.count()
-
     def to_internal_value(self, data):
         """Handle base64 image encoding."""
         if data.get("event_image"):
@@ -150,6 +132,7 @@ class SessionSerializer(serializers.ModelSerializer):
     """Serializer for the Session model."""
 
     speaker_details = serializers.SerializerMethodField()
+    location = LocationSerializer(required=False)
 
     class Meta:
         """Meta class for the SessionSerializer."""
@@ -164,3 +147,20 @@ class SessionSerializer(serializers.ModelSerializer):
 
             return SpeakerProfileSerializer(obj.speaker).data
         return None
+
+
+class EventWithGuestSpeakersSerializer(EventSerializer):
+    """Extended Event serializer that includes full speaker profile data."""
+
+    speaker_profiles = serializers.SerializerMethodField()
+    event_sessions = serializers.SerializerMethodField()
+
+    def get_speaker_profiles(self, obj):
+        """Get detailed speaker profiles for this event."""
+        speakers = obj.speakers.all()
+        return SpeakerProfileSerializer(speakers, many=True).data
+
+    def get_event_sessions(self, obj):
+        """Get sessions for this event with speaker details."""
+        sessions = obj.sessions.all()
+        return SessionSerializer(sessions, many=True).data

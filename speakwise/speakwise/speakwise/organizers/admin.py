@@ -8,6 +8,7 @@ from speakwise.organizers.models import (
 )
 
 
+
 class OrganizerAdmin(admin.ModelAdmin):
     """Admin view for the Organizers model."""
 

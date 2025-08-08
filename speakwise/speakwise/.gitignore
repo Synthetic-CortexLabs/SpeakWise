@@ -282,3 +282,4 @@ webpack-stats.json
 .env
 .envs/*
 .todo
+.idea
