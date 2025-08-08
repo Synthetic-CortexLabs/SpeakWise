@@ -9,7 +9,7 @@ class TeamSocialSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TeamSocial
-        exclude = ["created_at", "updated_at"]
+        exclude = ["created_at", "updated_at", "team"]
 
 
 class TeamMemberSerializer(serializers.ModelSerializer):
