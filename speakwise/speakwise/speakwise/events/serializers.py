@@ -114,6 +114,37 @@ class EventSerializer(serializers.ModelSerializer):
             "same_day": same_day,
         }
 
+    def get_attendees(self, obj):
+        """Get attendee count for this event."""
+        try:
+            return obj.event_attendance_emails.count()
+        except AttributeError:
+            return 0
+
+    def get_speakers(self, obj):
+        """Get speakers for this event."""
+        # Get speakers through sessions
+        try:
+            speakers = []
+            for session in obj.sessions.all():
+                if session.speaker:
+                    name = (
+                        session.speaker.user.get_full_name()
+                        if session.speaker.user
+                        else "Unknown"
+                    )
+                    speaker_data = {
+                        "id": session.speaker.id,
+                        "name": name,
+                        "title": getattr(session.speaker, "title", ""),
+                        "company": getattr(session.speaker, "company", ""),
+                    }
+                    if speaker_data not in speakers:
+                        speakers.append(speaker_data)
+        except AttributeError:
+            speakers = []
+        return speakers
+
     def to_internal_value(self, data):
         """Handle base64 image encoding."""
         if data.get("event_image"):
