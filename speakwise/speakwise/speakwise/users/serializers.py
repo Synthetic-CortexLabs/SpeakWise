@@ -5,6 +5,11 @@ from rest_framework import serializers
 
 from speakwise.users.models import User
 from speakwise.users.models import UserRole
+from speakwise.users.models import UserRole
+from speakwise.attendees.models import Attendee
+from speakwise.speakers.models import SpeakerProfile
+from speakwise.organizers.models import Organizers
+from speakwise.users.choices import UserRoles
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
@@ -45,15 +50,13 @@ class UserSerializer(WritableNestedModelSerializer):
         password = validated_data.pop("password")
         # Look up the UserRole by display value and assign to user
         if role_data and "display" in role_data:
-            from speakwise.users.models import UserRole
 
-            role_obj = UserRole.objects.get(display=role_data["display"])
+            role_obj, _ = UserRole.objects.get_or_create(display=role_data["display"])
             validated_data["role"] = role_obj
         user = User.objects.create_user(password=password, **validated_data)
 
         # Create Attendee profile if role is attendee
-        if role_data and role_data.get("display") == "attendee":
-            from speakwise.attendees.models import Attendee
+        if role_data and role_data.get("display") == UserRoles.ATTENDEE.value:
 
             # Create or get attendee with the user's email
             attendee, created = Attendee.objects.get_or_create(
@@ -62,26 +65,24 @@ class UserSerializer(WritableNestedModelSerializer):
                     "user": user,
                     "first_name": user.first_name,
                     "last_name": user.last_name,
-                }
+                },
             )
             if not created:
                 # If attendee already exists, just associate it with the user
                 attendee.user = user
                 attendee.save()
-        
+
         # Create SpeakerProfile if role is speaker
-        elif role_data and role_data.get("display") == "speaker":
-            from speakwise.speakers.models import SpeakerProfile
+        elif role_data and role_data.get("display") == UserRoles.SPEAKER.value:
 
             # Create speaker profile for the user
             SpeakerProfile.objects.create(
                 speaker_user=user,
                 long_bio="",  # Required field, set to empty initially
             )
-        
+
         # Create OrganizerProfile if role is organizer
-        elif role_data and role_data.get("display") == "organizer":
-            from speakwise.organizers.models import Organizers
+        elif role_data and role_data.get("display") == UserRoles.ORGANIZER.value:
 
             # Create organizer profile for the user
             Organizers.objects.create(
