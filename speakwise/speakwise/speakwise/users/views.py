@@ -41,9 +41,11 @@ class UserListView(APIView):
     )
     def post(self, request):
         """Create a user."""
+        print(request.data)
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
