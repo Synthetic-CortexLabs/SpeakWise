@@ -1,20 +1,30 @@
 """Authentication views for the Nebula app."""
-
+import os
 from abc import ABC
 from abc import abstractmethod
 
 from dj_rest_auth.views import LoginView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework import status
+from rest_framework.permissions import AllowAny
+from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from speakwise.authentication.models import PasswordReset
 
 from speakwise.attendees.models import Attendee
 from speakwise.attendees.serializers import AttendeeSerializer
 from speakwise.speakers.models import SpeakerProfile
 from speakwise.speakers.serializers import SpeakerSerializer
 from speakwise.users.models import UserRole
-
+from speakwise.authentication.serializers import ResetPasswordSerializer, ResetPasswordRequestSerializer
 from .exceptions import AuthenticationError
 
+User = get_user_model()
 
 class LoginBaseClass(ABC, LoginView):
     """This class inherits the LoginView from the rest_auth package.
@@ -102,3 +112,66 @@ class SpeakerLoginView(LoginBaseClass):
             raise AuthenticationError from err
         serializer = SpeakerSerializer(admin)
         return {"speaker": serializer.data}
+
+class ResetPassword(generics.GenericAPIView):
+    serializer_class = ResetPasswordSerializer
+    permission_classes = []
+
+    def post(self, request, token):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        
+        new_password = data['new_password']
+        confirm_password = data['confirm_password']
+        
+        if new_password != confirm_password:
+            return Response({"error": "Passwords do not match"}, status=400)
+        
+        reset_obj = PasswordReset.objects.filter(token=token).first()
+        
+        if not reset_obj:
+            return Response({'error':'Invalid token'}, status=400)
+        
+        user = User.objects.filter(email=reset_obj.email).first()
+        
+        if user:
+            user.set_password(request.data['new_password'])
+            user.save()
+            
+            reset_obj.delete()
+            
+            return Response({'success':'Password updated'})
+        else: 
+            return Response({'error':'No user found'}, status=404)
+        
+
+
+
+class RequestPasswordReset(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ResetPasswordRequestSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        email = request.data['email']
+        user = User.objects.filter(email__iexact=email).first()
+
+        if user:
+            token_generator = PasswordResetTokenGenerator()
+            token = token_generator.make_token(user) 
+            reset = PasswordReset(email=email, token=token)
+            reset.save()
+
+            reset_url = f"{os.environ['PASSWORD_RESET_BASE_URL']}/{token}"
+
+            send_mail(
+                subject="Password Reset Request",
+                message=f"Click the link to reset your password: {reset_url}",
+                from_email=os.environ['DEFAULT_FROM_EMAIL'],
+                recipient_list=[email]
+            )
+
+            return Response({'success': 'We have sent you a link to reset your password'}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "User with credentials not found"}, status=status.HTTP_404_NOT_FOUND)
