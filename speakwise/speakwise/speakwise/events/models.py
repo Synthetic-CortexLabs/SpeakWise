@@ -1,11 +1,12 @@
-# filepath: /Users/macbook/Desktop/Devs/SpeakWise/speakwise/speakwise/speakwise/events/models.py
+# filepath: speakwise/events/models.py
 """Models for the events app in the SpeakWise application."""
 
-from speakwise.base.models import TimestampedModel
 from cloudinary.models import CloudinaryField
 from cloudinary_storage.storage import RawMediaCloudinaryStorage
 from django.db import models
 from django.utils import timezone
+
+from speakwise.base.models import TimestampedModel
 
 EVENT_IMAGE_UPLOAD = "event_images/"
 
@@ -27,7 +28,10 @@ class Event(TimestampedModel):
     title = models.CharField(max_length=255, unique=True)
     event_nickname = models.CharField(max_length=255, blank=True, default="")
     event_image = CloudinaryField(
-        "image", folder=EVENT_IMAGE_UPLOAD, null=True, blank=True
+        "image",
+        folder=EVENT_IMAGE_UPLOAD,
+        null=True,
+        blank=True,
     )
     short_description = models.CharField(
         max_length=255,
@@ -36,7 +40,9 @@ class Event(TimestampedModel):
         help_text="Brief description for event cards",
     )
     description = models.TextField(
-        blank=True, default="", help_text="Detailed description for event page"
+        blank=True,
+        default="",
+        help_text="Detailed description for event page",
     )
     website = models.URLField(max_length=255, blank=True, default="")
     location = models.ForeignKey(
@@ -82,7 +88,7 @@ class Location(TimestampedModel):
     postal_code = models.CharField(max_length=255, blank=True)
     latitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
     longitude = models.DecimalField(null=True, max_digits=9, decimal_places=6)
-    description = models.TextField(null=True)
+    description = models.TextField(blank=True)
     country = models.ForeignKey(
         "Country",
         on_delete=models.CASCADE,
@@ -94,8 +100,8 @@ class Location(TimestampedModel):
 class Country(TimestampedModel):
     """A model for countries in the SpeakWise application."""
 
-    name = models.CharField(max_length=255, null=True)
-    code = models.CharField(max_length=255, null=True)
+    name = models.CharField(max_length=255, blank=True)
+    code = models.CharField(max_length=255, blank=True)
 
     class Meta:
         verbose_name_plural = "Countries"
@@ -111,8 +117,8 @@ class Session(TimestampedModel):
     This model connects events with speakers and includes session-specific details.
     """
 
-    name = models.CharField(max_length=255, null=True)
-    description = models.TextField(null=True)
+    name = models.CharField(max_length=255, blank=True)
+    description = models.TextField(blank=True)
     start_date_time = models.DateTimeField(default=timezone.now, null=True)
     end_date_time = models.DateTimeField(default=timezone.now, null=True)
     event = models.ForeignKey(

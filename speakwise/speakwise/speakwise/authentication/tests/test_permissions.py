@@ -2,15 +2,17 @@
 
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIClient
 from rest_framework import status
+from rest_framework.test import APIClient
 
-from speakwise.users.models import User, UserRole
-from speakwise.users.choices import UserRoles
-from speakwise.events.models import Event, Session
-from speakwise.speakers.models import SpeakerProfile
 from speakwise.attendees.models import Attendee
+from speakwise.events.models import Event
+from speakwise.events.models import Session
 from speakwise.feedbacks.models import Feedback
+from speakwise.speakers.models import SpeakerProfile
+from speakwise.users.choices import UserRoles
+from speakwise.users.models import User
+from speakwise.users.models import UserRole
 
 
 class PermissionsTestCase(TestCase):
@@ -211,16 +213,20 @@ class PermissionsTestCase(TestCase):
             status.HTTP_401_UNAUTHORIZED,
         )
         self.assertEqual(
-            self.attendee_client.get(list_url).status_code, status.HTTP_403_FORBIDDEN
+            self.attendee_client.get(list_url).status_code,
+            status.HTTP_403_FORBIDDEN,
         )
         self.assertEqual(
-            self.speaker_client.get(list_url).status_code, status.HTTP_200_OK
+            self.speaker_client.get(list_url).status_code,
+            status.HTTP_200_OK,
         )
         self.assertEqual(
-            self.organizer_client.get(list_url).status_code, status.HTTP_200_OK
+            self.organizer_client.get(list_url).status_code,
+            status.HTTP_200_OK,
         )
         self.assertEqual(
-            self.admin_client.get(list_url).status_code, status.HTTP_200_OK
+            self.admin_client.get(list_url).status_code,
+            status.HTTP_200_OK,
         )
 
         # Test POST permissions
@@ -249,10 +255,12 @@ class PermissionsTestCase(TestCase):
             status.HTTP_401_UNAUTHORIZED,
         )
         self.assertEqual(
-            self.attendee_client.get(detail_url).status_code, status.HTTP_403_FORBIDDEN
+            self.attendee_client.get(detail_url).status_code,
+            status.HTTP_403_FORBIDDEN,
         )
         self.assertEqual(
-            self.speaker_client.get(detail_url).status_code, status.HTTP_200_OK
+            self.speaker_client.get(detail_url).status_code,
+            status.HTTP_200_OK,
         )
 
         # Test PATCH permissions
@@ -266,7 +274,8 @@ class PermissionsTestCase(TestCase):
             status.HTTP_403_FORBIDDEN,
         )
         self.assertEqual(
-            self.speaker_client.patch(detail_url, data).status_code, status.HTTP_200_OK
+            self.speaker_client.patch(detail_url, data).status_code,
+            status.HTTP_200_OK,
         )
 
         # Test DELETE permissions
@@ -282,7 +291,8 @@ class PermissionsTestCase(TestCase):
             status.HTTP_403_FORBIDDEN,
         )
         self.assertEqual(
-            self.speaker_client.delete(delete_url).status_code, status.HTTP_200_OK
+            self.speaker_client.delete(delete_url).status_code,
+            status.HTTP_200_OK,
         )
 
 

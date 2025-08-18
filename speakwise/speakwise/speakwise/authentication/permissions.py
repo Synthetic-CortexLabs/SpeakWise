@@ -12,11 +12,11 @@ class IsAttendee(BasePermission):
         """Check if user has permission."""
         if not request.user or not request.user.is_authenticated:
             return False
-        
+
         # Check if user has a role and if role display is attendee
-        if not hasattr(request.user, 'role') or not request.user.role:
+        if not hasattr(request.user, "role") or not request.user.role:
             return False
-            
+
         return request.user.role.display == "attendee"
 
 
@@ -29,11 +29,11 @@ class IsSpeaker(BasePermission):
         """Check if user has permission."""
         if not request.user or not request.user.is_authenticated:
             return False
-        
+
         # Check if user has a role and if role display is speaker
-        if not hasattr(request.user, 'role') or not request.user.role:
+        if not hasattr(request.user, "role") or not request.user.role:
             return False
-            
+
         return request.user.role.display == "speaker"
 
 
@@ -46,11 +46,11 @@ class IsOrganizer(BasePermission):
         """Check if user has permission."""
         if not request.user or not request.user.is_authenticated:
             return False
-        
+
         # Check if user has a role and if role display is organizer
-        if not hasattr(request.user, 'role') or not request.user.role:
+        if not hasattr(request.user, "role") or not request.user.role:
             return False
-            
+
         return request.user.role.display == "organizer"
 
 
@@ -63,11 +63,11 @@ class IsSpeakerOrOrganizerOrAdmin(BasePermission):
         """Check if user has permission."""
         if not request.user or not request.user.is_authenticated:
             return False
-        
+
         # Check if user has a role and if role display is organizer or admin
-        if not hasattr(request.user, 'role') or not request.user.role:
+        if not hasattr(request.user, "role") or not request.user.role:
             return False
-            
+
         return request.user.role.display in ["speaker", "organizer", "admin"]
 
 
@@ -80,14 +80,12 @@ class IsOrganizerOrAdmin(BasePermission):
         """Check if user has permission."""
         if not request.user or not request.user.is_authenticated:
             return False
-        
+
         # Check if user has a role and if role display is organizer or admin
-        if not hasattr(request.user, 'role') or not request.user.role:
+        if not hasattr(request.user, "role") or not request.user.role:
             return False
-            
+
         return request.user.role.display in ["organizer", "admin"]
-
-
 
 
 class IsOwnerOrReadOnly(BasePermission):
@@ -111,17 +109,20 @@ class IsAuthenticatedUser(BasePermission):
     Permission that allows access to all authenticated users: attendees, speakers,
     organizers, and admins.
     """
-    
+
     def has_permission(self, request, view):
         """Check if user has permission."""
         if not request.user or not request.user.is_authenticated:
             return False
-        
+
         # Check if user has a role
-        if not hasattr(request.user, 'role') or not request.user.role:
+        if not hasattr(request.user, "role") or not request.user.role:
             return False
-            
+
         # Allow access to any authenticated user with a valid role
         return request.user.role.display in [
-            "attendee", "speaker", "organizer", "admin"
+            "attendee",
+            "speaker",
+            "organizer",
+            "admin",
         ]

@@ -2,7 +2,9 @@
 
 import csv
 import io
+
 from django.utils import timezone
+
 from speakwise.attendees.models import Attendee
 
 

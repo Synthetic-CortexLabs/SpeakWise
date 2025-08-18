@@ -27,7 +27,7 @@ class TestModels(TestCase):
         assert event.title == "Test Event"
         assert event.description == "This is a test event."
         assert event.location == "Test Location"
-        assert event.is_active == True
+        assert event.is_active
         assert str(event) == "Test Event"
 
     def test_country_model(self):

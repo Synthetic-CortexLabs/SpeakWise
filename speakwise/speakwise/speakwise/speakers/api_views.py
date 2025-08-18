@@ -1,14 +1,17 @@
 """Speaker API views for profile management."""
 
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
+from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from speakwise.authentication.permissions import IsSpeaker
 
-from .models import SkillTag, SpeakerProfile
-from .serializers import SkillTagSerializer, SpeakerProfileSerializer
+from .models import SkillTag
+from .models import SpeakerProfile
+from .serializers import SkillTagSerializer
+from .serializers import SpeakerProfileSerializer
 
 
 @api_view(["GET", "PATCH"])

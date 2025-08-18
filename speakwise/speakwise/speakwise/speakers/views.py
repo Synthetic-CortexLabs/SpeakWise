@@ -1,13 +1,19 @@
 """Speaker views."""
 
-from rest_framework import generics
-from rest_framework import permissions
-from rest_framework.exceptions import NotFound
-from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from drf_spectacular.utils import extend_schema
+from rest_framework import generics
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
+from rest_framework.decorators import permission_classes
+from rest_framework.exceptions import NotFound
+from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from speakwise.authentication.permissions import IsOrganizerOrAdmin
+from speakwise.authentication.permissions import IsSpeaker
+from speakwise.authentication.permissions import IsSpeakerOrOrganizerOrAdmin
+from speakwise.users.choices import UserRoles
 
 from .models import SkillTag
 from .models import SpeakerDashboard
@@ -17,13 +23,6 @@ from .serializers import SkillTagSerializer
 from .serializers import SpeakerDashboardSerializer
 from .serializers import SpeakerProfileSerializer
 from .serializers import SpeakerSocialLinkSerializer
-from .serializers import SpeakerSerializer
-from speakwise.authentication.permissions import (
-    IsSpeaker,
-    IsOrganizerOrAdmin,
-    IsSpeakerOrOrganizerOrAdmin,
-)
-from speakwise.users.choices import UserRoles
 
 
 class SpeakerProfileList(generics.ListCreateAPIView):
@@ -83,7 +82,8 @@ class SpeakerProfileDetail(generics.RetrieveUpdateDestroyAPIView):
 
         # Otherwise, deny access
         self.permission_denied(
-            request, message="You don't have permission to edit this speaker profile."
+            request,
+            message="You don't have permission to edit this speaker profile.",
         )
 
 
@@ -189,7 +189,8 @@ class SpeakerDashboardView(generics.RetrieveAPIView):
 
         # Otherwise, deny access
         self.permission_denied(
-            request, message="You don't have permission to view this speaker dashboard."
+            request,
+            message="You don't have permission to view this speaker dashboard.",
         )
 
     @extend_schema(
@@ -224,7 +225,9 @@ def speaker_profile_me(request):
 
     elif request.method == "PATCH":
         serializer = SpeakerProfileSerializer(
-            speaker_profile, data=request.data, partial=True
+            speaker_profile,
+            data=request.data,
+            partial=True,
         )
         if serializer.is_valid():
             serializer.save()
@@ -246,7 +249,8 @@ def speaker_upload_avatar(request):
 
     if "avatar" not in request.FILES:
         return Response(
-            {"error": "No avatar file provided"}, status=status.HTTP_400_BAD_REQUEST
+            {"error": "No avatar file provided"},
+            status=status.HTTP_400_BAD_REQUEST,
         )
 
     speaker_profile.avatar = request.FILES["avatar"]

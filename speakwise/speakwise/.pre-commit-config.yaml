@@ -1,5 +1,5 @@
 exclude: '^docs/|/migrations/|devcontainer.json|frontend/|disabled_tests/|landing/|.json'
-default_stages: [commit]
+default_stages: [pre-commit]
 
 default_language_version:
   python: python3.12
@@ -42,14 +42,17 @@ repos:
     rev: v2.3.0
     hooks:
       - id: codespell
-        args: ["nebula"]
+        args: ["--ignore-words-list=assertIn,assertEqual,assertTrue,assertFalse,assertIsNone,assertIsNotNone,assertRaises,assertWarns,assertLogs,assertNoLogs,assertContains,assertNotContains,assertFormError,assertFormsetError,assertRedirects,assertTemplateUsed,assertTemplateNotUsed,assertQuerysetEqual,assertNumQueries,assertHTMLEqual,assertHTMLNotEqual,assertXMLEqual,assertXMLNotEqual,assertJSONEqual,assertJSONNotEqual,assertInHTML,assertNotInHTML,assertInXML,assertNotInXML,assertInJSON,assertNotInJSON,assertInYAML,assertNotInYAML,assertInTOML,assertNotInTOML,assertInINI,assertNotInINI,assertInCSV,assertNotInCSV,assertInTSV,assertNotInTSV"]
+        files: '^speakwise/.*\.(py|md|rst|txt)$'
         exclude: >
           (?x)^(
               .*\.json|
-              .*\.json.*|
               .*\.pyc|
               .*\.po|
-              \.tox
+              \.tox|
+              .*/migrations/|
+              .*/static/|
+              .*/staticfiles/
           )$
 
 # TODO: review this again

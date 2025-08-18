@@ -1,7 +1,9 @@
 """team serializers."""
 
-from speakwise.teams.models import TeamMember, TeamSocial
 from rest_framework import serializers
+
+from speakwise.teams.models import TeamMember
+from speakwise.teams.models import TeamSocial
 
 
 class TeamSocialSerializer(serializers.ModelSerializer):

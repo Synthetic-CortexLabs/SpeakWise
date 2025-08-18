@@ -1,4 +1,5 @@
 # ruff: noqa: E501
+import logging
 import os
 
 from .base import *  # noqa: F403
@@ -91,46 +92,46 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 
 
 # # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID")  # noqa: ERA001
+# AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID")
 # # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY") # noqa: ERA001
+# AWS_SECRET_ACCESS_KEY = env("DJANGO_AWS_SECRET_ACCESS_KEY")
 # # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME") # noqa: ERA001
+# AWS_STORAGE_BUCKET_NAME = env("DJANGO_AWS_STORAGE_BUCKET_NAME")
 # # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_QUERYSTRING_AUTH = False # noqa: ERA001
+# AWS_QUERYSTRING_AUTH = False
 # # DO NOT change these unless you know what you're doing.
-# _AWS_EXPIRY = 60 * 60 * 24 * 7 # noqa: ERA001
+# _AWS_EXPIRY = 60 * 60 * 24 * 7
 # # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 # AWS_S3_OBJECT_PARAMETERS = {
-#     "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate",# noqa: ERA001
+#     "CacheControl": f"max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate",
 # }
 # # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
 # AWS_S3_MAX_MEMORY_SIZE = env.int(
 #     "DJANGO_AWS_S3_MAX_MEMORY_SIZE",
-#     default=100_000_000,  # 100MB# noqa: ERA001
+#     default=100_000_000,  # 100MB
 # )
 # # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-# AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None) # noqa: ERA001
+# AWS_S3_REGION_NAME = env("DJANGO_AWS_S3_REGION_NAME", default=None)
 # # https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#cloudfront
-# AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None) # noqa: ERA001
-# aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com" # noqa: ERA001
+# AWS_S3_CUSTOM_DOMAIN = env("DJANGO_AWS_S3_CUSTOM_DOMAIN", default=None)
+# aws_s3_domain = AWS_S3_CUSTOM_DOMAIN or f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 # # STATIC & MEDIA
 # ------------------------
 
 
 # STORAGES = {
-#     "default": { # noqa: ERA001
-#         "BACKEND": "storages.backends.s3.S3Storage",# noqa: ERA001
-#         "OPTIONS": { # noqa: ERA001
-#             "location": "media", # noqa: ERA001
-#             "file_overwrite": False, # noqa: ERA001
+#     "default": {
+#         "BACKEND": "storages.backends.s3.S3Storage",
+#         "OPTIONS": {
+#             "location": "media",
+#             "file_overwrite": False,
 #         },
 #     },
-#     "staticfiles": { # noqa: ERA001
-#         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage", # noqa: ERA001
+#     "staticfiles": {
+#         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
 #     },
 # }
-# MEDIA_URL = f"https://{aws_s3_domain}/media/" # noqa: ERA001
+# MEDIA_URL = f"https://{aws_s3_domain}/media/"
 
 
 # Static files settings remain the same for WhiteNoise
@@ -263,7 +264,7 @@ SPECTACULAR_SETTINGS["SERVERS"] = [
 # Your stuff...
 # ------------------------------------------------------------------------------
 
+# Log which settings are being used
 
-print(
-    "Using PRODUCTION settings" if "production" in __file__ else "Using LOCAL settings",
-)
+logger = logging.getLogger(__name__)
+logger.info("Using PRODUCTION settings")

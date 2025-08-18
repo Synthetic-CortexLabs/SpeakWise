@@ -1,13 +1,13 @@
 """Tests for events app."""
 
 from django.test import TestCase
+from rest_framework import status
+from rest_framework.reverse import reverse
+from rest_framework.test import APIClient
 
 from speakwise.attendees.models import AttendanceCode
 from speakwise.attendees.models import Attendee
 from speakwise.events.models import Event
-from rest_framework import status
-from rest_framework.reverse import reverse
-from rest_framework.test import APIClient
 
 
 class TestModels(TestCase):
@@ -17,9 +17,9 @@ class TestModels(TestCase):
         """Test Event model."""
         attendee = Attendee.objects.create(email="user@mail.com")
         assert attendee.email == "user@mail.com"
-        assert attendee.first_name == None
-        assert attendee.last_name == None
-        assert attendee.is_verified == False
+        assert attendee.first_name is None
+        assert attendee.last_name is None
+        assert not attendee.is_verified
 
     def test_country_model(self):
         """Test Country model."""
@@ -32,9 +32,6 @@ class TestModels(TestCase):
         )
         attendee = Attendee.objects.create(email="admin@mail.com")
         att_code = AttendanceCode.objects.create(
-            attendee=attendee,
-            event=event,
-            code="2024SW",
             attendee=attendee,
             event=event,
             code="2024SW",

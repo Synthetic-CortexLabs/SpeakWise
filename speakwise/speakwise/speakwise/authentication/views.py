@@ -11,7 +11,6 @@ from speakwise.attendees.models import Attendee
 from speakwise.attendees.serializers import AttendeeSerializer
 from speakwise.speakers.models import SpeakerProfile
 from speakwise.speakers.serializers import SpeakerSerializer
-from speakwise.users.models import UserRole
 
 from .exceptions import AuthenticationError
 

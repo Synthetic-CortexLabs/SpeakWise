@@ -81,7 +81,7 @@ def speaker_feedback_view(request, speaker_id):
         feedback_data = []
         for feedback in feedback_queryset:
             feedback_data.append(
-                {  # noqa: PERF401
+                {
                     "id": feedback.id,
                     "session_name": feedback.session.name,
                     "event_name": feedback.session.event.title,
@@ -91,14 +91,10 @@ def speaker_feedback_view(request, speaker_id):
                     "content_depth": feedback.content_depth,
                     "speaker_knowledge": feedback.speaker_knowledge,
                     "practical_relevance": feedback.practical_relevance,
-                    "comment": (
-                        feedback.comment
-                        if not feedback.is_anonymous
-                        else feedback.comment
-                    ),
+                    "comment": (feedback.comment if not feedback.is_anonymous else feedback.comment),
                     "is_anonymous": feedback.is_anonymous,
                     "created_at": feedback.created_at,
-                }
+                },
             )
 
         return Response(
@@ -110,15 +106,17 @@ def speaker_feedback_view(request, speaker_id):
                     "avg_clarity": round(stats["avg_clarity"] or 0, 2),
                     "avg_content_depth": round(stats["avg_content_depth"] or 0, 2),
                     "avg_speaker_knowledge": round(
-                        stats["avg_speaker_knowledge"] or 0, 2
+                        stats["avg_speaker_knowledge"] or 0,
+                        2,
                     ),
                     "avg_practical_relevance": round(
-                        stats["avg_practical_relevance"] or 0, 2
+                        stats["avg_practical_relevance"] or 0,
+                        2,
                     ),
                 },
                 "feedback": feedback_data,
                 "total_sessions": speaker_sessions.count(),
-            }
+            },
         )
 
     except Exception as e:

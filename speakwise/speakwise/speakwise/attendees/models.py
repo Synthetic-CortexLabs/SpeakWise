@@ -13,13 +13,15 @@ class Attendee(TimestampedModel):
     last_name = models.CharField(max_length=255, null=True)
     email = models.EmailField(unique=True)
     notification_preference = models.CharField(
-        max_length=255, null=True
+        max_length=255,
+        null=True,
     )  # what is the use case of this?
     organization = models.CharField(
-        max_length=255, null=True
+        max_length=255,
+        null=True,
     )  # we could make organization a model also.
     is_verified = models.BooleanField(
-        default=False
+        default=False,
     )  # I think should be done in the attendance model.
     user = models.ForeignKey(
         "users.User",
@@ -33,7 +35,7 @@ class Attendee(TimestampedModel):
 
 
 class AttendanceCode(
-    TimestampedModel
+    TimestampedModel,
 ):  # I think with the current flow, we don't need this model.
     """Attendee code model."""
 

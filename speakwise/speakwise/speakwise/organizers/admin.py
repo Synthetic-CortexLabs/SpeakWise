@@ -1,14 +1,13 @@
 # Register your models here.
 from django.contrib import admin
-from speakwise.organizers.models import (
-    Organizers,
-    SocialLinks,
-    AttendanceEmails,
-    AttendeeCSVUpload,
-)
+
+from speakwise.organizers.models import AttendanceEmails
+from speakwise.organizers.models import AttendeeCSVUpload
+from speakwise.organizers.models import Organizers
+from speakwise.organizers.models import SocialLinks
 
 
-
+@admin.register(Organizers)
 class OrganizerAdmin(admin.ModelAdmin):
     """Admin view for the Organizers model."""
 
@@ -18,6 +17,7 @@ class OrganizerAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
 
 
+@admin.register(SocialLinks)
 class SocialLinksAdmin(admin.ModelAdmin):
     """Admin view for the SocialLinks model."""
 
@@ -27,6 +27,7 @@ class SocialLinksAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
 
 
+@admin.register(AttendanceEmails)
 class AttendanceEmailsAdmin(admin.ModelAdmin):
     """Admin view for the AttendanceEmails model."""
 
@@ -36,6 +37,7 @@ class AttendanceEmailsAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
 
 
+@admin.register(AttendeeCSVUpload)
 class AttendeeCSVUploadAdmin(admin.ModelAdmin):
     """Admin view for the AttendeeCSVUpload model."""
 
@@ -59,6 +61,9 @@ class AttendeeCSVUploadAdmin(admin.ModelAdmin):
 
     actions = ["process_csv_files"]
 
+    @admin.action(
+        description="Process selected CSV files",
+    )
     def process_csv_files(self, request, queryset):
         """Admin action to process selected CSV files."""
         processed_count = 0
@@ -67,8 +72,6 @@ class AttendeeCSVUploadAdmin(admin.ModelAdmin):
             processed_count += 1
 
         self.message_user(request, f"Processed {processed_count} CSV files.")
-
-    process_csv_files.short_description = "Process selected CSV files"
 
     def save_model(self, request, obj, form, change):
         """Auto-process CSV after upload if not processed yet."""
@@ -82,11 +85,7 @@ class AttendeeCSVUploadAdmin(admin.ModelAdmin):
                 self.message_user(request, msg)
             except Exception as e:
                 self.message_user(
-                    request, f"Error processing CSV: {str(e)}", level="ERROR"
+                    request,
+                    f"Error processing CSV: {e!s}",
+                    level="ERROR",
                 )
-
-
-admin.site.register(Organizers, OrganizerAdmin)
-admin.site.register(SocialLinks, SocialLinksAdmin)
-admin.site.register(AttendanceEmails, AttendanceEmailsAdmin)
-admin.site.register(AttendeeCSVUpload, AttendeeCSVUploadAdmin)

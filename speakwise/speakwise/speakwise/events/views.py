@@ -3,7 +3,8 @@
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view
+from rest_framework.decorators import permission_classes
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
@@ -11,23 +12,20 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from speakwise.authentication.permissions import IsAuthenticatedUser
+from speakwise.events.models import Country
+from speakwise.events.models import Event
+from speakwise.events.models import Session
+from speakwise.events.models import Tag
+from speakwise.events.serializers import CountrySerializer
+from speakwise.events.serializers import EventSerializer
+from speakwise.events.serializers import SessionSerializer
+from speakwise.events.serializers import TagSerializer
 from speakwise.organizers.models import Organizers
-from speakwise.events.models import Country, Event, Session, Tag
-from speakwise.events.serializers import (
-    CountrySerializer,
-    EventSerializer,
-    SessionSerializer,
-    TagSerializer,
-)
 
 
 def is_organizer_or_admin(user):
     """Helper method to check if user is organizer or admin."""
-    return (
-        hasattr(user, "role")
-        and user.role
-        and user.role.display in ["organizer", "admin"]
-    )
+    return hasattr(user, "role") and user.role and user.role.display in ["organizer", "admin"]
 
 
 def is_organizer(user):
@@ -83,7 +81,7 @@ class EventListCreateAPIView(ListCreateAPIView):
         else:
             # Return permission denied for non-organizers
             raise PermissionDenied(
-                detail="Only organizers and admins can create events."
+                detail="Only organizers and admins can create events.",
             )
 
 

@@ -7,7 +7,7 @@ from django.utils import timezone
 
 PHONE_REGEX = RegexValidator(
     regex=r"^\+?1?\d{9,15}$",
-    message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
+    message=("Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."),
 )
 
 
@@ -73,13 +73,16 @@ class TeamMember(TimestampedModel):
     """
 
     name = models.CharField(
-        max_length=100, help_text="Full name of the team member",
+        max_length=100,
+        help_text="Full name of the team member",
     )
     role = models.CharField(
-        max_length=100, help_text="Job title or role in the company",
+        max_length=100,
+        help_text="Job title or role in the company",
     )
     short_bio = models.TextField(
-        max_length=500, help_text="Brief biography of the team member",
+        max_length=500,
+        help_text="Brief biography of the team member",
     )
     avatar = models.ImageField(
         upload_to=TEAM_UPLOAD_DIR,
@@ -91,19 +94,23 @@ class TeamMember(TimestampedModel):
     # Social media links
     twitter_url = models.URLField(blank=True, help_text="Twitter profile URL")
     linkedin_url = models.URLField(
-        blank=True, help_text="LinkedIn profile URL",
+        blank=True,
+        help_text="LinkedIn profile URL",
     )
     github_url = models.URLField(blank=True, help_text="GitHub profile URL")
     website_url = models.URLField(
-        blank=True, help_text="Personal website URL",
+        blank=True,
+        help_text="Personal website URL",
     )
 
     # Display settings
     is_active = models.BooleanField(
-        default=True, help_text="Show this team member on the website",
+        default=True,
+        help_text="Show this team member on the website",
     )
     display_order = models.IntegerField(
-        default=0, help_text="Order in which to display team members",
+        default=0,
+        help_text="Order in which to display team members",
     )
 
     class Meta:

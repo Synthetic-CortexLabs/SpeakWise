@@ -34,7 +34,7 @@ class Feedback(TimestampedModel):
             models.UniqueConstraint(
                 fields=["session", "attendee"],
                 name="unique_feedback_per_attendee_session",
-            )
+            ),
         ]
         verbose_name = "Feedback"
         verbose_name_plural = "Feedbacks"

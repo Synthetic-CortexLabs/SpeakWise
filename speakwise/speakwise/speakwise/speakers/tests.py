@@ -42,7 +42,7 @@ class SpeakerProfileTests(TestCase):
         self.user = User.objects.create_user(
             username="speaker1",
             email="speaker1@test.com",
-            password="testpass123",  # noqa: S106
+            password="testpass123",
         )
         self.profile = SpeakerProfile.objects.create(
             speaker_user=self.user,
@@ -78,7 +78,7 @@ class SpeakerDashboardTests(TestCase):
         self.user = User.objects.create_user(
             username="speaker1",
             email="speaker1@test.com",
-            password="testpass123",  # noqa: S106
+            password="testpass123",
         )
         self.profile = SpeakerProfile.objects.create(
             speaker_user=self.user,
@@ -101,7 +101,7 @@ class SpeakerDashboardTests(TestCase):
 
     def test_feedback_calculations(self):
         assert self.dashboard.total_events == 1
-        assert self.dashboard.average_feedback_rating == 4.5  # noqa: PLR2004
+        assert self.dashboard.average_feedback_rating == 4.5
 
     def test_feedback_per_conference(self):
         conference_ratings = self.dashboard.feedback_rate_per_conference
@@ -114,7 +114,7 @@ class APITests(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="testuser",
-            password="testpass123",  # noqa: S106
+            password="testpass123",
         )
         self.client.force_authenticate(user=self.user)
         self.profile = SpeakerProfile.objects.create(
@@ -152,7 +152,7 @@ class SerializerTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username="testuser",
-            password="testpass123",  # noqa: S106
+            password="testpass123",
         )
         self.profile = SpeakerProfile.objects.create(
             speaker_user=self.user,
@@ -179,7 +179,7 @@ class SpeakerSocialLinkTests(TestCase):
         self.user = User.objects.create_user(
             username="testspeaker",
             email="speaker@test.com",
-            password="testpass123",  # noqa: S106
+            password="testpass123",
         )
         self.profile = SpeakerProfile.objects.create(
             speaker_user=self.user,

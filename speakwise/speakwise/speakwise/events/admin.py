@@ -3,9 +3,14 @@
 # Register your models here.
 from django.contrib import admin
 
-from speakwise.events.models import Country, Event, Location, Session, Tag
+from speakwise.events.models import Country
+from speakwise.events.models import Event
+from speakwise.events.models import Location
+from speakwise.events.models import Session
+from speakwise.events.models import Tag
 
 
+@admin.register(Country)
 class CountryAdmin(admin.ModelAdmin):
     """Country admin."""
 
@@ -15,6 +20,7 @@ class CountryAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
 
 
+@admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
     """Region admin."""
 
@@ -24,6 +30,7 @@ class LocationAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
 
 
+@admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     """Event admin."""
 
@@ -44,13 +51,15 @@ class EventAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at", "updated_at")
     filter_horizontal = ("tags",)  # Better UI for managing many-to-many relationships
 
+    @admin.display(
+        description="Tags",
+    )
     def get_tags(self, obj):
         """Return a comma-separated list of tags."""
         return ", ".join([tag.name for tag in obj.tags.all()])
 
-    get_tags.short_description = "Tags"
 
-
+@admin.register(Session)
 class SessionAdmin(admin.ModelAdmin):
     """Session admin."""
 
@@ -60,6 +69,7 @@ class SessionAdmin(admin.ModelAdmin):
     ordering = ("-created_at",)
 
 
+@admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     """Tag admin."""
 
@@ -70,8 +80,3 @@ class TagAdmin(admin.ModelAdmin):
 
 
 # Register models with admin
-admin.site.register(Country, CountryAdmin)
-admin.site.register(Location, LocationAdmin)
-admin.site.register(Event, EventAdmin)
-admin.site.register(Session, SessionAdmin)
-admin.site.register(Tag, TagAdmin)

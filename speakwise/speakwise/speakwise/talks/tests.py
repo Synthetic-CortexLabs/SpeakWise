@@ -6,9 +6,10 @@ from datetime import timedelta
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
-from speakwise.events.models import Event
 from rest_framework import status
 from rest_framework.test import APIClient
+
+from speakwise.events.models import Event
 from speakwise.speakers.models import SpeakerProfile
 from speakwise.talks.models import Talks
 from speakwise.talks.serializers import TalkSerializer
