@@ -1,11 +1,7 @@
 """Organizer models."""
 
-import csv
-import io
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
-from django.utils import timezone
 
 from speakwise.base.models import TimestampedModel
 from speakwise.events.models import Event
@@ -107,10 +103,7 @@ class AttendeeCSVUpload(TimestampedModel):
     )
     csv_file = models.FileField(
         upload_to="attendee_uploads/",
-        help_text=(
-            "Upload a CSV file with attendee data "
-            "(first_name, last_name, email, organization)"
-        ),
+        help_text=("Upload a CSV file with attendee data (first_name, last_name, email, organization)"),
     )
     uploaded_at = models.DateTimeField(auto_now_add=True)
     processed = models.BooleanField(default=False)

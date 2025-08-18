@@ -14,5 +14,3 @@ class TalkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Talks
         exclude = ["created_at", "updated_at"]
-
-

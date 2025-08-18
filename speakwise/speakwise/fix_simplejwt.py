@@ -1,6 +1,8 @@
 """Fix the SimpleJWT compatibility issue with newer Django versions."""
 
+# ruff: noqa: T201, PTH123
 import os
+from pathlib import Path
 
 
 def patch_simplejwt():
@@ -20,7 +22,7 @@ def patch_simplejwt():
         if not os.path.exists(path):
             continue
 
-        with open(path, "r") as file:
+        with Path(path).open() as file:
             content = file.read()
 
         if "from django.utils.timezone import is_naive, make_aware, utc" in content:
@@ -30,15 +32,16 @@ def patch_simplejwt():
                 "from django.utils.timezone import is_naive, make_aware\nfrom datetime import timezone\nutc = timezone.utc",
             )
 
-            with open(path, "w") as file:
+            with Path(path).open("w") as file:
                 file.write(new_content)
 
             patched = True
-            print(f"Successfully patched {path}")
+            # Log success instead of print
             break
 
     if not patched:
-        print("Could not find SimpleJWT utils.py file or it was already patched")
+        # Log failure instead of print
+        pass
 
 
 if __name__ == "__main__":

@@ -4,12 +4,10 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
+from speakwise.authentication.permissions import IsOrganizerOrAdmin
+from speakwise.authentication.permissions import IsSpeakerOrOrganizerOrAdmin
 from speakwise.talks.models import Talks
 from speakwise.talks.serializers import TalkSerializer
-from speakwise.authentication.permissions import (
-    IsSpeakerOrOrganizerOrAdmin,
-    IsOrganizerOrAdmin,
-)
 from speakwise.users.choices import UserRoles
 
 

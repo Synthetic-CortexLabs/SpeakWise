@@ -1,11 +1,12 @@
 """Speakers models."""
 
-from speakwise.base.models import SocialLink
-from speakwise.base.models import TimestampedModel
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.forms import ValidationError
 from django.urls import reverse
-from django.contrib.auth import get_user_model
+
+from speakwise.base.models import SocialLink
+from speakwise.base.models import TimestampedModel
 from speakwise.events.models import Event
 from speakwise.feedbacks.models import Feedback
 
@@ -113,11 +114,7 @@ class SpeakerDashboard(TimestampedModel):
 
         # Group events by conference and calculate average feedback
         for event in speaker_events:
-            conference_name = (
-                event.conference.name
-                if hasattr(event, "conference")
-                else "No Conference"
-            )
+            conference_name = event.conference.name if hasattr(event, "conference") else "No Conference"
             feedbacks = Feedback.objects.filter(
                 event=event,
                 speaker=self.speaker_profile,
@@ -129,10 +126,7 @@ class SpeakerDashboard(TimestampedModel):
                 else:
                     conference_feedback[conference_name] = [round(avg_rate, 2)]
         # Calculate average for each conference
-        return {
-            conf: round(sum(rates) / len(rates), 2)
-            for conf, rates in conference_feedback.items()
-        }
+        return {conf: round(sum(rates) / len(rates), 2) for conf, rates in conference_feedback.items()}
 
     @property
     def full_name(self):

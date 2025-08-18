@@ -47,11 +47,7 @@ class CustomJSONRenderer(JSONRenderer):
         response_data = data
         errors = []
         response_message = (
-            data.pop("response_message", "")
-            if isinstance(data, dict)
-            else data
-            if isinstance(data, str)
-            else ""
+            data.pop("response_message", "") if isinstance(data, dict) else data if isinstance(data, str) else ""
         )
 
         if status.is_client_error(status_code) or status.is_server_error(status_code):
@@ -77,4 +73,4 @@ class CustomJSONRenderer(JSONRenderer):
             accepted_media_type,
             renderer_context,
         )
-        return response  # noqa: RET504
+        return response

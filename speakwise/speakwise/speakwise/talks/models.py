@@ -9,10 +9,10 @@ from speakwise.speakers.models import SpeakerProfile
 
 class Talks(TimestampedModel):
     """
-        event_id (ForeignKey): Reference to the associated event.
-        start_time (DateTimeField): The start time of the talk.
-        end_time (DateTimeField): The end time of the talk.
-        speaker_id (ManyToManyField): Reference to the associated speakers.
+    event_id (ForeignKey): Reference to the associated event.
+    start_time (DateTimeField): The start time of the talk.
+    end_time (DateTimeField): The end time of the talk.
+    speaker_id (ManyToManyField): Reference to the associated speakers.
     """
 
     event_id = models.ForeignKey(

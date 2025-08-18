@@ -56,14 +56,10 @@ class AttendeeDetailView(RetrieveUpdateDestroyAPIView):
         super().check_object_permissions(request, obj)
 
         # Organizers and admins can access any attendee profile
-        if (
-            request.user.role
-            and request.user.role.display
-            in [  # should we really do this?
-                UserRoles.ORGANIZER,
-                UserRoles.ADMIN,
-            ]
-        ):
+        if request.user.role and request.user.role.display in [  # should we really do this?
+            UserRoles.ORGANIZER,
+            UserRoles.ADMIN,
+        ]:
             return
 
         # Attendees can only access their own profile

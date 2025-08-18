@@ -5,9 +5,7 @@ from rest_framework.serializers import ModelSerializer
 
 from speakwise.speakers.models import SkillTag
 from speakwise.speakers.models import SpeakerDashboard
-from speakwise.speakers.models import (
-    SpeakerProfile,  # Updated from Speaker to SpeakerProfile
-)
+from speakwise.speakers.models import SpeakerProfile  # Updated from Speaker to SpeakerProfile
 from speakwise.speakers.models import SpeakerSocialLink
 
 

@@ -2,9 +2,11 @@
 
 from django.contrib import admin
 from django.db.models import Avg
+
 from speakwise.feedbacks.models import Feedback
 
 
+@admin.register(Feedback)
 class FeedbackAdmin(admin.ModelAdmin):
     """Enhanced feedback admin for better management."""
 
@@ -48,7 +50,7 @@ class FeedbackAdmin(admin.ModelAdmin):
                     "content_depth",
                     "speaker_knowledge",
                     "practical_relevance",
-                )
+                ),
             },
         ),
         (
@@ -63,11 +65,7 @@ class FeedbackAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         """Optimize queryset with select_related."""
-        return (
-            super()
-            .get_queryset(request)
-            .select_related("session", "attendee", "session__event")
-        )
+        return super().get_queryset(request).select_related("session", "attendee", "session__event")
 
     def changelist_view(self, request, extra_context=None):
         """Add summary statistics to the changelist."""
@@ -91,16 +89,15 @@ class FeedbackAdmin(admin.ModelAdmin):
                 "avg_clarity": round(summary_stats["avg_clarity"] or 0, 2),
                 "avg_content_depth": round(summary_stats["avg_content_depth"] or 0, 2),
                 "avg_speaker_knowledge": round(
-                    summary_stats["avg_speaker_knowledge"] or 0, 2
+                    summary_stats["avg_speaker_knowledge"] or 0,
+                    2,
                 ),
                 "avg_practical_relevance": round(
-                    summary_stats["avg_practical_relevance"] or 0, 2
+                    summary_stats["avg_practical_relevance"] or 0,
+                    2,
                 ),
             }
         except (AttributeError, KeyError):
             pass
 
         return response
-
-
-admin.site.register(Feedback, FeedbackAdmin)

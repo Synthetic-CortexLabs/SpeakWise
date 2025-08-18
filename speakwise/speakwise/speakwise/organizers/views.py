@@ -1,24 +1,18 @@
 """organizers views."""
 
-import csv
-import io
 import os
 
 from django.http import Http404
-from django.http import HttpResponse
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from rest_framework import status
 from rest_framework.parsers import FormParser
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from speakwise.authentication.permissions import IsOrganizer
 from speakwise.authentication.permissions import IsOrganizerOrAdmin
-from speakwise.users.choices import UserRoles
 
 from .models import AttendanceEmails
 from .models import Organizers
@@ -79,23 +73,24 @@ class FileUploadViewCreatView(APIView):
         if not file_obj:
             return Response(
                 {"error": "No file provided"},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        
+
         if not event_id:
             return Response(
                 {"error": "Event ID is required"},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         # Get the event object
         try:
             from speakwise.events.models import Event
+
             event = Event.objects.get(id=event_id)
         except Event.DoesNotExist:
             return Response(
                 {"error": "Event not found"},
-                status=status.HTTP_404_NOT_FOUND
+                status=status.HTTP_404_NOT_FOUND,
             )
 
         # Process the file with your FileHandler
@@ -109,7 +104,7 @@ class FileUploadViewCreatView(APIView):
             os.remove(temp_file_path)
             return Response(
                 {"error": str(e)},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         os.remove(temp_file_path)
@@ -142,7 +137,9 @@ class FileUploadDetailview(APIView):
         """update an email."""
         email = self.get_object(pk)
         serializer = FileUploadSerializer(
-            email, data=request.data, partial=True
+            email,
+            data=request.data,
+            partial=True,
         )
         serializer.is_valid(raise_exception=True)
         serializer.save()

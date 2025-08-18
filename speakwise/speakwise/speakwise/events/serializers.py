@@ -5,7 +5,12 @@ import base64
 from django.core.files.base import ContentFile
 from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
-from speakwise.events.models import Event, Location, Country, Session, Tag
+
+from speakwise.events.models import Country
+from speakwise.events.models import Event
+from speakwise.events.models import Location
+from speakwise.events.models import Session
+from speakwise.events.models import Tag
 from speakwise.speakers.serializers import SpeakerProfileSerializer
 
 
