@@ -1,1 +1,0 @@
-"""Base app for SpeakWise."""

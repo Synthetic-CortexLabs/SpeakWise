@@ -1,1 +1,0 @@
-"""attendees module."""

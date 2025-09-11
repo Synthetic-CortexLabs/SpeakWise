@@ -1,2 +1,0 @@
-"""talks module."""
-
